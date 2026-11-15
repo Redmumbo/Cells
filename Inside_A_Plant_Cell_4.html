@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#06202A">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="An interactive atlas of the plant cell: fly into 11 structures, dive inside, watch them work, compare with an animal cell and take the quiz.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Inside a Plant Cell</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap"></noscript>
+<style>
+/* Layout: lab-bench atlas. A dark microscope stage on a pale botanical page; the info panel docks beside it on desktop and sits under a sticky stage on phones. */
+:root{--bg:#F0F5EA;--surface:#FFFFFF;--surface2:#E5EDDD;--ink:#0D2216;--ink2:#47624F;--line:#D1DDC8;--accent:#15803D;--accent-ink:#fff;--stage:#06202A;--chip:#fff;
+--display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;--body:"Instrument Sans",system-ui,-apple-system,sans-serif;--mono:"DM Mono",ui-monospace,Menlo,monospace;
+--sh:0 1px 2px rgba(10,40,20,.06),0 14px 34px -16px rgba(10,40,20,.3)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08130E;--surface:#0F211A;--surface2:#16291F;--ink:#E8F4EA;--ink2:#9DB8A5;--line:#22392C;--accent:#4FD08A;--accent-ink:#06210F;--chip:#122A20;--sh:0 1px 2px rgba(0,0,0,.3),0 14px 34px -16px rgba(0,0,0,.7);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08130E;--surface:#0F211A;--surface2:#16291F;--ink:#E8F4EA;--ink2:#9DB8A5;--line:#22392C;--accent:#4FD08A;--accent-ink:#06210F;--chip:#122A20;--sh:0 1px 2px rgba(0,0,0,.3),0 14px 34px -16px rgba(0,0,0,.7);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;-webkit-text-size-adjust:100%}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.05;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* hero */
+.hero{padding:26px 0 18px;display:grid;gap:10px}
+.eyebrow{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0}
+.hero h1{font-size:clamp(42px,8.4vw,92px);font-weight:800;letter-spacing:-.035em}
+.hero h1 em{font-style:normal;background:linear-gradient(100deg,#1FA34E,#8CCB2E 60%,#D9C21E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{margin:0;max-width:56ch;color:var(--ink2);font-size:clamp(16px,2vw,19px)}
+nav.jump{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px;font:500 13px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+nav.jump a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--line);padding-bottom:2px}
+nav.jump a:hover{border-color:var(--accent)}
+[hidden]{display:none!important}
+section{margin-top:22px}
+.tabs{display:flex;gap:6px;margin-top:6px;overflow-x:auto;scrollbar-width:none;padding:4px;background:var(--surface2);border-radius:99px;width:fit-content;max-width:100%}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{border:0;background:none;border-radius:99px;padding:10px 20px;font:700 15px var(--display);color:var(--ink2);white-space:nowrap;min-height:44px}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+#scale,#compare,#quiz{content-visibility:auto;contain-intrinsic-size:auto 700px}
+.sh{display:grid;gap:6px;margin-bottom:20px}
+.sh h2{font-size:clamp(30px,5vw,48px);font-weight:700;letter-spacing:-.025em}
+.sh p{margin:0;color:var(--ink2);max-width:62ch}
+/* explore grid */
+.grid{display:grid;gap:14px 22px;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);grid-template-areas:"stage panel" "tray panel";align-items:start}
+.stagecard{grid-area:stage;position:relative;border-radius:26px;overflow:hidden;background:var(--stage);box-shadow:var(--sh);touch-action:pan-y;isolation:isolate}
+#cell{display:block;width:100%;height:auto;aspect-ratio:900/680;cursor:grab;user-select:none;-webkit-user-select:none}
+#cell.drag{cursor:grabbing}
+.bar{position:absolute;left:10px;right:10px;top:10px;display:flex;flex-wrap:wrap;gap:8px;z-index:3;pointer-events:none}
+.bar>*{pointer-events:auto}
+.seg{display:inline-flex;background:rgba(6,32,42,.86);border:1px solid rgba(255,255,255,.16);border-radius:99px;padding:3px}
+.seg button{border:0;background:none;color:#D6EBE4;font:600 13px var(--body);padding:7px 12px;border-radius:99px;display:inline-flex;align-items:center;gap:6px;min-height:34px}
+.seg button[aria-pressed="true"]{background:#fff;color:#06202A}
+.seg svg{width:15px;height:15px}
+.zoomc{position:absolute;right:10px;bottom:46px;display:grid;gap:6px;z-index:3}
+.zoomc button{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(6,32,42,.86);color:#fff;font:600 20px/1 var(--body);display:grid;place-items:center;padding:0}
+.zoomc button:hover{background:rgba(255,255,255,.2)}
+.status{position:absolute;left:0;right:0;bottom:0;z-index:2;margin:0;padding:22px 14px 11px;background:linear-gradient(transparent,rgba(3,16,22,.88));color:#E3F2EC;font:500 13px/1.35 var(--body);pointer-events:none;min-height:56px;display:flex;align-items:flex-end}
+.status b{color:#fff}
+.tip{position:absolute;z-index:4;pointer-events:none;transform:translate(-50%,-130%);padding:4px 10px;border-radius:8px;font:600 12.5px var(--body);color:#fff;background:var(--tc,#222);box-shadow:0 4px 14px rgba(0,0,0,.4);white-space:nowrap;opacity:0;transition:opacity .12s}
+.tip.on{opacity:1}
+.tray{grid-area:tray;display:flex;flex-wrap:wrap;gap:8px}
+.tc{--oc:#888;display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--chip);border-radius:99px;padding:6px 13px 6px 8px;font:600 13.5px var(--body);min-height:38px;white-space:nowrap;transition:transform .15s,border-color .15s}
+.tc i{width:18px;height:18px;border-radius:50%;background:var(--oc);box-shadow:inset 0 -3px 0 rgba(0,0,0,.22),inset 0 2px 0 rgba(255,255,255,.4);flex:none;position:relative}
+.tc:hover{transform:translateY(-1px);border-color:var(--oc)}
+.tc[aria-pressed="true"]{background:var(--oc);color:#fff;border-color:var(--oc)}
+.tc[aria-pressed="true"] i{background:#fff;box-shadow:none}
+.tc.lock span::after{content:"";}
+.tc.new i::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--oc);animation:ping 1.8s ease-out infinite}
+@keyframes ping{from{transform:scale(.7);opacity:1}to{transform:scale(1.5);opacity:0}}
+/* organelles in svg */
+.org{cursor:pointer;transition:opacity .35s}
+.org:focus-visible{outline:none;filter:drop-shadow(0 0 6px #fff)}
+#cell.focus .org:not(.on){opacity:.32}
+.org.on{filter:drop-shadow(0 0 8px var(--glow))}
+#cell.flying .org.on{filter:none}
+.th{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.org.hint{animation:hint 1s ease-in-out 3}
+@keyframes hint{50%{filter:drop-shadow(0 0 14px #fff)}}@keyframes hintl{50%{transform:scale(1.05)}}
+#inner{transform-origin:450px 340px;transition:transform 1.1s cubic-bezier(.5,0,.2,1)}
+#fxg{transform-origin:450px 340px;transition:transform 1.1s cubic-bezier(.5,0,.2,1)}.dry #fxg{transform:scale(.935)}
+.tc.un i{background:transparent;box-shadow:inset 0 0 0 2px var(--oc)}
+.opt i{opacity:0}.answered .opt i{opacity:1}
+#vacwrap{transition:transform 1.1s cubic-bezier(.5,0,.2,1)}
+.dry #inner{transform:scale(.935)}
+.dry #vacwrap{transform:scale(.58,.52)}
+#veil{fill:#0A1440;opacity:0;transition:opacity 1s;pointer-events:none}
+.night #veil{opacity:.5}
+#halos{display:none;pointer-events:none}
+.night #halos{display:inline}
+.halo{animation:breathe 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes breathe{50%{transform:scale(1.25);opacity:.6}}
+#day,#sparks{pointer-events:none}
+.night #day{display:none}
+#sparks{display:none}.night #sparks{display:inline}
+.ph{stroke:#FFE27A;stroke-width:3;stroke-linecap:round;animation:fall 2.8s linear infinite}
+@keyframes fall{from{transform:translate(0,-40px);opacity:0}15%{opacity:1}to{transform:translate(26px,70px);opacity:0}}
+.o2{fill:#CFF7FF;stroke:#69D2EA;stroke-width:1.6;animation:rise 3.6s ease-in infinite;opacity:0}
+@keyframes rise{from{transform:translateY(0);opacity:.95}to{transform:translateY(-52px);opacity:0}}
+.sp{fill:#FFE14D;animation:rise 2.2s ease-out infinite;opacity:0}
+/* panel */
+.panel{grid-area:panel;background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:var(--sh);overflow:hidden;position:sticky;top:14px;--oc:#2E7D32;--od:#14532D}
+.pn-top{padding:20px 22px 18px;color:#fff;background:linear-gradient(135deg,var(--od),color-mix(in oklab,var(--od),#000 32%));position:relative;overflow:hidden}
+.pn-top .art{position:absolute;right:-26px;top:-26px;width:150px;height:150px;border-radius:50%;opacity:.95;overflow:hidden;box-shadow:0 0 0 6px rgba(255,255,255,.1)}
+.pn-top h3{font-size:clamp(26px,3.2vw,34px);font-weight:700;letter-spacing:-.02em;max-width:70%}
+.pill{display:inline-block;margin-top:8px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 11px}
+.pn-body{padding:18px 22px 22px;display:grid;gap:12px}
+.pn-body p{margin:0}
+.kv{border-left:4px solid var(--oc);padding:2px 0 2px 12px;font-size:15px}
+.kv b{display:block;font:500 11.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin-bottom:1px}
+.cta{display:flex;gap:8px;margin-top:4px}
+.btn{border:1.5px solid var(--line);background:var(--chip);border-radius:99px;padding:10px 18px;font-weight:600;min-height:44px}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{flex:1;background:var(--od);border-color:var(--od);color:#fff;font:700 16px var(--display);display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.btn.pri:hover{filter:brightness(1.12)}
+.intro{padding:24px 22px}
+.intro h3{font-size:28px;margin-bottom:8px}
+.prog{display:flex;align-items:center;gap:12px;margin-top:14px}
+.ring{width:54px;height:54px;flex:none}
+.prog b{font:700 22px var(--display)}
+/* album */
+.album{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr))}
+.card{--oc:#888;--od:#444;position:relative;border:1px solid var(--line);background:var(--surface);border-radius:20px;overflow:hidden;text-align:left;padding:0;display:flex;flex-direction:column;box-shadow:var(--sh);transition:transform .2s}
+.card:hover{transform:translateY(-3px)}
+.card .im{aspect-ratio:4/3;background:radial-gradient(circle at 50% 45%,color-mix(in oklab,var(--od),#fff 4%),#06202A 90%);position:relative;overflow:hidden}
+
+.card.locked .im img{filter:grayscale(1) brightness(.14) contrast(1.4);opacity:.9}
+.card.locked .im::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;font:800 56px var(--display);color:rgba(255,255,255,.35)}
+.card .tx{padding:11px 14px 14px;display:grid;gap:2px}
+.card .tx b{font:700 17px var(--display)}
+.card .tx span{font-size:13px;color:var(--ink2)}
+.card .sw{position:absolute;left:12px;top:12px;z-index:2;width:12px;height:12px;border-radius:50%;background:var(--oc);box-shadow:0 0 0 3px rgba(255,255,255,.85)}
+.card.locked .tx b{color:var(--ink2)}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+/* scale */
+.scale{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:18px 18px 14px;box-shadow:var(--sh)}
+.srow{display:grid;grid-template-columns:150px minmax(0,1fr) 72px;gap:12px;align-items:center;width:100%;border:0;background:none;padding:6px 6px;border-radius:12px;text-align:left;font-size:14px;color:var(--ink)}
+button.srow:hover{background:var(--surface2)}
+.srow .nm{display:flex;align-items:center;gap:8px;font-weight:600;min-width:0}
+.srow .nm i{width:10px;height:10px;border-radius:50%;flex:none;background:var(--oc,#999)}
+.srow .nm small{display:block;font:400 11.5px var(--mono);color:var(--ink2)}
+.srow.ctx{color:var(--ink2)}
+.trk{height:14px;border-radius:7px;position:relative;background:linear-gradient(90deg,var(--line) 1px,transparent 1px) var(--tp,0) 0/var(--tk) 100%}
+.trk b{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--oc,#8a9a90);min-width:6px}
+.srow.ctx .trk b{background:repeating-linear-gradient(45deg,var(--ink2) 0 4px,transparent 4px 8px);opacity:.55}
+.srow .v{font:500 13px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.axis{display:grid;grid-template-columns:150px minmax(0,1fr) 72px;gap:12px;padding:6px 6px 0;font:500 11px var(--mono);color:var(--ink2)}
+.axis div{position:relative;height:18px}
+.axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.axis span:first-child{transform:none}
+.scale .note{margin:10px 6px 2px;font-size:13px;color:var(--ink2)}
+/* compare */
+.wipe{position:relative;border-radius:26px;overflow:hidden;box-shadow:var(--sh);background:var(--stage);--x:50%;touch-action:pan-y}
+.wipe svg.pc{display:block;width:100%;height:auto;aspect-ratio:900/680}
+.wipe .top{will-change:clip-path;position:absolute;inset:0;clip-path:inset(0 0 0 var(--x))}
+.wipe .top svg{position:absolute;inset:0;width:100%;height:100%}
+.wipe .ln{position:absolute;top:0;bottom:0;left:var(--x);width:3px;margin-left:-1.5px;background:#fff;box-shadow:0 0 14px rgba(255,255,255,.6);pointer-events:none}
+.wipe .kn{position:absolute;top:50%;left:var(--x);width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#fff;color:#06202A;display:grid;place-items:center;font:700 18px var(--display);box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:none}
+.wipe input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.wipe input:focus-visible+.ln{box-shadow:0 0 0 4px var(--accent)}
+.lab{position:absolute;z-index:2;font:700 13px var(--body);color:#fff;border-radius:99px;padding:5px 12px;pointer-events:none;background:rgba(6,32,42,.78);border:1px solid rgba(255,255,255,.25)}
+.lab.p{left:14px;top:14px}.lab.a{right:14px;top:14px}
+.callout{position:absolute;z-index:2;font:600 12px var(--body);color:#06202A;background:#fff;border-radius:8px;padding:3px 8px;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.tbl{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--sh)}
+.tbl div.r{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr) minmax(0,1fr);gap:14px;padding:12px 18px;border-top:1px solid var(--line);font-size:15px}
+.tbl div.r:first-child{border-top:0;background:var(--surface2);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.tbl b{font-weight:600}
+@media(max-width:600px){.tbl div.r{grid-template-columns:1fr 1fr;gap:4px 14px}.tbl div.r b{grid-column:1/-1;font-size:13px;color:var(--ink2)}.tbl div.r:first-child{display:none}}
+/* quiz */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:var(--sh);overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.q-art{background:radial-gradient(circle at 50% 45%,#12404A,#06202A 85%);min-height:260px;position:relative;display:grid;place-items:center}
+
+.q-art .big{position:relative;font:700 clamp(24px,3.4vw,36px) var(--display);color:#fff;padding:24px;text-align:center;max-width:22ch;text-wrap:balance}
+.q-body{padding:22px;display:grid;gap:14px;align-content:start}
+.q-meta{display:flex;justify-content:space-between;font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.q-body h3{font-size:clamp(22px,2.6vw,28px)}
+.opts{display:grid;gap:8px}
+.opt{--oc:#888;text-align:left;border:1.5px solid var(--line);background:var(--chip);border-radius:14px;padding:11px 14px;font-weight:600;min-height:46px;display:flex;align-items:center;gap:10px}
+.opt i{width:12px;height:12px;border-radius:50%;background:var(--oc);flex:none}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{background:#16803D;border-color:#16803D;color:#fff}
+.opt.bad{background:#B42318;border-color:#B42318;color:#fff}
+.opt:disabled{cursor:default}
+.fb{font-size:15px;min-height:46px;color:var(--ink2)}
+.fb b{color:var(--ink)}
+.res{display:grid;gap:10px;justify-items:start}
+.res .score{font:800 64px/1 var(--display);letter-spacing:-.03em}
+@media(max-width:760px){.quiz{grid-template-columns:1fr}.q-art{min-height:200px;aspect-ratio:4/3}}
+/* quiz polish */
+.q-art{overflow:hidden}
+.q-art svg{position:absolute;inset:0;width:100%;height:100%;padding:6px}
+.qtag{position:absolute;left:14px;top:14px;font:500 11.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.14);border-radius:99px;padding:4px 12px}
+.qcap{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);color:#fff;font:700 18px var(--display);padding:7px 20px;border-radius:99px;box-shadow:0 6px 20px rgba(0,0,0,.5);animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:translateX(-50%) scale(.6);opacity:0}}
+.q-art .big small{display:block;font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
+.q-art:has(.big){background:radial-gradient(circle at 30% 20%,color-mix(in oklab,var(--od,#14532D),#fff 8%),#06202A 90%)}
+.qbar{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.qbar span{height:6px;border-radius:3px;background:var(--line)}
+.qbar span.now{background:var(--ink2)}.qbar span.ok{background:#16A34A}.qbar span.bad{background:#DC2626}
+.opt{padding:8px 14px 8px 8px;transition:transform .12s,border-color .12s}
+.opt:hover:not(:disabled){transform:translateX(3px)}
+.btn.qn{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font:700 15px var(--display);padding:8px 24px;min-height:44px}
+.btn.qn:hover{filter:brightness(1.1)}
+.opt .lk{line-height:1;padding-bottom:3px;width:30px;height:30px;border-radius:9px;background:var(--surface2);display:grid;place-items:center;font:700 13px var(--display);flex:none}
+.opt .on{flex:1}
+.opt i{display:none;margin-left:auto}
+.answered .opt i{display:block}
+.opt.ok .lk,.opt.bad .lk{background:rgba(255,255,255,.25)}
+.fb{border-radius:14px;padding:0}
+.fb.ok,.fb.bad{padding:12px 14px;border:1.5px solid}
+.fb.ok{background:color-mix(in oklab,#16A34A,var(--surface) 90%);border-color:#16A34A}
+.fb.bad{background:color-mix(in oklab,#DC2626,var(--surface) 90%);border-color:#DC2626}
+footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink2);font-size:13.5px;display:grid;gap:4px}
+/* lab overlay */
+#lab{position:fixed;inset:0;z-index:50;background:rgba(3,14,10,.86);overflow:auto;padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.lb{max-width:1120px;margin:0 auto;background:var(--surface);border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6);--oc:#2E7D32;--od:#14532D;animation:zin .5s cubic-bezier(.2,1.1,.3,1)}
+@keyframes zin{from{transform:scale(.6);opacity:0}}
+.lt{display:flex;align-items:center;gap:12px;padding:14px 16px;color:#fff;background:linear-gradient(135deg,var(--od),color-mix(in oklab,var(--od),#000 32%))}
+.lt h3{font-size:clamp(22px,3.4vw,32px);flex:1;min-width:0}
+.lt .pill{margin:0}
+.rb{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;font-size:18px;display:grid;place-items:center;padding:0;flex:none}
+.rb:hover{background:rgba(255,255,255,.25)}
+.lm{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+.la{position:relative;background:radial-gradient(circle at 50% 45%,color-mix(in oklab,var(--od),#fff 5%),#06202A 92%);aspect-ratio:4/3;overflow:hidden;touch-action:pan-y}
+#lsvg{position:absolute;inset:0;width:100%;height:100%;display:block}
+#lsvg.sel [data-p]{opacity:.28;transition:opacity .25s}
+#lsvg.sel [data-p].pon{opacity:1;filter:drop-shadow(0 0 8px #fff)}
+#lsvg [data-p]{cursor:pointer}
+.pins{position:absolute;inset:0;pointer-events:none}
+.pinb{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:2.5px solid #fff;background:var(--od);color:#fff;font:700 13px var(--display);display:grid;place-items:center;padding:0;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+.pinb::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(255,255,255,.7);animation:ping 2s ease-out infinite}
+.pins.seen .pinb::after{display:none}
+.pinb.on{background:#fff;color:var(--od);transform:scale(1.15)}
+.lbtns{position:absolute;left:12px;bottom:12px;z-index:2;display:flex;gap:8px;flex-wrap:wrap;right:12px}
+.runb.alt{background:rgba(6,32,42,.82);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.runb.alt[aria-pressed="false"]{background:#fff;color:#06202A}
+.pins.hide{display:none}
+#cell.moving *{filter:none!important}
+.runb{display:inline-flex;gap:8px;align-items:center;border:0;border-radius:99px;background:#fff;color:#06202A;font:700 15px var(--display);padding:10px 18px;min-height:44px;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.runb:hover{filter:brightness(.94)}
+.lh{position:absolute;right:12px;bottom:12px;z-index:2;font:500 12px var(--mono);color:#cfe;background:rgba(6,32,42,.7);border-radius:99px;padding:6px 12px;pointer-events:none}
+.ls{padding:18px 20px 20px;display:grid;gap:14px;align-content:start;min-width:0}
+.cap{background:var(--surface2);border-radius:16px;padding:14px 16px;border-left:5px solid var(--oc);min-height:128px}
+.cap h4{margin:0 0 4px;font:700 20px var(--display)}
+.cap p{margin:0;font-size:15px}
+.cap small{display:block;margin-top:8px;font:500 12px var(--mono);color:var(--ink2)}
+.parts{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.parts button{display:inline-flex;gap:8px;align-items:center;border:1.5px solid var(--line);background:var(--chip);border-radius:99px;padding:5px 13px 5px 6px;font:600 13.5px var(--body);min-height:38px}
+.parts .n{width:24px;height:24px;border-radius:50%;background:var(--od);color:#fff;display:grid;place-items:center;font:700 12px var(--display)}
+.parts button[aria-pressed="true"]{background:var(--od);color:#fff;border-color:var(--od)}
+.parts button[aria-pressed="true"] .n{background:#fff;color:var(--od)}
+.ln2{display:flex;gap:8px}
+.ln2 .btn{flex:1}
+.tokt{font:700 20px var(--body);fill:#fff;stroke:#031014;stroke-width:5px;paint-order:stroke;pointer-events:none}
+#fx{display:none;position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99}
+@media(max-width:640px){.lt .pill{display:none}.lh{display:none}}
+@media(max-width:860px){
+ .grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"stage" "tray" "panel"}
+ .stagecard{position:sticky;top:max(8px,env(safe-area-inset-top,0px));z-index:5}
+ .panel{position:static}
+ .lm{grid-template-columns:1fr}
+ .pn-top .art{width:110px;height:110px}
+ .srow,.axis{grid-template-columns:104px minmax(0,1fr) 62px;gap:8px;font-size:13px}
+ .tray{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:2px 16px 8px;scrollbar-width:none}
+ .tray::-webkit-scrollbar{display:none}
+ section{margin-top:52px}
+ .status{font-size:12px;padding-top:14px;min-height:46px}
+ .bar{top:8px;left:8px;right:8px;gap:6px}
+ .seg button{padding:6px 10px;font-size:12px;min-height:32px}
+ .zoomc{bottom:42px;right:8px}.zoomc button{width:34px;height:34px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* ---- v2 polish ---- */
+body{background-image:radial-gradient(900px 520px at 88% -8%,color-mix(in oklab,var(--accent),transparent 87%),transparent),radial-gradient(760px 460px at -8% 28%,color-mix(in oklab,#D9C21E,transparent 90%),transparent);background-repeat:no-repeat}
+.hero{position:relative}
+.hero h1 em{background-size:220% 100%;animation:sheen 9s ease-in-out infinite alternate}
+@keyframes sheen{to{background-position:100% 0}}
+.theme{position:absolute;right:0;top:24px;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);display:grid;place-items:center;box-shadow:var(--sh);padding:0;color:var(--ink)}
+.theme:hover{border-color:var(--accent)}
+.theme svg{width:20px;height:20px}
+.labopen #cell *,#cell.paused *,.labopen #liveSvg *,#liveSvg.paused *{animation-play-state:paused!important}
+.trk b{transform-origin:0 50%;animation:grow .95s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
+@keyframes grow{from{transform:scaleX(0)}}
+.lnk{background:none;border:0;padding:0;text-decoration:underline;color:var(--ink2);font:inherit;font-size:13.5px;width:fit-content;min-height:32px}
+.lnk:hover{color:var(--ink)}
+.org:focus-visible{outline:3px solid #fff;outline-offset:3px}
+/* ---- v3: alive + clickable ---- */
+.org:hover:not(.on){filter:brightness(1.15)}
+.orb{cursor:pointer}
+.orbi{animation:orbf var(--t,5s) ease-in-out infinite alternate}
+@keyframes orbf{from{transform:translate(0,0)}to{transform:translate(var(--dx,20px),var(--dy,-16px))}}
+.orbc{animation:orbp 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes orbp{50%{transform:scale(1.25)}}
+.orb:hover .orbg{stroke:#fff;stroke-width:2.5;stroke-opacity:.9}
+.ves{cursor:pointer}
+.rip{fill:none;stroke:#fff;stroke-width:3;transform-box:fill-box;transform-origin:center;animation:rip .7s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(9);opacity:0}}
+.bst{animation:burst .65s ease-out forwards;pointer-events:none}
+@keyframes burst{to{transform:translate(var(--bx),var(--by));opacity:0}}
+.toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:18px;font:600 14px/1.35 var(--body);opacity:0;transition:opacity .25s,transform .25s;z-index:60;pointer-events:none;max-width:min(92vw,460px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.theme#snd{right:54px;font:700 20px var(--display)}
+.theme#snd[aria-pressed="false"]{opacity:.55;text-decoration:line-through}
+/* simulate tab */
+.simw{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+.simv{border-radius:26px;overflow:hidden;background:var(--stage);box-shadow:var(--sh)}
+.simv svg{display:block;width:100%;height:auto;aspect-ratio:800/520}
+.simc{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:var(--sh);padding:18px 20px;display:grid;gap:14px}
+.sl{display:grid;grid-template-columns:64px 1fr 36px;gap:10px;align-items:center;font-weight:600}
+.sl input{width:100%;accent-color:var(--accent);min-height:30px;margin:0}
+.sl output{font:500 13px var(--mono);text-align:right}
+.pre{display:flex;flex-wrap:wrap;gap:8px}
+.pre button{border:1.5px solid var(--line);background:var(--chip);border-radius:99px;padding:7px 14px;font:600 13.5px var(--body);min-height:38px}
+.pre button:hover{border-color:var(--accent)}
+.mt{display:grid;gap:4px;font-size:13px;font-weight:600}
+.mt .mb{height:12px;border-radius:6px;background:var(--surface2);overflow:hidden}
+.mt .mb b{display:block;height:100%;width:0;background:var(--c);transition:width .4s}
+.simmsg{margin:0;padding:12px 14px;border-radius:14px;background:var(--surface2);border-left:5px solid var(--accent);font-size:15px;min-height:76px}
+.eqn{font:500 12px var(--mono);color:var(--ink2)}
+.fl{animation:sflow var(--d,4s) linear infinite}
+@keyframes sflow{from{transform:translate(var(--x0),var(--y0));opacity:0}15%{opacity:1}85%{opacity:1}to{transform:translate(var(--x1),var(--y1));opacity:0}}
+#simch{cursor:pointer}
+#simch.pulse{animation:orbp .5s ease-out}
+@media(max-width:860px){.simw{grid-template-columns:1fr}}
+/* ===== v4: living backgrounds, per-part motion, tune-ups ===== */
+@property --tint{syntax:"<color>";inherits:true;initial-value:transparent}
+:root{transition:--tint .9s}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(820px 560px at 82% 6%,color-mix(in oklab,var(--tint) 24%,transparent),transparent),radial-gradient(640px 460px at 4% 70%,color-mix(in oklab,var(--tint) 14%,transparent),transparent)}
+.stagecard{transition:box-shadow .8s}
+.stagecard.lit{box-shadow:var(--sh),0 0 70px -14px var(--tc)}
+.tint,.amb{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.tint.back,.amb.back{z-index:0}
+.la{isolation:isolate}.pins{z-index:2}
+.tint{opacity:0;transition:opacity .9s;overflow:hidden}
+.tint.on{opacity:.4}
+.tint::before,.tint::after{content:"";position:absolute;inset:-30%}
+.tint::before{background:radial-gradient(closest-side,color-mix(in oklab,var(--tc,#4FD08A) 30%,transparent),transparent 92%);animation:tbr 6s ease-in-out infinite alternate}
+@keyframes tbr{to{transform:scale(1.12);opacity:.7}}
+@keyframes tl{to{transform:translate(var(--tx,0),var(--ty,0))}}
+@keyframes tsway{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+@keyframes tspin{to{transform:rotate(360deg)}}
+@keyframes tthrob{from{transform:scale(.55);opacity:1}to{transform:scale(1.25);opacity:0}}
+@keyframes tcaus{to{transform:translate(5%,3%) scale(1.1)}}
+.tint[data-k=chloroplast]::after{inset:-60% -30% 0;transform-origin:50% 0;background:repeating-conic-gradient(at 50% 0,rgba(255,236,120,.2) 0 5deg,transparent 5deg 15deg);animation:tsway 10s ease-in-out infinite alternate}
+.tint[data-k=mito]::after{background:repeating-radial-gradient(circle at 50% 55%,transparent 0 46px,rgba(255,150,60,.22) 50px 54px);animation:tthrob 2.2s ease-out infinite}
+.tint[data-k=nucleus]::after{background:conic-gradient(transparent 0,rgba(170,120,255,.28) 12%,transparent 30%,rgba(110,80,230,.22) 55%,transparent 75%);animation:tspin 28s linear infinite}
+.tint[data-k=vacuole]::after{background:radial-gradient(ellipse 40% 12% at 30% 30%,rgba(190,235,255,.3),transparent),radial-gradient(ellipse 35% 10% at 70% 62%,rgba(190,235,255,.24),transparent);animation:tcaus 8s ease-in-out infinite alternate}
+.tint[data-k=er]::after{--tx:54px;--ty:54px;background:linear-gradient(135deg,transparent 42%,rgba(255,130,200,.2) 42% 58%,transparent 58%) 0 0/54px 54px;animation:tl 3.2s linear infinite}
+.tint[data-k=golgi]::after{--ty:-46px;background:linear-gradient(transparent 58%,rgba(120,245,225,.2) 58% 68%,transparent 68%) 0 0/100% 46px;animation:tl 4s linear infinite}
+.tint[data-k=ribosome]::after{--tx:56px;background:radial-gradient(circle,rgba(255,150,170,.4) 0 2.5px,transparent 3px) 0 0/28px 28px;animation:tl 2.4s linear infinite}
+.tint[data-k=peroxisome]::after{--ty:-120px;background:radial-gradient(circle at 30% 70%,transparent 0 9px,rgba(255,150,110,.32) 10px 12px,transparent 13px) 0 0/90px 120px,radial-gradient(circle at 72% 30%,transparent 0 5px,rgba(255,190,140,.3) 6px 7.5px,transparent 8.5px) 0 0/90px 120px;animation:tl 4.5s linear infinite}
+.tint[data-k=wall]::after{--tx:48px;--ty:48px;background:linear-gradient(135deg,transparent 44%,rgba(200,230,110,.2) 44% 56%,transparent 56%) 0 0/48px 48px,linear-gradient(45deg,transparent 44%,rgba(230,245,160,.14) 44% 56%,transparent 56%) 0 0/48px 48px;animation:tl 6s linear infinite}
+.tint[data-k=membrane]::after{--tx:-22px;background:radial-gradient(circle,rgba(255,215,110,.42) 0 3px,transparent 4px) 0 0/22px 60px;animation:tl 1.8s linear infinite}
+.tint[data-k=cytoplasm]::after{--tx:120px;background:linear-gradient(100deg,transparent 40%,rgba(190,240,120,.16) 40% 60%,transparent 60%) 0 0/120px 100%;animation:tl 6s linear infinite}
+/* selected part has its own body language */
+.org.on{transform-box:fill-box;transform-origin:center}
+#cell:not(.flying) .org.on{animation:var(--oa,none) var(--ot,3s) ease-in-out infinite}
+.org.on[data-id=mito]{--oa:abeat;--ot:1.1s}
+.org.on[data-id=chloroplast]{--oa:abreath;--ot:2.4s}
+.org.on[data-id=nucleus]{--oa:abreath;--ot:3.4s}
+.org.on[data-id=vacuole]{--oa:awob;--ot:4s}
+.org.on[data-id=golgi]{--oa:asway;--ot:2.8s}
+.org.on[data-id=er]{--oa:awig;--ot:2.2s}
+.org.on[data-id=ribosome]{--oa:ajit;--ot:.35s}
+.org.on[data-id=peroxisome]{--oa:afizz;--ot:.6s}
+@keyframes abeat{0%,100%{transform:scale(1)}14%{transform:scale(1.04)}28%{transform:scale(1)}42%{transform:scale(1.055)}}
+@keyframes abreath{50%{transform:scale(1.022)}}
+@keyframes awob{50%{transform:scale(1.02,.985)}}
+@keyframes asway{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.4deg)}}
+@keyframes awig{0%,100%{transform:skewX(-1.2deg)}50%{transform:skewX(1.2deg)}}
+@keyframes ajit{25%{transform:translate(1px,-1px)}50%{transform:translate(-1px,1px)}75%{transform:translate(1px,1px)}}
+@keyframes afizz{50%{transform:scale(1.05)}}
+/* touch devices skip the expensive hover filter */
+.org:hover:not(.on){filter:none}
+@media(hover:hover) and (pointer:fine){.org:hover:not(.on){filter:brightness(1.15)}}
+/* panel entrance answers the tap */
+.pn-top{background-size:200% 200%;animation:pgrad 10s ease-in-out infinite alternate}
+@keyframes pgrad{to{background-position:100% 100%}}
+@keyframes prise{from{opacity:0;transform:translateY(10px)}}
+.pn-top h3,.pn-top .pill{animation:prise .45s cubic-bezier(.2,.8,.2,1) backwards}
+.pn-body>*{animation:prise .45s cubic-bezier(.2,.8,.2,1) backwards}
+.pn-body>:nth-child(2){animation-delay:.05s}.pn-body>:nth-child(3){animation-delay:.1s}.pn-body>:nth-child(4){animation-delay:.15s}.pn-body>:nth-child(5){animation-delay:.2s}
+/* dive-inside feels alive */
+#lsvg{animation:lfloat 9s ease-in-out infinite alternate}
+@keyframes lfloat{to{transform:scale(1.018) translateY(-4px)}}
+@media(hover:hover){#lsvg [data-p]:hover{filter:brightness(1.15) drop-shadow(0 0 6px rgba(255,255,255,.55))}}
+.pinb{animation:ppop .5s cubic-bezier(.2,1.5,.4,1) backwards;animation-delay:calc(var(--k,0)*70ms)}
+@keyframes ppop{from{transform:scale(0);opacity:0}}
+@media (prefers-reduced-motion:reduce){.tint::before,.tint::after{animation:none!important}}
+
+/* ===== v5: performance + new bits ===== */
+/* animated overlay lives in its own compositor layer so orbs, vesicles and particles never repaint the cell */
+#liveSvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;will-change:transform;display:block}
+#liveSvg .orb,#liveSvg .ves{pointer-events:auto}
+/* pause paint-only gradient animations when their element is off screen */
+.hero-off .hero h1 em,.panel-off .pn-top{animation-play-state:paused}
+.labopen #stage .tint::before,.labopen #stage .tint::after{animation-play-state:paused}
+#simsvg.paused .fl,#simsvg.paused #simch{animation-play-state:paused}
+/* effects toggle */
+.theme#fxb{right:104px;font:700 20px var(--display)}
+.theme#fxb[data-m="lite"]{opacity:.6}
+/* quiz review chips, share button */
+.miss{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.miss span{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.miss .btn{min-height:36px;padding:6px 14px;font-size:14px}
+.cta .btn.sm{flex:none;padding:10px 14px}
+#dayB{border-color:var(--accent);color:var(--ink)}
+#dayB[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+/* lite mode: same look, fewer continuous effects (auto-selected on slow devices, or via the effects button) */
+html[data-fx="lite"] #cell:not(.flying) .org.on{animation:none}
+html[data-fx="lite"] .tint{display:none}
+html[data-fx="lite"] .org.hint{animation-name:hintl}
+html[data-fx="lite"] .org:hover:not(.on),html[data-fx="lite"] #lsvg [data-p]:hover{filter:none}
+html[data-fx="lite"] .hero h1 em,html[data-fx="lite"] .pn-top{animation:none}
+html[data-fx="lite"] .pinb::after{animation:none}
+html[data-fx="lite"] body::before{display:none}
+
+/* credits tab */
+.cr{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-top:16px}
+.crc{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 22px;box-shadow:var(--sh)}
+.crc.crw{grid-column:1/-1}
+.crc.crh{background:var(--ink);color:var(--bg);border-color:transparent}
+.crc.crh .crk{color:var(--accent)}
+.crk{display:block;font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin-bottom:8px}
+.crc h3{font:800 clamp(26px,4vw,36px)/1.1 var(--display);margin:0 0 10px;letter-spacing:-.01em}
+.crc p{margin:0 0 10px;line-height:1.55}
+.crc p:last-child{margin-bottom:0}
+.crc .crs{font-size:14px;color:var(--ink2)}
+.crc a{color:var(--accent);font-weight:700;text-underline-offset:3px}
+.crt{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.crt li{display:flex;flex-direction:column;gap:2px;padding:12px 14px;background:var(--surface2);border-radius:14px}
+.crt b{font:700 15px var(--display)}
+.crt span{font-size:14px;color:var(--ink2);line-height:1.45}
+.crm{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.crm li{justify-content:center;min-height:48px}
+
+/* ===== v6 phone perf ===== */
+#cell.moving{shape-rendering:optimizeSpeed}
+#cell.moving ~ #liveSvg,#cell.moving ~ .tint,#cell.moving ~ canvas.amb{visibility:hidden}
+html[data-fx="lite"] #lsvg{animation:none}
+@media (max-width:520px){#lsvg{animation:none}.pn-top{animation:none}}
+#lsvg{will-change:auto}
+.org,.dr{contain:layout style}
+
+/* ===== v7 features: toolbar, search, read aloud ===== */
+.ptools{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;align-items:center}
+.ptools .btn{min-height:44px;padding:8px 14px;font-size:14px}
+.ptools input{flex:1 1 150px;min-height:44px;border:1px solid var(--line);border-radius:99px;padding:8px 16px;background:var(--surface);color:var(--ink);font:500 14px var(--body);min-width:0}
+.tc.nomatch{display:none}
+.ptools .btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs id="gdefs"></defs></svg>
+<div class="wrap">
+<header class="hero">
+ <button class="theme" id="snd" aria-pressed="false" aria-label="Sound effects">♪</button>
+ <button class="theme" id="fxb" data-m="auto" aria-label="Visual effects: automatic. Tap to change">✦</button>
+ <button class="theme" id="theme" aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+ <p class="eyebrow">Interactive atlas · 11 structures · tap to explore</p>
+ <h1>Inside a <em>Plant</em> Cell</h1>
+ <p class="lede">A leaf cell under the microscope. Tap any part to fly in close, then dive inside to see how it is built and watch it work.</p>
+ </header>
+<div class="tabs" id="tabs" role="tablist" aria-label="Sections"><button role="tab" id="tab-explore" data-t="explore" aria-selected="true" aria-controls="explore">Explore</button><button role="tab" id="tab-album" data-t="album" aria-selected="false" aria-controls="album" tabindex="-1">Collection</button><button role="tab" id="tab-scale" data-t="scale" aria-selected="false" aria-controls="scale" tabindex="-1">Scale</button><button role="tab" id="tab-compare" data-t="compare" aria-selected="false" aria-controls="compare" tabindex="-1">Compare</button><button role="tab" id="tab-sim" data-t="sim" aria-selected="false" aria-controls="sim" tabindex="-1">Simulate</button><button role="tab" id="tab-quiz" data-t="quiz" aria-selected="false" aria-controls="quiz" tabindex="-1">Quiz</button><button role="tab" id="tab-about" data-t="about" aria-selected="false" aria-controls="about" tabindex="-1">Credits</button></div>
+
+<section id="explore" role="tabpanel" aria-labelledby="tab-explore">
+ <div class="grid">
+  <div class="stagecard" id="stage">
+   <div class="bar">
+    <div class="seg" role="group" aria-label="Time of day"><button id="bDay" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M5.3 18.7L7 17M17 7l1.7-1.7"/></svg>Day</button><button id="bNight" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg>Night</button></div>
+    <div class="seg" role="group" aria-label="Water"><button id="bWet" aria-pressed="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5C8 8 5.5 11.2 5.5 14.6a6.5 6.5 0 0 0 13 0C18.5 11.2 16 8 12 2.5z"/></svg>Watered</button><button id="bDry" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5C8 8 5.5 11.2 5.5 14.6a6.5 6.5 0 0 0 13 0C18.5 11.2 16 8 12 2.5z"/><path d="M4 20L20 4"/></svg>Thirsty</button></div>
+    <div class="seg"><button id="bCnt" tabindex="-1" style="pointer-events:none">0 / 11 found</button></div><div class="seg"><button id="bAtp" tabindex="-1" style="pointer-events:none">⚡ 0 ATP</button></div>
+   </div>
+   <svg id="cell" viewBox="0 0 900 680" role="group" aria-label="Plant cell diagram. Use the list below the picture to choose a part."></svg>
+   <div class="zoomc"><button id="zIn" aria-label="Zoom in">+</button><button id="zOut" aria-label="Zoom out">−</button><button id="zRe" aria-label="Show whole cell" style="font-size:15px">⤢</button></div>
+   <p class="status" id="status" aria-live="polite"></p>
+   <div class="tip" id="tip"></div>
+  </div>
+  <div class="tray" id="tray" role="group" aria-label="Choose a part"></div>
+  <aside class="panel" id="panel" aria-live="polite"></aside>
+ </div>
+</section>
+
+<section id="album" role="tabpanel" aria-labelledby="tab-album" hidden>
+ <div class="sh"><h2 id="h-album">Your collection</h2><p id="albumP">Each part you select in the cell is added here. Locked cards show a silhouette. Tap one for a hint.</p></div>
+ <div class="album" id="albumG"></div>
+</section>
+
+<section id="scale" role="tabpanel" aria-labelledby="tab-scale" hidden>
+ <div class="sh"><h2 id="h-scale">How big is everything?</h2><p>From a membrane that is a few nanometers thick to a whole cell 50 micrometers across. Tap a row to jump to that part.</p></div>
+ <div class="scale" id="scaleBox"></div>
+</section>
+
+<section id="compare" role="tabpanel" aria-labelledby="tab-compare" hidden>
+ <div class="sh"><h2 id="h-cmp">Plant cell vs animal cell</h2><p>Drag the divider across. Both cells share the nucleus, ER, Golgi and mitochondria. Plants add a wall, chloroplasts and a giant vacuole.</p></div>
+ <div class="wipe" id="wipe">
+  <svg class="pc" id="cmpP" viewBox="0 0 900 680" aria-label="Plant cell"></svg>
+  <div class="top"><svg id="cmpA" viewBox="0 0 900 680" aria-label="Animal cell"></svg></div>
+  <span class="lab p">Plant cell</span><span class="lab a">Animal cell</span>
+  <span class="callout" data-s="p" style="left:6%;top:44%">Cell wall</span>
+  <span class="callout" data-s="p" style="left:19%;top:20%">Chloroplasts</span>
+  <span class="callout" data-s="p" style="left:30%;top:56%">Giant vacuole</span>
+  <span class="callout" data-s="a" style="left:63%;top:76%">Small vacuoles</span>
+  <span class="callout" data-s="a" style="left:77%;top:57%">Lysosomes</span>
+  <span class="callout" data-s="a" style="left:54%;top:15%">Centrioles</span>
+  <input type="range" id="wr" min="0" max="100" step="1" value="50" aria-label="Compare plant cell and animal cell">
+  <div class="ln"></div><div class="kn" aria-hidden="true">⇄</div>
+ </div>
+ <div class="tbl" id="tbl"></div>
+</section>
+
+<section id="sim" role="tabpanel" aria-labelledby="tab-sim" hidden>
+ <div class="sh"><h2 id="h-sim">Run the chloroplast</h2><p>Feed a chloroplast with the sliders. The scarcest ingredient limits how much sugar it can make. Tap the chloroplast itself for a surprise.</p></div>
+ <div class="simw">
+  <div class="simv"><svg id="simsvg" viewBox="0 0 800 520" aria-label="Chloroplast with light, water and carbon dioxide flowing in, and sugar and oxygen flowing out"></svg></div>
+  <div class="simc">
+   <div class="pre" id="pre" role="group" aria-label="Presets"></div>
+   <label class="sl"><span>Light</span><input type="range" id="sL" min="0" max="100" value="85"><output id="oL">85</output></label>
+   <label class="sl"><span>CO₂</span><input type="range" id="sC" min="0" max="100" value="70"><output id="oC">70</output></label>
+   <label class="sl"><span>Water</span><input type="range" id="sW" min="0" max="100" value="80"><output id="oW">80</output></label>
+   <div class="mt"><span>Sugar made</span><div class="mb"><b id="mS" style="--c:#E04FA9"></b></div></div>
+   <div class="mt"><span>Oxygen released</span><div class="mb"><b id="mO" style="--c:#4DB8EC"></b></div></div>
+   <p class="simmsg" id="simmsg" aria-live="polite"></p>
+   <span class="eqn">6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂</span>
+  </div>
+ </div>
+</section>
+
+<section id="quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden>
+ <div class="sh"><h2 id="h-quiz">Name that part</h2><p>Ten questions. Some show you the structure, some describe its job.</p></div>
+ <div class="quiz" id="quizBox"></div>
+</section>
+
+<section id="about" role="tabpanel" aria-labelledby="tab-about" hidden>
+ <div class="sh"><h2 id="h-about">Credits and information</h2><p>Who made this, why, and what it was built with.</p></div>
+ <div class="cr">
+  <article class="crc crh">
+   <span class="crk">Creator</span>
+   <h3>Gabriel D. Vinuya</h3>
+   <p>STEM Cassiopeia<br>SMNHS Student<br>San Miguel National High School</p>
+  </article>
+  <article class="crc">
+   <span class="crk">About this project</span>
+   <p>This website was made in accordance with the Cell Model project. It lets you explore a plant cell by tapping its parts, looking inside them, comparing plant and animal cells, running a photosynthesis simulation, and testing yourself with a quiz.</p>
+   <p class="crs">Illustrations are simplified drawings based on electron microscope images and textbook diagrams. Sizes are typical ranges.</p>
+  </article>
+  <article class="crc">
+   <span class="crk">Want to create one and need help?</span>
+   <p>Contact <a href="tel:+639949448866">+63 994 944 8866</a></p>
+  </article>
+  <article class="crc crw">
+   <span class="crk">Group members</span>
+   <ul class="crt crm">
+    <li><b>Princess Clarrise Gabriel</b></li>
+    <li><b>Meryl Celso</b></li>
+    <li><b>Xyrene Valenzuela</b></li>
+    <li><b>John Christian Ramos</b></li>
+    <li><b>Mark Rvie Tolentino</b></li>
+    <li><b>Nathaly Guitierrez</b></li>
+    <li><b>Caryl Manuzon</b></li>
+    <li><b>Rhynstel Joy Victoria</b></li>
+   </ul>
+  </article>
+  <article class="crc crw">
+   <span class="crk">Tools used</span>
+   <ul class="crt">
+    <li><b>HTML, CSS and JavaScript</b><span>One self-contained page, no frameworks.</span></li>
+    <li><b>Inline SVG</b><span>Every organelle and cell drawing.</span></li>
+    <li><b>CSS and SMIL animation</b><span>Floating, pulsing and flowing motion.</span></li>
+    <li><b>Canvas 2D</b><span>Ambient particles and confetti.</span></li>
+    <li><b>Web Audio API</b><span>The optional sound effects.</span></li>
+    <li><b>Google Fonts</b><span>Bricolage Grotesque, Instrument Sans and DM Mono.</span></li>
+    <li><b>Claude Sonnet 5.5</b><span>AI assistant by Anthropic. Helped speed up the page, fix bugs and security issues, and add this tab, the share button, quiz review and the day simulation.</span></li>
+   </ul>
+  </article>
+  <article class="crc crw">
+   <span class="crk">Good to know</span>
+   <ul class="crt">
+    <li><b>Your progress stays on your device</b><span>Parts found, ATP, theme and best score are saved in your browser only. Nothing is sent anywhere.</span></li>
+    <li><b>Shortcuts</b><span>Esc deselects a part. Arrow keys move between tabs and parts of the inside view.</span></li>
+    <li><b>Running slowly?</b><span>Tap the ✦ button at the top to switch effects between automatic, light and full.</span></li>
+    <li><b>Share a part</b><span>Select a part and press Share to copy a link straight to it.</span></li>
+   </ul>
+  </article>
+ </div>
+</section>
+
+<footer><span>Illustrations are simplified drawings based on electron microscope images and textbook diagrams. Sizes are typical ranges.</span><span>Made for the plant cell model project.</span><button class="lnk" id="reset">Reset my progress</button></footer>
+</div>
+
+<div id="lab" role="dialog" aria-modal="true" aria-label="Inside view" hidden>
+ <div class="lb" id="lb">
+  <div class="lt"><button class="rb" id="lPrev" aria-label="Previous part">←</button><h3 id="lt"></h3><span class="pill" id="ltag"></span><button class="rb" id="lNext" aria-label="Next part">→</button><button class="rb" id="lx" aria-label="Close">✕</button></div>
+  <div class="lm">
+   <div class="la"><svg id="lsvg" viewBox="0 0 800 600"></svg><div class="pins" id="pins"></div>
+    <div class="lbtns"><button class="runb" id="lrun"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>Watch it work</button><button class="runb alt" id="lnum" aria-pressed="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M10 9.5l2-1.5v8"/></svg><span>Numbers on</span></button></div>
+    <span class="lh">Tap the numbered pins</span></div>
+   <div class="ls"><div class="cap" id="lcap" aria-live="polite"></div><ul class="parts" id="lparts"></ul></div>
+  </div>
+ </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<script>
+/* ---------- core helpers + shared art defs ---------- */
+const NS='http://www.w3.org/2000/svg';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const PAL={
+ wall:['#F0F8BC','#A8C63A','#587714'],
+ membrane:['#FFF1BC','#F2B531','#946000'],
+ cytoplasm:['#F3FADB','#CDE58B','#7A9A3A'],
+ nucleus:['#EADFFF','#9B72F2','#47279A'],
+ chloroplast:['#D2F7BE','#34B84F','#0F6329'],
+ vacuole:['#E1F6FF','#4DB8EC','#12689E'],
+ mito:['#FFE0B5','#FB8C2A','#A84000'],
+ er:['#FFD6EC','#E04FA9','#86136A'],
+ ribosome:['#FFC9D3','#E5304F','#7E0F28'],
+ ribosome2:['#FFE3E8','#FF7D95','#B3254A'],
+ golgi:['#C6F7EC','#16B7A0','#08594F'],
+ peroxisome:['#F6DDBF','#B8743A','#5A3012']
+};
+function rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const A=o=>Object.entries(o).map(([k,v])=>` ${k}="${v}"`).join('');
+const E=(t,o,c)=>c==null?`<${t}${A(o)}/>`:`<${t}${A(o)}>${c}</${t}>`;
+const f1=n=>Math.round(n*10)/10;
+const has=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const lsInt=(k,max)=>{const n=Math.floor(+lsGet(k));return Number.isFinite(n)&&n>0?Math.min(n,max):0};
+/* path sampling (offscreen svg) */
+const _ps=document.createElementNS(NS,'svg'),_pp=document.createElementNS(NS,'path');
+_ps.appendChild(_pp);_ps.setAttribute('width','0');_ps.setAttribute('height','0');_ps.style.cssText='position:absolute;visibility:hidden';document.body.appendChild(_ps);
+function pts(d,step,off=0,from=0){_pp.setAttribute('d',d);const L=_pp.getTotalLength(),o=[];for(let s=from;s<=L;s+=step){const p=_pp.getPointAtLength(s),q=_pp.getPointAtLength(Math.min(L,s+1)),a=Math.atan2(q.y-p.y,q.x-p.x);o.push([f1(p.x-Math.sin(a)*off),f1(p.y+Math.cos(a)*off),f1(a*180/Math.PI)])}return o}
+function at(d,f){_pp.setAttribute('d',d);const p=_pp.getPointAtLength(_pp.getTotalLength()*f);return[f1(p.x),f1(p.y)]}
+function smooth(p){let d=`M${f1(p[0][0])} ${f1(p[0][1])}`;for(let i=1;i<p.length-1;i++){const m=[(p[i][0]+p[i+1][0])/2,(p[i][1]+p[i+1][1])/2];d+=`Q${f1(p[i][0])} ${f1(p[i][1])} ${f1(m[0])} ${f1(m[1])}`}const l=p[p.length-1];return d+`L${f1(l[0])} ${f1(l[1])}`}
+/* drawing primitives */
+const pa=p=>p==null?'':` data-p="${p}"`;
+const tube=(d,w,k,p)=>{const c=PAL[k];return `<g${pa(p)} fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="${d}" stroke="${c[2]}" stroke-width="${w}"/><path d="${d}" stroke="${c[1]}" stroke-width="${f1(w*.74)}"/><path d="${d}" stroke="${c[0]}" stroke-width="${f1(w*.22)}" opacity=".7" transform="translate(${f1(-w*.08)} ${f1(-w*.13)})"/></g>`};
+const rib=(x,y,r=5,p)=>`<g transform="translate(${x} ${y})"${pa(p)}><circle r="${r}" fill="url(#g-ribosome)"/><circle cx="${f1(r*.55)}" cy="${f1(-r*.85)}" r="${f1(r*.62)}" fill="url(#g-ribosome2)" stroke="${PAL.ribosome[2]}" stroke-width=".5"/></g>`;
+const bead=(x,y,r,c,p)=>`<g${pa(p)}><circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width="1.2"/><circle cx="${f1(x-r*.3)}" cy="${f1(y-r*.35)}" r="${f1(r*.38)}" fill="#fff" opacity=".55"/></g>`;
+const gloss=(cx,cy,rx,ry,o=.3)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#fff" opacity="${o}" pointer-events="none"/>`;
+function lerpHex(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),x=p(a),y=p(b);return'#'+x.map((v,i)=>Math.round(v+(y[i]-v)*t).toString(16).padStart(2,'0')).join('')}
+
+function buildDefs(){
+ let s='';
+ for(const[k,p]of Object.entries(PAL)){
+  s+=`<radialGradient id="g-${k}" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="${p[0]}"/><stop offset=".5" stop-color="${p[1]}"/><stop offset="1" stop-color="${p[2]}"/></radialGradient>`;
+  s+=`<linearGradient id="l-${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${p[0]}"/><stop offset=".5" stop-color="${p[1]}"/><stop offset="1" stop-color="${p[2]}"/></linearGradient>`;
+ }
+ s+=`<radialGradient id="g-nucleoplasm" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#7650D6"/><stop offset="1" stop-color="#3A1E86"/></radialGradient>
+ <radialGradient id="g-stroma" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#C5F2A8"/><stop offset=".7" stop-color="#7FD36A"/><stop offset="1" stop-color="#3FA24A"/></radialGradient>
+ <linearGradient id="l-thyl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3FBF57"/><stop offset=".6" stop-color="#1B8A3A"/><stop offset="1" stop-color="#0B5A24"/></linearGradient>
+ <radialGradient id="g-matrix" cx=".5" cy=".4" r=".8"><stop offset="0" stop-color="#FFEBD0"/><stop offset="1" stop-color="#FFC27A"/></radialGradient>
+ <radialGradient id="g-sap" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#9ADCFA"/><stop offset=".6" stop-color="#3FA6DD"/><stop offset="1" stop-color="#1D6FB0"/></radialGradient>
+ <radialGradient id="g-perox-m" cx=".4" cy=".35" r=".85"><stop offset="0" stop-color="#E9B27A"/><stop offset="1" stop-color="#8A4E22"/></radialGradient>
+ <radialGradient id="g-field" cx=".5" cy=".45" r=".8"><stop offset="0" stop-color="#14424A"/><stop offset="1" stop-color="#06202A"/></radialGradient>
+ <radialGradient id="g-cytfield" cx=".5" cy=".4" r=".9"><stop offset="0" stop-color="#EAF6C6"/><stop offset="1" stop-color="#BFD97E"/></radialGradient>
+ <filter id="fShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity=".4"/></filter>
+ <filter id="fSoft"><feGaussianBlur stdDeviation="3"/></filter>
+ <filter id="fRough" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="9"/></filter>
+ <filter id="fGrain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="2" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 -.12" result="a"/><feComposite in="a" in2="SourceGraphic" operator="in" result="g"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="g"/></feMerge></filter>
+ <pattern id="pLat" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#6B3A17"/><rect x="2" y="2" width="18" height="18" rx="3" fill="#C98F55"/><rect x="4" y="4" width="8" height="6" rx="2" fill="#E8BE8A"/></pattern>
+ <pattern id="pCel" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="14" height="14" fill="#7E9A28"/><path d="M0 3.5H14M0 10.5H14" stroke="#C6DB6A" stroke-width="2.4"/></pattern>
+ <pattern id="pCel2" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-48)"><rect width="14" height="14" fill="none"/><path d="M0 3.5H14M0 10.5H14" stroke="#B6CF52" stroke-width="2.2"/></pattern>
+ <pattern id="pSec" width="30" height="9" patternUnits="userSpaceOnUse"><rect width="30" height="9" fill="#4F6C10"/><rect y="1" width="30" height="3" rx="1.5" fill="#B7D04C"/><rect y="5" width="30" height="3" rx="1.5" fill="#9DBA35"/></pattern>
+ <pattern id="pSec2" width="10" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(18)"><rect width="10" height="26" fill="#51701A"/><rect x="1" width="3" height="26" rx="1.5" fill="#A9C443"/><rect x="5.5" width="3" height="26" rx="1.5" fill="#C2DB60"/></pattern>
+ <pattern id="pLam" width="18" height="18" patternUnits="userSpaceOnUse"><rect width="18" height="18" fill="#C79A3B"/><circle cx="5" cy="5" r="2.4" fill="#F2D27A"/><circle cx="13" cy="12" r="2.8" fill="#E6BE5C"/><circle cx="4" cy="14" r="1.8" fill="#8F6A1A"/></pattern>`;
+ $('#gdefs').innerHTML=s;
+}
+const SC={};
+/* ---------- scene art 1: nucleus, chloroplast, mitochondrion, vacuole (viewBox 800x600) ---------- */
+SC.nucleus=()=>{
+ const r=rng(7),cx=430,cy=290,R=205,Ri=187;let s='';
+ const erD='M292 398C232 430 160 428 112 478S92 560 156 578';
+ s+=tube(erD,52,'er',5);
+ [26,-26].forEach(o=>pts(erD,26,o).forEach(p=>{s+=rib(p[0],p[1],5.5,5)}));
+ s+=`<circle data-p="0" cx="${cx}" cy="${cy}" r="${R}" fill="#A98CF7" stroke="${PAL.nucleus[2]}" stroke-width="7" filter="url(#fShadow)"/>`;
+ s+=`<circle data-p="2" cx="${cx}" cy="${cy}" r="${Ri}" fill="url(#g-nucleoplasm)" stroke="#2A1366" stroke-width="5"/>`;
+ s+=gloss(cx-70,cy-110,90,38,.18);
+ /* dense chromatin clumps hugging the envelope */
+ let h='';for(let i=0;i<22;i++){const a=r()*6.283,d=150+r()*26;h+=`<ellipse cx="${f1(cx+d*Math.cos(a))}" cy="${f1(cy+d*Math.sin(a))}" rx="${10+r()*14}" ry="${6+r()*8}" transform="rotate(${f1(a*57.3+90)} ${f1(cx+d*Math.cos(a))} ${f1(cy+d*Math.sin(a))})" fill="#1B0C4C" opacity=".88"/>`}
+ s+=`<g data-p="3" filter="url(#fRough)">${h}</g>`;
+ /* loose chromatin strands */
+ let c='';for(let k=0;k<10;k++){let x=k===0?330:cx+(r()-.5)*220,y=k===0?215:cy+(r()-.5)*220,a=r()*6.283,P=[[x,y]];for(let j=0;j<14;j++){a+=(r()-.5)*2.2;x+=Math.cos(a)*20;y+=Math.sin(a)*20;const dx=x-cx,dy=y-cy,dd=Math.hypot(dx,dy);if(dd>150){x=cx+dx*.9;y=cy+dy*.9}P.push([x,y])}const d=smooth(P);c+=`<path d="${d}" stroke="#C4AEFF" stroke-width="6" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#F2EAFF" stroke-width="2" fill="none" stroke-linecap="round"/>`}
+ s+=`<g data-p="3">${c}</g>`;
+ /* nucleolus */
+ s+=`<g data-p="4"><circle cx="${cx+34}" cy="${cy-16}" r="58" fill="#1A0B46" stroke="#0C0430" stroke-width="3"/>`;
+ for(let i=0;i<70;i++){const a=r()*6.283,d=Math.sqrt(r())*50;s+=`<circle cx="${f1(cx+34+d*Math.cos(a))}" cy="${f1(cy-16+d*Math.sin(a))}" r="${1.4+r()*2.4}" fill="${r()>.5?'#7C58E0':'#4B2BA8'}"/>`}
+ s+=`<circle cx="${cx+24}" cy="${cy-24}" r="17" fill="#3A2090"/><circle cx="${cx+19}" cy="${cy-29}" r="6" fill="#9D7BF5" opacity=".8"/></g>`;
+ /* nuclear pores */
+ const poreA=[-70,-30,5,40,80,110,175,210,250];
+ poreA.forEach(a=>{s+=`<g data-p="1" transform="translate(${cx} ${cy}) rotate(${a})"><path d="M${Ri-4} -9L${Ri-44} -3M${Ri-4} 9L${Ri-44} 3" stroke="#FFE38A" stroke-width="3.4" stroke-linecap="round"/><path d="M${R+4} -9L${R+22} -14M${R+4} 9L${R+22} 14" stroke="#FFE38A" stroke-width="3" stroke-linecap="round"/><rect x="${Ri-7}" y="-12" width="${R-Ri+14}" height="24" rx="6" fill="#FFF1B8" stroke="#2A1366" stroke-width="3.4"/><rect x="${Ri-1}" y="-4" width="${R-Ri+2}" height="8" rx="3" fill="#3A1E86"/></g>`});
+ const pin=[[cx-145,cy-145],[cx+Math.round(196*Math.cos(-.5236)),cy+Math.round(196*Math.sin(-.5236))],[300,380],[330,215],[cx+34,cy+42],at(erD,.45)];
+ const mrnaD='M530 268L'+(cx+Math.round(196*Math.cos(-.5236)))+' '+(cy+Math.round(196*Math.sin(-.5236)))+'L770 110';
+ return{svg:s,pins:pin,flows:[
+  {l:'mRNA',c:'#5EEAD4',d:mrnaD,dur:3.4,n:3},
+  {l:'Proteins in',c:'#FFD43B',d:`M780 500L${cx+Math.round(196*Math.cos(.698))} ${cy+Math.round(196*Math.sin(.698))}L480 350`,dur:3.6,n:2,delay:.5},
+  {l:'Ribosome parts',c:'#FF8FB8',d:`M490 290L${cx+Math.round(196*Math.cos(.087))} ${cy+Math.round(196*Math.sin(.087))}L780 320`,dur:3.4,n:2,delay:1}
+ ]};
+};
+
+SC.chloroplast=()=>{
+ const r=rng(11);let s='';
+ s+=`<ellipse data-p="0" cx="400" cy="300" rx="362" ry="226" fill="#6FD060" stroke="#0A4A1F" stroke-width="9" filter="url(#fShadow)"/>`;
+ s+=`<ellipse data-p="0" cx="400" cy="300" rx="346" ry="210" fill="#2E9B45" stroke="#13692E" stroke-width="5"/>`;
+ s+=`<ellipse data-p="1" cx="400" cy="300" rx="334" ry="198" fill="url(#g-stroma)"/>`;
+ s+=gloss(300,170,170,34,.28);
+ const G=[[250,170,7],[400,150,8],[550,175,7],[300,325,7],[470,335,8],[600,330,6]],H=15,W=104;
+ const mid=g=>[g[0],g[1]+g[2]*H/2];
+ /* lamellae first (behind) */
+ const L=[[0,1],[1,2],[0,3],[1,4],[2,5],[3,4],[4,5]];
+ let lam='',lamD=[];L.forEach(([a,b])=>{const p=mid(G[a]),q=mid(G[b]),d=`M${p[0]} ${p[1]}C${p[0]+(q[0]-p[0])*.3} ${p[1]+30} ${p[0]+(q[0]-p[0])*.7} ${q[1]-30} ${q[0]} ${q[1]}`;lamD.push(d);lam+=`<path d="${d}" stroke="#0F6E2C" stroke-width="13" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#52C766" stroke-width="6" fill="none" stroke-linecap="round"/>`});
+ s+=`<g data-p="4">${lam}</g>`;
+ /* starch, plastoglobuli */
+ [[168,330,50,33],[655,235,30,20]].forEach(q=>{let e='';for(let i=0;i<4;i++)e+=`<ellipse cx="${q[0]}" cy="${q[1]}" rx="${q[2]-i*q[2]*.22}" ry="${q[3]-i*q[3]*.22}" fill="none" stroke="#D9C98A" stroke-width="1.8"/>`;s+=`<g data-p="5"><ellipse cx="${q[0]}" cy="${q[1]}" rx="${q[2]}" ry="${q[3]}" fill="#FFFCEC" stroke="#CDBB78" stroke-width="3.5"/>${e}${gloss(q[0]-q[2]*.3,q[1]-q[3]*.4,q[2]*.4,q[3]*.25,.7)}</g>`});
+ for(let i=0;i<9;i++){const a=r()*6.283,d=.78+r()*.1;s+=`<g data-p="1"><circle cx="${f1(400+330*d*Math.cos(a))}" cy="${f1(300+196*d*Math.sin(a))}" r="${5+r()*4}" fill="#FFC93C" stroke="#B8860B" stroke-width="1.4"/></g>`}
+ /* grana */
+ G.forEach(g=>{for(let i=0;i<g[2];i++){const y=g[1]+i*H,w=W-Math.abs(i-g[2]/2)*1.5;s+=`<g><rect data-p="2" x="${g[0]-w/2}" y="${y}" width="${w}" height="${H-1.5}" rx="6" fill="url(#l-thyl)" stroke="#07461B" stroke-width="1.8"/><rect data-p="3" x="${g[0]-w/2+9}" y="${y+4}" width="${w-18}" height="${H-9}" rx="3" fill="#DDFBC0" opacity=".92"/></g>`}});
+ /* DNA ring + ribosomes */
+ s+=`<g data-p="6"><ellipse cx="365" cy="302" rx="32" ry="15" fill="none" stroke="#7A3FD0" stroke-width="6"/><ellipse cx="365" cy="302" rx="32" ry="15" fill="none" stroke="#D3B8FF" stroke-width="2" stroke-dasharray="5 4"/>`;
+ for(let i=0;i<14;i++)s+=rib(f1(330+r()*80),f1(280+r()*50),3.8,6);
+ for(let i=0;i<10;i++)s+=rib(f1(110+r()*560),f1(230+r()*160),3.6,6);
+ s+='</g>';
+ const pin=[[230,101],[455,300],[212,168],[400,201],at(lamD[0],.5),[168,330],[365,302]];
+ return{svg:s,pins:pin,flows:[
+  {l:'Light',c:'#FFD43B',d:'M330 -20L330 200',dur:2.6,n:3},
+  {l:'H₂O',c:'#5BC0FF',d:'M-20 250L250 215',dur:2.8,n:2,delay:.3},
+  {l:'CO₂',c:'#C3C9D6',d:'M-20 440L200 380L330 320',dur:3,n:2,delay:.6},
+  {l:'O₂',c:'#8FF3FF',d:'M420 190L640 40L820 -20',dur:3,n:3,delay:1.3},
+  {l:'Sugar',c:'#FF8FB8',d:'M480 330L650 310L830 330',dur:3.2,n:3,delay:1.8}
+ ]};
+};
+
+SC.mito=()=>{
+ const r=rng(5);let s='';
+ s+=`<rect data-p="0" x="50" y="110" width="700" height="380" rx="130" fill="url(#l-mito)" stroke="#8A3200" stroke-width="10" filter="url(#fShadow)"/>`;
+ s+=`<rect data-p="1" x="58" y="118" width="684" height="364" rx="122" fill="none" stroke="#FFC27A" stroke-width="3" opacity=".6"/>`;
+ let d='M74 240A106 106 0 0 1 180 134';
+ [230,330,430,530].forEach(x=>{d+=`L${x-11} 134L${x-11} 328A11 11 0 0 0 ${x+11} 328L${x+11} 134`});
+ d+='L620 134A106 106 0 0 1 726 240L726 360A106 106 0 0 1 620 466';
+ [580,480,380,280].forEach(x=>{d+=`L${x+11} 466L${x+11} 272A11 11 0 0 0 ${x-11} 272L${x-11} 466`});
+ d+='L180 466A106 106 0 0 1 74 360Z';
+ s+=`<path data-p="3" d="${d}" fill="url(#g-matrix)"/>`;
+ /* matrix texture */
+ for(let i=0;i<46;i++){const x=110+r()*580,y=160+r()*280;s+=`<circle data-p="3" cx="${f1(x)}" cy="${f1(y)}" r="${1.2+r()*1.6}" fill="#E49A4C" opacity=".55"/>`}
+ s+=`<path data-p="2" d="${d}" fill="none" stroke="#C24E00" stroke-width="8" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#FFB265" stroke-width="2.4" stroke-linejoin="round" opacity=".7" pointer-events="none"/>`;
+ /* ATP synthase lollipops along inner membrane */
+ let at_='';pts(d,62,13).forEach(p=>{at_+=`<g transform="translate(${p[0]} ${p[1]})"><circle r="6.5" fill="#E6283C" stroke="#7A0F1C" stroke-width="1.5"/><circle cx="-2" cy="-2.2" r="2.2" fill="#fff" opacity=".6"/></g>`});
+ s+=`<g data-p="5">${at_}</g>`;
+ /* mtDNA + ribosomes */
+ s+=`<g data-p="4"><path d="M640 300c-10-34 38-48 52-18s-18 52-44 40-14-30 4-34" fill="none" stroke="#6F35C8" stroke-width="6" stroke-linecap="round"/><path d="M640 300c-10-34 38-48 52-18s-18 52-44 40-14-30 4-34" fill="none" stroke="#D8C2FF" stroke-width="2" stroke-linecap="round"/>`;
+ [[610,250],[700,340],[620,350],[690,235],[660,370]].forEach(q=>s+=rib(q[0],q[1],4.5,4));
+ s+='</g>';
+ const pin=[[400,488],[400,122],[330,330],[380,225],[655,300],at(d,.02)];
+ pin[5]=[88,300];
+ return{svg:s,pins:pin,flows:[
+  {l:'Pyruvate',c:'#FF8FB8',d:'M-20 190L380 225',dur:3.2,n:2},
+  {l:'O₂',c:'#8FF3FF',d:'M-20 430L300 395L400 300',dur:3.2,n:2,delay:.5},
+  {l:'ATP',c:'#FFE14D',d:'M420 300L640 220L830 180',dur:3.2,n:3,delay:1.4},
+  {l:'CO₂',c:'#C3C9D6',d:'M470 220L560 60L580 -20',dur:3,n:2,delay:1.7},
+  {l:'H₂O',c:'#5BC0FF',d:'M470 400L560 560L580 620',dur:3,n:2,delay:2}
+ ]};
+};
+
+SC.vacuole=()=>{
+ const r=rng(3);let s='';
+ const bd='M110 300C108 150 262 66 410 72C582 78 702 150 696 300C690 452 560 536 400 531C240 526 112 452 110 300Z';
+ s+=`<path data-p="1" d="${bd}" fill="url(#g-sap)" filter="url(#fShadow)"/>`;
+ s+=gloss(330,150,160,34,.35);
+ /* sugar rings + ions drifting in sap */
+ for(let i=0;i<16;i++){const x=170+r()*460,y=130+r()*340;if(((x-400)/280)**2+((y-300)/180)**2>.8)continue;s+=`<g data-p="1" transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(r()*60)})" opacity=".85"><polygon points="0,-9 8,-4.5 8,4.5 0,9 -8,4.5 -8,-4.5" fill="none" stroke="#fff" stroke-width="2.2"/><circle r="2.4" fill="#fff"/></g>`}
+ for(let i=0;i<14;i++){const x=170+r()*460,y=130+r()*340;if(((x-400)/280)**2+((y-300)/180)**2>.75)continue;s+=`<g data-p="1"><circle cx="${f1(x)}" cy="${f1(y)}" r="6" fill="#FFE57A" stroke="#9B7B00" stroke-width="1.2"/><text x="${f1(x)}" y="${f1(y+3.4)}" font-size="9" font-weight="700" text-anchor="middle" fill="#6a4f00">+</text></g>`}
+ /* pigments */
+ [[250,230,34,'#A21CAF'],[505,200,26,'#7C3AED'],[470,390,30,'#BE123C'],[250,380,22,'#7C3AED'],[600,330,20,'#C026D3']].forEach(q=>{s+=`<g data-p="2"><circle cx="${q[0]}" cy="${q[1]}" r="${q[2]}" fill="${q[3]}" stroke="rgba(0,0,0,.35)" stroke-width="2"/><circle cx="${q[0]-q[2]*.3}" cy="${q[1]-q[2]*.35}" r="${q[2]*.35}" fill="#fff" opacity=".45"/></g>`});
+ /* raphide crystal bundle */
+ let cr='';for(let i=0;i<9;i++){const a=-30+i*7.5+(r()-.5)*4,len=96+r()*28;cr+=`<g transform="translate(360 420) rotate(${f1(a)})"><polygon points="-3.5,0 3.5,0 1,${-len} -1,${-len}" fill="#F4FBFF" stroke="#7FB3D6" stroke-width="1.4"/><polygon points="-3.5,0 0,0 -1,${-len}" fill="#C7E6F8" opacity=".8"/></g>`}
+ s+=`<g data-p="3" style="filter:drop-shadow(0 0 4px rgba(255,255,255,.7))">${cr}</g>`;
+ /* tonoplast + pumps */
+ s+=`<path data-p="0" d="${bd}" fill="none" stroke="#0F5E92" stroke-width="16" stroke-linejoin="round"/><path d="${bd}" fill="none" stroke="#5FBFEF" stroke-width="5" stroke-dasharray="1 9" stroke-linecap="round" pointer-events="none"/>`;
+ let pm='';pts(bd,54,-2).forEach((p,i)=>{pm+=`<g transform="translate(${p[0]} ${p[1]}) rotate(${p[2]})"><rect x="-10" y="-2" width="20" height="24" rx="6" fill="#FFD66B" stroke="#8A5A00" stroke-width="2.4"/><rect x="-14" y="16" width="28" height="12" rx="6" fill="#FFB938" stroke="#8A5A00" stroke-width="2.4"/><circle cx="-4" cy="6" r="3" fill="#fff" opacity=".6"/></g>`});
+ s+=`<g data-p="4">${pm}</g>`;
+ const pin=[[150,196],[400,300],[250,230],[388,350],at(bd,.28)];
+ pin[0]=at(bd,.9);pin[4]=at(bd,.07);
+ return{svg:s,pins:pin,flows:[
+  {l:'H₂O',c:'#E1F6FF',d:'M-20 300L330 300',dur:3.2,n:3},
+  {l:'H⁺ pumped in',c:'#FFD66B',d:'M400 640L400 440',dur:3,n:2,delay:.6},
+  {l:'Sugars',c:'#FFFFFF',d:'M830 420L560 340',dur:3,n:2,delay:1}
+ ]};
+};
+/* ---------- scene art 2: ER, Golgi, ribosome, peroxisome ---------- */
+SC.er=()=>{
+ let s='';
+ const sheets=['M40 110C150 56 250 168 372 102','M30 222C142 168 252 280 382 212','M40 334C150 280 260 392 392 322'];
+ sheets.forEach(d=>{
+  s+=`<path data-p="0" d="${d}" fill="none" stroke="#86136A" stroke-width="62" stroke-linecap="round"/>`;
+  s+=`<path data-p="2" d="${d}" fill="none" stroke="#FFD0EA" stroke-width="40" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" transform="translate(-3 -7)" pointer-events="none"/>`;
+ });
+ sheets.forEach(d=>[40,-40].forEach(o=>pts(d,25,o,14).forEach(p=>{s+=rib(p[0],p[1],6,1)})));
+ /* smooth ER tubes */
+ const N={a:[470,110],b:[570,170],c:[660,112],d:[716,214],e:[600,262],f:[486,252],g:[574,356],h:[690,346],i:[480,372]};
+ const ed=[['a','b'],['b','c'],['c','d'],['d','e'],['e','b'],['e','f'],['e','g'],['g','h'],['h','d'],['g','i'],['f','i']];
+ let t='';ed.forEach(([u,v])=>{const p=N[u],q=N[v],m=[(p[0]+q[0])/2+(p[1]-q[1])*.12,(p[1]+q[1])/2+(q[0]-p[0])*.12];t+=tube(`M${p[0]} ${p[1]}Q${m[0]} ${m[1]} ${q[0]} ${q[1]}`,30,'er',3)});
+ const links=['M372 102C420 100 440 108 470 110','M382 212C430 220 450 240 486 252','M392 322C430 340 450 362 480 372'];
+ links.forEach(d=>t+=tube(d,30,'er',3));
+ s+=t;
+ Object.values(N).forEach(p=>{s+=`<circle data-p="3" cx="${p[0]}" cy="${p[1]}" r="20" fill="#E04FA9" stroke="#86136A" stroke-width="3"/><circle cx="${p[0]-5}" cy="${p[1]-6}" r="6" fill="#FFD6EC" opacity=".7"/>`});
+ /* vesicles */
+ const V=[[250,470],[330,520],[600,470],[520,540]];
+ V.forEach((v,i)=>{s+=`<g data-p="4"><circle cx="${v[0]}" cy="${v[1]}" r="24" fill="#FFD0EA" stroke="#86136A" stroke-width="4"/><circle cx="${v[0]}" cy="${v[1]}" r="24" fill="url(#g-er)" opacity=".4"/><circle cx="${v[0]-5}" cy="${v[1]-3}" r="6" fill="#7A2BD0"/><circle cx="${v[0]+7}" cy="${v[1]+5}" r="4.5" fill="#FFC93C"/></g>`});
+ s+=`<path data-p="4" d="M200 380C205 410 205 430 215 446" fill="none" stroke="#86136A" stroke-width="10" stroke-linecap="round"/>`;
+ s+=`<g data-p="4"><circle cx="220" cy="458" r="22" fill="#FFD0EA" stroke="#86136A" stroke-width="4"/><circle cx="217" cy="456" r="6" fill="#7A2BD0"/></g>`;
+ s+=`<text x="40" y="440" font-size="17" font-weight="600" fill="#fff" opacity=".7">Rough ER</text><text x="600" y="430" font-size="17" font-weight="600" fill="#fff" opacity=".7">Smooth ER</text>`;
+ const rp=pts(sheets[1],25,-40,14)[4];
+ return{svg:s,pins:[at(sheets[0],.25),[rp[0],rp[1]],at(sheets[2],.42),N.e,V[1]],flows:[
+  {l:'New protein',c:'#FF9FD2',d:'M60 150C150 120 260 220 372 170',dur:3.4,n:3},
+  {l:'Lipids',c:'#FFE14D',d:'M720 360L600 262L486 252',dur:3.2,n:2,delay:.8},
+  {l:'Vesicle to Golgi',c:'#7DF2E0',d:'M220 458L420 500L800 560',dur:3.4,n:2,delay:1.4}
+ ]};
+};
+
+SC.golgi=()=>{
+ let s='';
+ const n=5;
+ for(let k=0;k<n;k++){
+  const y=165+k*70,x1=120+k*14,x2=680-k*14,d=`M${x1} ${y}Q400 ${y-78} ${x2} ${y}`,p=k===0?1:k===n-1?2:0;
+  const c=[lerpHex('#8FF5E3','#0F9E8B',k/(n-1)),lerpHex('#4DD9C4','#087A6B',k/(n-1)),lerpHex('#C9FBF1','#5ADBC7',k/(n-1))];
+  s+=`<g data-p="${p}"><path d="${d}" fill="none" stroke="#06463E" stroke-width="44" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c[1]}" stroke-width="34" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c[2]}" stroke-width="9" stroke-linecap="round" opacity=".75" transform="translate(-3 -8)"/>`;
+  s+=`<circle cx="${x1-6}" cy="${y-3}" r="24" fill="${c[1]}" stroke="#06463E" stroke-width="4"/><circle cx="${x2+6}" cy="${y-3}" r="24" fill="${c[1]}" stroke="#06463E" stroke-width="4"/>`;
+  s+=`<circle cx="${x1-11}" cy="${y-9}" r="7" fill="#fff" opacity=".4"/><circle cx="${x2+1}" cy="${y-9}" r="7" fill="#fff" opacity=".4"/></g>`;
+ }
+ /* incoming ER vesicles (cis) and outgoing vesicles (trans) */
+ [[70,110],[160,62],[260,40],[40,200]].forEach(v=>{s+=`<g data-p="3"><circle cx="${v[0]}" cy="${v[1]}" r="21" fill="#FFD0EA" stroke="#86136A" stroke-width="4"/><circle cx="${v[0]-4}" cy="${v[1]-3}" r="6" fill="#7A2BD0"/><circle cx="${v[0]+7}" cy="${v[1]+5}" r="4" fill="#FFC93C"/></g>`});
+ [[690,495],[560,535],[260,530],[130,495],[400,548]].forEach((v,i)=>{const c=['#FFB36B','#B6E35A','#7FC8FF','#FFB36B','#E9A6FF'][i];s+=`<g data-p="3"><circle cx="${v[0]}" cy="${v[1]}" r="23" fill="${c}" stroke="#06463E" stroke-width="4"/><circle cx="${v[0]-6}" cy="${v[1]-6}" r="6" fill="#fff" opacity=".6"/></g>`});
+ s+=`<text x="20" y="262" font-size="20" font-weight="700" fill="#BFFAF0">CIS</text><text x="20" y="262" font-size="13" fill="#BFFAF0" opacity=".7" dy="18">receiving side</text>`;
+ s+=`<text x="640" y="470" font-size="20" font-weight="700" fill="#BFFAF0">TRANS</text><text x="640" y="470" font-size="13" fill="#BFFAF0" opacity=".7" dy="18">shipping side</text>`;
+ return{svg:s,pins:[[400,255],[400,87],[400,367],[690,495]],flows:[
+  {l:'Cargo from ER',c:'#FF9FD2',d:'M60 100L200 130L400 100',dur:3.2,n:3},
+  {l:'Cargo moves down',c:'#FFE14D',d:'M250 170C230 230 270 280 250 310S270 400 250 440',dur:3.6,n:2,delay:.8},
+  {l:'To the cell wall',c:'#B6E35A',d:'M560 440L690 520L800 560',dur:3,n:2,delay:1.6},
+  {l:'To the vacuole',c:'#7FC8FF',d:'M300 440L200 540L130 600',dur:3,n:2,delay:2}
+ ]};
+};
+
+SC.ribosome=()=>{
+ const r=rng(9);let s='';
+ const blob=(cs,fill,p,dy=0)=>`<g data-p="${p}" filter="url(#fRough)"><g filter="url(#fShadow)">${cs.map(c=>`<circle cx="${c[0]}" cy="${c[1]+dy}" r="${c[2]}" fill="${fill}"/>`).join('')}</g></g>`;
+ s+=blob([[290,380,58],[370,396,66],[460,388,62],[540,368,46],[420,360,60]],'url(#g-ribosome2)',1);
+ s+=blob([[340,215,92],[430,200,100],[395,140,74],[480,250,76],[320,262,62]],'url(#g-ribosome)',0);
+ s+=gloss(380,130,80,30,.3)+gloss(310,370,60,16,.25);
+ /* tunnel */
+ s+=`<path d="M470 215C500 190 520 170 548 150" stroke="#4A0716" stroke-width="30" stroke-linecap="round" fill="none" opacity=".55" pointer-events="none"/>`;
+ const mD='M-10 312C130 278 250 336 400 304S650 276 810 312';
+ s+=`<g data-p="2"><path d="${mD}" fill="none" stroke="#0B4F4A" stroke-width="20" stroke-linecap="round"/><path d="${mD}" fill="none" stroke="#2DD4BF" stroke-width="13" stroke-linecap="round"/>`;
+ pts(mD,19,0).forEach((p,i)=>{if(i%3===0)s+=`<line x1="${p[0]}" y1="${f1(p[1]-9)}" x2="${p[0]}" y2="${f1(p[1]+9)}" stroke="#0B4F4A" stroke-width="3" transform="rotate(${p[2]} ${p[0]} ${p[1]})"/>`});
+ s+='</g>';
+ const tR=(x,col,aa)=>`<g data-p="3"><path d="M${x} 300V238" stroke="#7A5200" stroke-width="16" stroke-linecap="round"/><path d="M${x} 300V238" stroke="${col}" stroke-width="10" stroke-linecap="round"/><path d="M${x-30} 262Q${x-52} 240 ${x-28} 232M${x+30} 262Q${x+52} 240 ${x+28} 232" stroke="#7A5200" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M${x-30} 262Q${x-52} 240 ${x-28} 232M${x+30} 262Q${x+52} 240 ${x+28} 232" stroke="${col}" stroke-width="7" stroke-linecap="round" fill="none"/>${bead(x-9,308,5,'#0B4F4A')}${bead(x,309,5,'#0B4F4A')}${bead(x+9,308,5,'#0B4F4A')}${aa}</g>`;
+ s+=tR(352,'#FFD43B',bead(352,224,13,'#60A5FA'));
+ s+=tR(452,'#FFC21A',bead(452,224,13,'#A78BFA'));
+ /* growing chain */
+ const C=[[452,224],[470,192],[500,170],[528,140],[560,112],[600,92],[648,92],[690,118],[708,160]],col=['#A78BFA','#34D399','#F472B6','#FBBF24','#60A5FA','#34D399','#F472B6','#FBBF24','#60A5FA'];
+ s+=`<path data-p="4" d="${smooth(C)}" fill="none" stroke="#2A2A2A" stroke-width="9" stroke-linecap="round" opacity=".5"/>`;
+ C.slice(1).forEach((p,i)=>s+=bead(p[0],p[1],14,col[i+1],4));
+ return{svg:s,pins:[[340,160],[420,420],[120,288],[352,262],[600,92]],flows:[
+  {l:'tRNA + amino acid',c:'#FFD43B',d:'M80 130C200 110 300 190 352 236',dur:3.4,n:2},
+  {l:'mRNA slides through',c:'#2DD4BF',d:'M-20 312C130 278 250 336 400 304S650 276 820 312',dur:4.4,n:2,delay:.4},
+  {l:'New protein chain',c:'#F472B6',d:'M470 192C520 150 580 90 650 92S740 150 800 210',dur:3.4,n:3,delay:1.2}
+ ]};
+};
+
+SC.peroxisome=()=>{
+ const r=rng(13);let s='';
+ s+=`<circle data-p="0" cx="400" cy="300" r="222" fill="url(#g-perox-m)" stroke="#3D1F08" stroke-width="12" filter="url(#fShadow)"/>`;
+ s+=`<circle cx="400" cy="300" r="210" fill="none" stroke="#E8B98A" stroke-width="3" opacity=".6" pointer-events="none"/>`;
+ s+=gloss(300,170,120,36,.28);
+ s+=`<g data-p="1" transform="rotate(16 400 300)"><rect x="318" y="218" width="176" height="176" rx="12" fill="url(#pLat)" stroke="#3D1F08" stroke-width="6"/><rect x="318" y="218" width="176" height="176" rx="12" fill="none" stroke="#F4D3A5" stroke-width="2" opacity=".5"/></g>`;
+ /* catalase tetramers */
+ const T=(x,y)=>`<g data-p="2" transform="translate(${x} ${y})"><circle cx="-6" cy="-6" r="7.5" fill="#7DD3C0" stroke="#0F5E52" stroke-width="1.6"/><circle cx="6" cy="-6" r="7.5" fill="#5CC2AB" stroke="#0F5E52" stroke-width="1.6"/><circle cx="-6" cy="6" r="7.5" fill="#5CC2AB" stroke="#0F5E52" stroke-width="1.6"/><circle cx="6" cy="6" r="7.5" fill="#7DD3C0" stroke="#0F5E52" stroke-width="1.6"/></g>`;
+ for(let i=0;i<26;i++){const a=r()*6.283,d=80+r()*118,x=400+d*Math.cos(a),y=300+d*Math.sin(a);if(x>300&&x<510&&y>200&&y<410)continue;s+=T(f1(x),f1(y))}
+ /* H2O2 molecules */
+ const M=(x,y,a)=>`<g transform="translate(${x} ${y}) rotate(${a})"><line x1="-8" y1="0" x2="8" y2="0" stroke="#fff" stroke-width="4"/><circle cx="-9" cy="0" r="8" fill="#EF4444" stroke="#7F1D1D" stroke-width="1.4"/><circle cx="9" cy="0" r="8" fill="#EF4444" stroke="#7F1D1D" stroke-width="1.4"/><circle cx="-18" cy="-9" r="4.6" fill="#fff"/><circle cx="18" cy="9" r="4.6" fill="#fff"/></g>`;
+ [[225,310,20],[560,230,-30],[300,170,40]].forEach(m=>s+=M(...m));
+ return{svg:s,pins:[[400,92],[400,306],[250,420]],flows:[
+  {l:'H₂O₂ (toxic)',c:'#EF4444',d:'M-20 330L220 330L330 330',dur:3.2,n:3},
+  {l:'H₂O',c:'#5BC0FF',d:'M480 330L650 360L830 400',dur:3,n:2,delay:1.6},
+  {l:'O₂',c:'#8FF3FF',d:'M480 270L650 200L830 140',dur:3,n:2,delay:1.9}
+ ]};
+};
+/* ---------- scene art 3: wall, membrane, cytoplasm ---------- */
+SC.wall=()=>{
+ const r=rng(21);let s='';
+ const band=(y,h,fill,p,extra='')=>`<g data-p="${p}"><rect y="${y}" width="800" height="${h}" fill="${fill}"/>${extra}</g>`;
+ /* cytoplasm above and below */
+ const cyto=(y,h)=>{let c=`<rect y="${y}" width="800" height="${h}" fill="#355B2C"/>`;for(let i=0;i<34;i++)c+=`<circle cx="${f1(r()*800)}" cy="${f1(y+r()*h)}" r="${1.5+r()*3}" fill="#6E9A4B" opacity=".6"/>`;return c};
+ s+=cyto(0,128)+cyto(472,128);
+ /* microtubules just under each membrane */
+ [[96],[504]].forEach(([y])=>{s+=`<path d="M0 ${y}H800" stroke="#1E5E8F" stroke-width="16"/><path d="M0 ${y}H800" stroke="#7DC8FF" stroke-width="9"/><path d="M0 ${y}H800" stroke="#fff" stroke-width="2.4" stroke-dasharray="1 10" stroke-linecap="round" opacity=".8"/>`});
+ /* layers */
+ s+=band(140,26,'url(#pSec)',2)+band(166,50,'url(#pSec2)',2);
+ s+=band(216,52,'url(#pCel)',1,'<rect y="216" width="800" height="52" fill="url(#pCel2)"/>');
+ s+=band(268,64,'url(#pLam)',0);
+ s+=band(332,52,'url(#pCel)',1,'<rect y="332" width="800" height="52" fill="url(#pCel2)"/>');
+ s+=band(384,50,'url(#pSec2)',2)+band(434,26,'url(#pSec)',2);
+ /* membranes */
+ [[128,12],[460,12]].forEach(([y,h])=>{s+=`<g data-p="4"><rect y="${y}" width="800" height="${h}" fill="#F2B531"/><path d="M0 ${y+h/2}H800" stroke="#FFF1BC" stroke-width="4" stroke-dasharray="1 8" stroke-linecap="round"/><path d="M0 ${y}H800M0 ${y+h}H800" stroke="#946000" stroke-width="2"/></g>`});
+ /* plasmodesma */
+ const px=596;
+ s+=`<g data-p="3"><rect x="${px-38}" y="128" width="76" height="344" fill="#355B2C"/><path d="M${px-38} 128V472M${px+38} 128V472" stroke="#F2B531" stroke-width="10"/><path d="M${px-38} 128V472M${px+38} 128V472" stroke="#FFF1BC" stroke-width="3" stroke-dasharray="1 8" stroke-linecap="round"/>`;
+ s+=tube(`M${px} 40V560`,20,'er');
+ for(let i=0;i<10;i++)s+=`<circle cx="${px+(i%2?-24:24)}" cy="${150+i*33}" r="${3+r()*2}" fill="#8EE08A"/>`;
+ s+='</g>';
+ s+=`<g data-p="3">${tube(`M${px} 40C${px+50} 60 ${px+100} 30 ${px+150} 70`,16,'er')}${tube(`M${px} 560C${px-50} 540 ${px-110} 570 ${px-160} 530`,16,'er')}</g>`;
+ s+=`<text x="16" y="30" font-size="16" font-weight="700" fill="#E6F5D6" opacity=".85">Cell 1 (cytoplasm)</text><text x="16" y="582" font-size="16" font-weight="700" fill="#E6F5D6" opacity=".85">Cell 2 (cytoplasm)</text>`;
+ return{svg:s,pins:[[220,300],[220,242],[220,190],[px,300],[220,134]],flows:[
+  {l:'Water',c:'#5BC0FF',d:'M120 560L120 300L120 20',dur:3.6,n:3},
+  {l:'Sugars via plasmodesma',c:'#FFD43B',d:`M${px-14} 570L${px-14} 300L${px-14} 30`,dur:3.6,n:3,delay:.8}
+ ]};
+};
+
+SC.membrane=()=>{
+ const r=rng(33);let s='';
+ const yT=196,yB=404,mid=300;
+ s+=`<rect width="800" height="${yT-30}" fill="#10404B" opacity=".55"/><rect y="${yB+30}" width="800" height="${600-yB-30}" fill="#3E6A26" opacity=".45"/>`;
+ const lip=(x,top)=>{const y=top?yT:yB,dir=top?1:-1,w=(r()-.5)*5;let t='';[-5,5].forEach((o,i)=>{const L=mid-y,q=[x+o];t+=`<path d="M${x+o} ${y+dir*10}c${i?6:-6} ${dir*L*.25} ${i?-6:6} ${dir*L*.5} ${w+(i?3:-3)} ${dir*(L*.5-6)}" stroke="#F8D774" stroke-width="3.2" fill="none" stroke-linecap="round"/>`});return`<g data-p="0">${t}<circle cx="${x}" cy="${y}" r="13" fill="url(#g-membrane)" stroke="#946000" stroke-width="1.6"/><circle cx="${x-4}" cy="${y-4}" r="4" fill="#fff" opacity=".55"/></g>`};
+ const skip=[[140,232],[298,376],[474,566],[630,710]];
+ for(let x=26;x<800;x+=30){if(!skip.some(k=>x>k[0]-2&&x<k[1]-2&&false))s+=lip(x+(r()-.5)*3,true)+lip(x+15+(r()-.5)*3,false)}
+ /* phytosterols */
+ [[96,236],[260,360],[440,244],[560,356],[700,230],[388,262]].forEach(q=>s+=`<g data-p="4" transform="translate(${q[0]} ${q[1]}) rotate(${f1(r()*20-10)})"><rect x="-6" y="-26" width="12" height="52" rx="6" fill="#FF7A59" stroke="#8A2A10" stroke-width="2"/><circle cy="-18" r="7" fill="#FFB09A" stroke="#8A2A10" stroke-width="1.6"/></g>`);
+ /* channel (aquaporin) */
+ s+=`<g data-p="1"><rect x="132" y="156" width="34" height="288" rx="14" fill="url(#l-vacuole)" stroke="#0B3F66" stroke-width="3"/><rect x="190" y="156" width="34" height="288" rx="14" fill="url(#l-vacuole)" stroke="#0B3F66" stroke-width="3"/><rect x="166" y="170" width="24" height="260" fill="#0B2E4A" opacity=".75"/></g>`;
+ /* carrier */
+ s+=`<g data-p="2"><path d="M300 160Q300 150 312 150H368Q380 150 380 160V280Q380 300 360 300Q380 300 380 320V440Q380 450 368 450H312Q300 450 300 440V320Q300 300 320 300Q300 300 300 280Z" fill="url(#g-ribosome2)" stroke="#7E0F28" stroke-width="3.5"/><circle cx="340" cy="300" r="10" fill="#fff" opacity=".18"/>${gloss(322,176,16,8,.5)}</g>`;
+ /* glycoprotein with sugar chain */
+ s+=`<g data-p="3"><rect x="508" y="150" width="30" height="300" rx="14" fill="url(#l-nucleus)" stroke="#2E1670" stroke-width="3"/><path d="M523 150V108M523 130L496 100M523 130L548 98M496 100L482 78M548 98L562 74" stroke="#14B8A6" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+ [[523,106],[496,100],[548,98],[482,76],[562,72],[523,128]].forEach(q=>s+=bead(q[0],q[1],9,'#2DD4BF'));
+ s+='</g>';
+ /* peripheral protein */
+ s+=`<g data-p="5"><ellipse cx="672" cy="448" rx="44" ry="30" fill="url(#g-golgi)" stroke="#06463E" stroke-width="3"/><ellipse cx="672" cy="448" rx="44" ry="30" fill="none"/>${gloss(660,438,16,7,.5)}<path d="M650 424V418M694 424V418" stroke="#06463E" stroke-width="5" stroke-linecap="round"/></g>`;
+ s+=`<text x="16" y="38" font-size="16" font-weight="700" fill="#fff" opacity=".8">OUTSIDE (cell wall side)</text><text x="16" y="584" font-size="16" font-weight="700" fill="#fff" opacity=".8">INSIDE (cytoplasm)</text>`;
+ return{svg:s,pins:[[600,196],[178,300],[340,200],[523,120],[440,244],[672,448]],flows:[
+  {l:'H₂O',c:'#7FD4FF',d:'M178 30L178 300L178 580',dur:3.4,n:3},
+  {l:'Nutrient',c:'#FFD43B',d:'M332 40L332 300L332 570',dur:3.6,n:2,delay:.5},
+  {l:'Waste out',c:'#C084FC',d:'M348 570L348 300L348 30',dur:3.6,n:2,delay:1.5}
+ ]};
+};
+
+SC.cytoplasm=()=>{
+ const r=rng(44);let s='';
+ s+=`<rect width="800" height="600" fill="#17301F"/><rect width="800" height="600" fill="url(#g-cytfield)" opacity=".16"/>`;
+ /* cytosol granules */
+ for(let i=0;i<130;i++){const x=r()*800,y=r()*600,k=r();s+=k>.8?rib(f1(x),f1(y),4.5,3):`<circle data-p="3" cx="${f1(x)}" cy="${f1(y)}" r="${1.6+r()*3.4}" fill="${k>.5?'#9FCB6B':'#6FA054'}" opacity=".8"/>`}
+ /* microtubules */
+ const mt=['M-10 120C160 70 330 190 520 130S720 90 820 150','M-10 470C150 520 300 400 470 470S700 540 820 480'];
+ mt.forEach(d=>{s+=`<g data-p="0"><path d="${d}" fill="none" stroke="#124C7A" stroke-width="30" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#6BBAF2" stroke-width="22" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#D6EEFF" stroke-width="5" stroke-linecap="round" opacity=".7" transform="translate(-2 -6)"/>`;pts(d,13,0).forEach((p,i)=>{s+=`<circle cx="${p[0]}" cy="${f1(p[1]+(i%2?5:-5))}" r="5" fill="${i%2?'#3E8FD0':'#A6D6F8'}" opacity=".85"/>`});s+='</g>'});
+ /* actin filaments (twisted double strand) */
+ const ac=['M-10 300C140 270 280 340 430 300S650 260 820 310','M120 -10C170 120 90 220 150 330S180 520 130 610'];
+ ac.forEach(d=>{let a='',b='',P=pts(d,6,0);P.forEach((p,i)=>{const o=Math.sin(i*.55)*7,x=p[0]-Math.sin(p[2]*Math.PI/180)*o,y=p[1]+Math.cos(p[2]*Math.PI/180)*o;a+=(i?'L':'M')+f1(x)+' '+f1(y);const x2=p[0]+Math.sin(p[2]*Math.PI/180)*o,y2=p[1]-Math.cos(p[2]*Math.PI/180)*o;b+=(i?'L':'M')+f1(x2)+' '+f1(y2)});s+=`<g data-p="1" fill="none" stroke-linecap="round"><path d="${a}" stroke="#7A4A00" stroke-width="7"/><path d="${b}" stroke="#7A4A00" stroke-width="7"/><path d="${a}" stroke="#FFC24D" stroke-width="4"/><path d="${b}" stroke="#FFE08A" stroke-width="4"/></g>`});
+ /* myosin carrying a vesicle */
+ s+=`<g data-p="2" id="motor" transform="translate(300 300)"><path d="M0 -4L-10 -34M0 -4L12 -34" stroke="#B91C1C" stroke-width="6" stroke-linecap="round"/><path d="M0 -4V-62" stroke="#EF4444" stroke-width="6" stroke-linecap="round"/><circle cy="-4" r="9" fill="#EF4444" stroke="#7F1D1D" stroke-width="2"/><g transform="translate(0 -90)"><circle r="30" fill="#E9D5FF" stroke="#6D28D9" stroke-width="5"/><circle cx="-8" cy="-6" r="7" fill="#7C3AED"/><circle cx="9" cy="6" r="5" fill="#FBBF24"/>${gloss(-10,-14,12,6,.7)}</g></g>`;
+ return{svg:s,pins:[[330,140],[200,310],[300,225],[640,380]],flows:[
+  {l:'Cargo on myosin',c:'#C084FC',d:'M120 300C220 280 330 330 430 300S650 262 800 306',dur:4.2,n:2},
+  {l:'Cargo on a microtubule',c:'#6BBAF2',d:'M0 470C150 520 300 400 470 470S700 540 800 480',dur:4.2,n:2,delay:.8}
+ ]};
+};
+/* ---------- whole-cell scenes (viewBox 900x680) ---------- */
+function cellDefs(){
+ $('#gdefs').insertAdjacentHTML('beforeend',`<pattern id="pLatS" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#6B3A17"/><rect x=".8" y=".8" width="5.4" height="5.4" rx="1" fill="#C98F55"/></pattern>
+ <radialGradient id="g-orbglow"><stop offset=".3" stop-color="#FFD43B" stop-opacity=".8"/><stop offset="1" stop-color="#FFD43B" stop-opacity="0"/></radialGradient>
+ <radialGradient id="g-halo"><stop offset="0" stop-color="#FFB74D" stop-opacity=".95"/><stop offset="1" stop-color="#FF7A00" stop-opacity="0"/></radialGradient>
+ <radialGradient id="g-vign" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>`);
+}
+const sp={
+ chl:(x,y,rot=0)=>{let g='';[-27,0,27].forEach(dx=>{for(let i=0;i<4;i++)g+=`<rect x="${dx-11}" y="${-10+i*5}" width="22" height="4.2" rx="2" fill="url(#l-thyl)" stroke="#07461B" stroke-width=".7"/>`});
+  return`<g transform="translate(${x} ${y}) rotate(${rot})"><ellipse rx="53" ry="27" fill="#6FD060" stroke="#0A4A1F" stroke-width="3.6"/><ellipse rx="48" ry="22" fill="url(#g-stroma)"/><path d="M-27 0H27" stroke="#1F8A3C" stroke-width="2.4"/>${g}<ellipse cx="38" cy="10" rx="6" ry="4" fill="#FFFCEC" stroke="#CDBB78" stroke-width="1"/><ellipse cx="-18" cy="-17" rx="22" ry="3.6" fill="#fff" opacity=".35"/></g>`},
+ mito:(x,y,rot=0,s=1)=>`<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})"><rect x="-40" y="-18" width="80" height="36" rx="18" fill="url(#l-mito)" stroke="#8A3200" stroke-width="3"/><rect x="-35" y="-13" width="70" height="26" rx="13" fill="url(#g-matrix)" stroke="#C24E00" stroke-width="1.8"/><path d="M-22 -13V3M-8 13V-3M6 -13V3M20 13V-3" stroke="#C24E00" stroke-width="3" stroke-linecap="round" fill="none"/><ellipse cx="-12" cy="-14.5" rx="16" ry="2.4" fill="#fff" opacity=".4"/></g>`,
+ nuc:(cx,cy,R,seed=3)=>{const r=rng(seed);let s=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="#B79BF8" stroke="${PAL.nucleus[2]}" stroke-width="4"/><circle cx="${cx}" cy="${cy}" r="${R-9}" fill="url(#g-nucleoplasm)" stroke="#2A1366" stroke-width="2.6"/>`;
+  for(let i=0;i<5;i++){let x=cx+(r()-.5)*R,y=cy+(r()-.5)*R,a=r()*6.28,P=[[x,y]];for(let j=0;j<8;j++){a+=(r()-.5)*2.4;x+=Math.cos(a)*9;y+=Math.sin(a)*9;if(Math.hypot(x-cx,y-cy)>R-22){x=cx+(x-cx)*.88;y=cy+(y-cy)*.88}P.push([x,y])}s+=`<path d="${smooth(P)}" stroke="#C9B5FF" stroke-width="2.6" fill="none" stroke-linecap="round"/>`}
+  s+=`<circle cx="${cx+R*.22}" cy="${cy-R*.1}" r="${R*.28}" fill="#1A0B46" stroke="#0C0430" stroke-width="1.5"/><circle cx="${cx+R*.14}" cy="${cy-R*.18}" r="${R*.09}" fill="#7C58E0"/>`;
+  for(let i=0;i<12;i++){const a=i*30*Math.PI/180;s+=`<g transform="translate(${cx} ${cy}) rotate(${i*30})"><rect x="${R-12}" y="-4.5" width="14" height="9" rx="2.5" fill="#FFF1B8" stroke="#2A1366" stroke-width="1.6"/></g>`}
+  return s+gloss(cx-R*.35,cy-R*.5,R*.5,R*.16,.25)},
+ golgi:(x,y,rot=0,s=1)=>{let g='';for(let k=0;k<4;k++){const yy=-27+k*18,c=[lerpHex('#8FF5E3','#0F9E8B',k/3),lerpHex('#4DD9C4','#087A6B',k/3)];g+=`<path d="M-52 ${yy}Q0 ${yy-18} 52 ${yy}" fill="none" stroke="#06463E" stroke-width="12" stroke-linecap="round"/><path d="M-52 ${yy}Q0 ${yy-18} 52 ${yy}" fill="none" stroke="${c[0]}" stroke-width="8" stroke-linecap="round"/><circle cx="-54" cy="${yy}" r="6" fill="${c[1]}" stroke="#06463E" stroke-width="1.6"/><circle cx="54" cy="${yy}" r="6" fill="${c[1]}" stroke="#06463E" stroke-width="1.6"/>`}
+  return`<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})">${g}<circle cx="-62" cy="-38" r="7" fill="#FFD0EA" stroke="#86136A" stroke-width="2"/><circle cx="64" cy="40" r="8" fill="#FFB36B" stroke="#06463E" stroke-width="2"/><circle cx="-8" cy="50" r="7" fill="#B6E35A" stroke="#06463E" stroke-width="2"/></g>`},
+ perox:(x,y,r)=>`<g transform="translate(${x} ${y})"><circle r="${r}" fill="url(#g-perox-m)" stroke="#3D1F08" stroke-width="2.6"/><rect x="${-r*.45}" y="${-r*.45}" width="${r*.9}" height="${r*.9}" rx="2" fill="url(#pLatS)" stroke="#3D1F08" stroke-width="1.4" transform="rotate(16)"/><ellipse cx="${-r*.3}" cy="${-r*.55}" rx="${r*.4}" ry="${r*.15}" fill="#fff" opacity=".4"/></g>`
+};
+const VAC='M170 215C165 165 260 130 380 130C490 132 560 135 600 190C640 250 636 380 604 470C580 530 520 548 420 548C290 548 190 540 168 460C150 390 175 300 170 215Z';
+const rr=(x,y,w,h,r)=>`M${x+r} ${y}H${x+w-r}A${r} ${r} 0 0 1 ${x+w} ${y+r}V${y+h-r}A${r} ${r} 0 0 1 ${x+w-r} ${y+h}H${x+r}A${r} ${r} 0 0 1 ${x} ${y+h-r}V${y+r}A${r} ${r} 0 0 1 ${x+r} ${y}Z`;
+
+const dr=(c,k)=>`<g class="dr" style="--dx:${(k%3-1)*4+3}px;--dy:${(k%2?-1:1)*3}px;--t:${9+k%5*2}s;--d:-${(k*1.3).toFixed(1)}s">${c}</g>`;
+function plantCell(i){
+ const org=(id,label,c)=>`<g class="org" data-id="${id}"${i?` tabindex="0" role="button" aria-label="${label}"`:''} style="--glow:${PAL[id][1]}">${c}</g>`;
+ const r=rng(17);let s='';const W=(c,k)=>i?dr(c,k):c;
+ /* wall */
+ const wallD=rr(20,20,860,640,84)+rr(46,46,808,588,62);
+ let wallBits='';[[866,300],[866,360],[34,520],[34,150]].forEach(p=>wallBits+=`<g><rect x="${p[0]-9}" y="${p[1]-3}" width="18" height="6" fill="#2A3A0A" opacity=".5"/><circle cx="${p[0]}" cy="${p[1]}" r="2.6" fill="#F2B531"/></g>`);
+ s+=org('wall','Cell wall',`<path d="${wallD}" fill-rule="evenodd" fill="url(#l-wall)" stroke="#3E560C" stroke-width="4"/><path d="${wallD}" fill-rule="evenodd" fill="url(#pCel)" opacity=".38" pointer-events="none"/><path d="${rr(20,20,860,640,84)}" fill="none" stroke="#C79A3B" stroke-width="3" opacity=".9" pointer-events="none"/>${wallBits}`);
+ s+=`<path${i?' id="wgap"':''} d="${rr(46,46,808,588,62)}" fill="#C9DC83" pointer-events="none"/>`;
+ s+=`<g${i?' id="inner"':''}>`;
+ s+=org('cytoplasm','Cytoplasm',`<path d="${rr(52,52,796,576,56)}" fill="url(#g-cytoplasm)"/>`);
+ /* vacuole */
+ let vb='';[[250,230],[470,200],[330,420],[520,430],[560,300],[250,350]].forEach((p,k)=>vb+=`<g transform="translate(${p[0]} ${p[1]}) rotate(${k*17})" opacity=".7"><polygon points="0,-9 8,-4.5 8,4.5 0,9 -8,4.5 -8,-4.5" fill="none" stroke="#fff" stroke-width="2"/></g>`);
+ [[300,300,26,'#A21CAF'],[500,330,18,'#7C3AED'],[390,230,14,'#BE123C']].forEach(p=>vb+=`<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="${p[3]}" opacity=".85" stroke="rgba(0,0,0,.3)" stroke-width="1.4"/><circle cx="${p[0]-p[2]*.3}" cy="${p[1]-p[2]*.35}" r="${p[2]*.33}" fill="#fff" opacity=".45"/>`);
+ s+=`<g${i?' id="vacwrap"':''} style="transform-origin:400px 340px"><g class="org" data-id="vacuole"${i?' tabindex="0" role="button" aria-label="Central vacuole"':''} style="--glow:${PAL.vacuole[1]}"><path d="${VAC}" fill="url(#g-sap)" stroke="#0F5E92" stroke-width="6"/>${gloss(330,175,150,30,.3)}${vb}<path d="${VAC}" fill="none" stroke="#7CCBF2" stroke-width="2" stroke-dasharray="1 8" stroke-linecap="round" pointer-events="none"/></g></g>`;
+ /* membrane (above cytoplasm, below organelles so it reads as the edge) */
+ s+=org('membrane','Cell membrane',`<path d="${rr(52,52,796,576,56)}" fill="none" stroke="#946000" stroke-width="8"/><path d="${rr(52,52,796,576,56)}" fill="none" stroke="#FFD866" stroke-width="5"/><path d="${rr(52,52,796,576,56)}" fill="none" stroke="#FFF6CC" stroke-width="2.4" stroke-dasharray="1 7" stroke-linecap="round" pointer-events="none"/>`);
+ /* ER sheets around nucleus */
+ const NX=752,NY=178,arc=(R,a1,a2)=>{const p=a=>[f1(NX+R*Math.cos(a*Math.PI/180)),f1(NY+R*Math.sin(a*Math.PI/180))],A_=p(a1),B=p(a2);return`M${A_[0]} ${A_[1]}A${R} ${R} 0 0 1 ${B[0]} ${B[1]}`};
+ const e1=arc(104,35,160),e2=arc(124,52,148);
+ let er=tube(e1,15,'er')+tube(e2,15,'er')+tube('M690 276C690 322 742 330 744 392','10','er')+tube('M806 262C830 300 800 340 812 372','10','er');
+ let rb='';[[e1,-11],[e2,-11],[e1,11],[e2,11]].forEach(([d,o])=>pts(d,17,o).forEach(p=>{rb+=rib(p[0],p[1],3.6)}));
+ s+=org('er','Endoplasmic reticulum',er);
+ /* nucleus */
+ s+=org('nucleus','Nucleus',`<g>${sp.nuc(NX,NY,80)}</g>`);
+ /* ribosomes: on ER + free along the vacuole edge */
+ pts(VAC,40,-14,10).forEach(p=>{if(p[0]>150&&p[0]<640)rb+=rib(p[0],p[1],4)});
+ [[690,415],[705,430],[660,520],[620,560],[790,540],[610,60],[80,330],[105,470]].forEach(p=>rb+=rib(p[0],p[1],4));
+ s+=org('ribosome','Ribosomes',rb+`<circle cx="744" cy="288" r="26" fill="transparent"/><circle cx="662" cy="228" r="22" fill="transparent"/>`);
+ /* golgi, peroxisomes, mitochondria, chloroplasts */
+ s+=org('golgi','Golgi apparatus',sp.golgi(745,470,-6,1.05));
+ s+=org('peroxisome','Peroxisomes',[[96,326,15],[88,528,15],[632,592,15],[658,442,14]].map(p=>sp.perox(...p)+`<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]+8}" fill="transparent"/>`).join(''));
+ s+=org('mito','Mitochondria',[[610,98,0],[700,586,0],[800,580,-8],[814,398,82],[690,372,-24]].map((p,k)=>W(sp.mito(p[0],p[1],p[2]),k+3)).join(''));
+ s+=org('chloroplast','Chloroplasts',[[140,100,0],[260,100,0],[380,100,0],[500,100,0],[96,250,90],[96,400,90],[170,590,0],[295,590,0],[420,590,0],[545,590,0]].map((p,k)=>W(sp.chl(p[0],p[1],p[2]),k)).join(''));
+ s+=`</g>`;
+ return s;
+}
+
+function animalCell(){
+ const r=rng(29);let s='';
+ const B='M450 72C640 60 812 150 836 330C860 520 720 642 450 626C222 616 70 520 70 340C70 170 250 84 450 72Z';
+ s+=`<path d="${B}" fill="url(#g-cytoplasm)" stroke="#946000" stroke-width="9"/><path d="${B}" fill="none" stroke="#FFD866" stroke-width="5.5"/><path d="${B}" fill="none" stroke="#FFF6CC" stroke-width="2.4" stroke-dasharray="1 7" stroke-linecap="round"/>`;
+ /* rough ER sheets right + below nucleus */
+ const NX=430,NY=330,arc=(R,a1,a2)=>{const p=a=>[f1(NX+R*Math.cos(a*Math.PI/180)),f1(NY+R*Math.sin(a*Math.PI/180))],A_=p(a1),Bb=p(a2);return`M${A_[0]} ${A_[1]}A${R} ${R} 0 0 1 ${Bb[0]} ${Bb[1]}`};
+ const ds=[arc(150,-20,90),arc(172,-5,70),arc(194,10,55)];
+ ds.forEach(d=>{s+=tube(d,17,'er');pts(d,18,-12).forEach(p=>s+=rib(p[0],p[1],3.8))});
+ s+=`<g>${sp.nuc(NX,NY,112,5)}</g>`;
+ s+=sp.golgi(668,205,-30,1.1);
+ [[250,520,12],[600,520,-18],[240,190,30],[690,420,70],[310,560,0],[560,580,8],[150,330,80],[760,300,-70]].forEach(p=>s+=sp.mito(p[0],p[1],p[2],.95));
+ /* lysosomes */
+ [[160,230],[330,100],[650,95],[760,400],[500,560],[180,450],[120,390]].forEach(p=>{s+=`<g transform="translate(${p[0]} ${p[1]})"><circle r="15" fill="#D6EB7A" stroke="#5A7A12" stroke-width="3"/><circle cx="-4" cy="-3" r="2.4" fill="#4F6B10"/><circle cx="5" cy="4" r="2.8" fill="#4F6B10"/><circle cx="3" cy="-6" r="1.8" fill="#4F6B10"/><ellipse cx="-5" cy="-9" rx="6" ry="2.4" fill="#fff" opacity=".5"/></g>`});
+ /* small vacuoles */
+ [[470,130,20],[380,150,13],[740,500,18],[560,500,12],[215,330,14]].forEach(p=>s+=`<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="url(#g-sap)" stroke="#0F5E92" stroke-width="3"/><ellipse cx="${p[0]-p[2]*.3}" cy="${p[1]-p[2]*.4}" rx="${p[2]*.35}" ry="${p[2]*.18}" fill="#fff" opacity=".5"/>`);
+ /* centrioles + microtubule rays */
+ s+=`<g transform="translate(545 175)"><g stroke="#6BBAF2" stroke-width="2" opacity=".8">${[0,40,80,120,160,200,240,280,320].map(a=>`<line x1="0" y1="0" x2="${f1(46*Math.cos(a*.01745))}" y2="${f1(46*Math.sin(a*.01745))}"/>`).join('')}</g><g transform="rotate(-20)"><rect x="-6" y="-20" width="12" height="40" rx="4" fill="#8B7CFF" stroke="#2D1E8F" stroke-width="2"/><path d="M-6 -8H6M-6 2H6M-6 12H6" stroke="#2D1E8F" stroke-width="1.6"/></g><g transform="translate(18 14) rotate(70)"><rect x="-6" y="-20" width="12" height="40" rx="4" fill="#A79BFF" stroke="#2D1E8F" stroke-width="2"/><path d="M-6 -8H6M-6 2H6M-6 12H6" stroke="#2D1E8F" stroke-width="1.6"/></g></g>`;
+ for(let k=0;k<26;k++)s+=rib(f1(110+r()*680),f1(110+r()*480),4);
+ return s;
+}
+/* ---------- content ---------- */
+const O={
+wall:{n:'Cell wall',tag:'Strong outer frame',job:'Gives the cell its shape and stops it bursting',
+ d:'A rigid layer of cellulose fibers set in pectin and other sugars, built outside the cell membrane. It holds the cell in shape and stops it bursting when water floods in.',
+ f:'Wood is mostly thick, lignin-reinforced cell walls that stay behind after the cells die.',b:'A cardboard box, a thick clay border or a green foam frame.',
+ s:'Primary wall about 0.1 to 0.2 µm thick. Secondary walls can be several µm.',sv:.15,sk:'thickness',
+ parts:[['Middle lamella','The pectin glue shared by neighboring cells. It is the outermost layer and cements the cells together.'],['Primary wall','Thin and stretchy. Cellulose microfibrils lie in a criss-cross web, so the wall can still grow.'],['Secondary wall','Added inside the primary wall by some cells. Microfibrils run in tight parallel layers, and in wood they are strengthened with lignin.'],['Plasmodesmata','Channels through the wall, lined by the cell membrane. A thread of ER, the desmotubule, runs through each one.'],['Cell membrane','Sits tight against the inside of the wall. Microtubules just beneath it steer how new cellulose is laid down.']],
+ ft:'Moving through the wall',fx:'Water moves through the wall itself. Sugars and signals travel between neighbors through plasmodesmata.'},
+membrane:{n:'Cell membrane',tag:'Selective gatekeeper',job:'Controls what enters and leaves the cell',
+ d:'A double layer of phospholipids with proteins floating in it, known as the fluid mosaic model. It lets some molecules through and blocks others.',
+ f:'Water slips through directly, and also uses channel proteins called aquaporins to move much faster.',b:'Plastic wrap or a thin gold sheet lining the box.',
+ s:'About 7 to 10 nm thick, roughly 10,000 times thinner than a hair.',sv:.007,sk:'thickness',
+ parts:[['Phospholipid bilayer','Water-loving heads face outward and fatty tails hide in the middle. Kinked tails keep it fluid.'],['Channel protein','A tunnel that lets water or ions pass through. Aquaporins are channels for water.'],['Carrier protein','Grabs one kind of molecule, changes shape and releases it on the other side.'],['Glycoprotein','A protein with sugar chains on the outer face, used for recognition and signaling.'],['Phytosterols','The plant version of cholesterol. They tuck between the tails and steady the membrane.'],['Peripheral protein','Sticks to the inner surface instead of crossing it. Often passes signals along.']],
+ ft:'A selective gate',fx:'Water uses the channel. Nutrients ride carriers into the cell. Waste is pumped out.'},
+cytoplasm:{n:'Cytoplasm',tag:'Jelly and scaffold',job:'Jelly-like interior that holds the organelles',
+ d:'Everything inside the membrane except the nucleus: watery cytosol plus the organelles. A mesh of protein filaments called the cytoskeleton gives it structure.',
+ f:'In plants the cytoplasm flows in loops around the vacuole, called cytoplasmic streaming.',b:'Clear gelatin or hair gel to hold the parts in place.',
+ s:'Microtubules are 25 nm wide. In a mature cell the cytoplasm is only a thin layer.',sv:null,sk:'',
+ parts:[['Microtubules','Hollow tubes of tubulin. They act as roads for transport and steer how the wall is built.'],['Actin filaments','Thin twisted threads that act as tracks for transport and drive streaming.'],['Motor protein and cargo','Myosin walks along actin carrying vesicles. This drives cytoplasmic streaming.'],['Cytosol','The watery gel full of enzymes, ions, sugars and free ribosomes.']],
+ ft:'Cargo on the move',fx:'Motor proteins walk along filaments, dragging vesicles and organelles to where they are needed.'},
+nucleus:{n:'Nucleus',tag:'Control center',job:'Stores DNA and sends out mRNA',
+ d:'Stores the DNA inside a double membrane. It copies genes into mRNA, which is sent out to the ribosomes.',
+ f:'In a mature plant cell the big vacuole usually squeezes the nucleus against the wall.',b:'A purple ball with a small dark ball inside for the nucleolus.',
+ s:'About 5 to 10 µm across.',sv:8,sk:'diameter',
+ parts:[['Nuclear envelope','Two membranes with a gap between them. The outer one is continuous with the rough ER.'],['Nuclear pores','Protein gates that control traffic. mRNA leaves and proteins come in.'],['Nucleoplasm','The jelly inside the nucleus.'],['Chromatin','DNA wound on proteins. Loose strands hold active genes. Dark dense clumps are packed away.'],['Nucleolus','Where ribosomal RNA is made and ribosome parts are assembled.'],['Rough ER link','The outer membrane connects to the ER, so the gap between the two membranes is part of the ER lumen.']],
+ ft:'Making a message',fx:'DNA is copied into mRNA, which leaves through the pores to find ribosomes. Proteins and ribosome parts pass through as well.'},
+chloroplast:{n:'Chloroplast',tag:'Solar kitchen',job:'Turns sunlight into sugar',
+ d:'Turns light, water and CO₂ into sugar and oxygen. It has a double membrane, plus its own DNA and ribosomes.',
+ f:'Chloroplasts descend from bacteria swallowed by an ancient cell over a billion years ago, an idea called endosymbiosis.',b:'Green clay ovals with darker stacks of coins inside.',
+ s:'About 4 to 10 µm long, with dozens in a leaf cell.',sv:5,sk:'length',
+ parts:[['Double envelope','An outer and an inner membrane with a thin gap between them.'],['Stroma','The fluid inside. The Calvin cycle builds sugar from CO₂ here.'],['Grana','Stacks of flat sacs, like coins. Green chlorophyll in their membranes catches the light.'],['Thylakoid lumen','The space inside each sac. Protons build up here and power ATP production.'],['Stroma lamellae','Thin sheets that link one granum to the next.'],['Starch granule','Extra sugar stored as starch.'],['Own DNA and ribosomes','A small circular chromosome and bacteria-like ribosomes, a reminder of its origin.']],
+ ft:'Photosynthesis',fx:'Light and water are split in the grana, releasing O₂. The stroma then builds sugar from CO₂.  6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂'},
+vacuole:{n:'Central vacuole',tag:'Water tank and storage',job:'Stores water and keeps the cell firm',
+ d:'A huge membrane sac that can fill up to 90% of a mature cell. It stores water, ions, sugars and pigments, and presses the cell firmly against its wall.',
+ f:'When a plant wilts, the vacuole shrinks and the membrane pulls away from the wall, called plasmolysis. Try the Thirsty switch!',b:'A big blue balloon or bag of blue gel. Make it the biggest part.',
+ s:'Up to about 30 to 40 µm across in a 50 µm cell.',sv:30,sk:'diameter',
+ parts:[['Tonoplast','The vacuole’s own membrane.'],['Cell sap','Water with sugars, salts, acids and proteins dissolved in it.'],['Pigments','Anthocyanins give red, purple and blue colors to many petals and fruits.'],['Crystals','Many plants store calcium oxalate crystals, such as needle-like raphides.'],['Pumps','Proton pumps move H⁺ in, which powers the transport of other molecules.']],
+ ft:'Turgor pressure',fx:'Water fills the vacuole, which pushes the cell against its wall and keeps the plant upright.'},
+mito:{n:'Mitochondrion',tag:'Power plant',job:'Makes most of the cell’s ATP',
+ d:'Burns sugar with oxygen to make ATP. Plants have mitochondria too, even though they also photosynthesize.',
+ f:'Like chloroplasts, mitochondria have their own circular DNA.',b:'Orange kidney beans or capsules of clay with folds drawn inside.',
+ s:'About 1 to 3 µm long.',sv:2,sk:'length',
+ parts:[['Outer membrane','A smooth skin with large pores.'],['Intermembrane space','The narrow gap between the two membranes. Protons are pumped into it.'],['Inner membrane and cristae','Folded into cristae, which makes room for lots of protein machinery.'],['Matrix','The inner space, where the Krebs cycle runs.'],['Own DNA and ribosomes','A small ring of DNA and its own ribosomes.'],['ATP synthase','A tiny turbine that makes ATP as protons flow back through it.']],
+ ft:'Cellular respiration',fx:'Sugar breakdown products and oxygen go in. Most ATP is made along the cristae.  C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP'},
+er:{n:'Endoplasmic reticulum',tag:'Production and delivery network',job:'Folds proteins and makes lipids',
+ d:'A web of flattened sacs and tubes that forms one connected space. The rough ER makes proteins and the smooth ER makes lipids.',
+ f:'In many cells the ER makes up over half of all the membrane.',b:'Curly pink pasta or pipe cleaners bent into waves.',
+ s:'Tubes about 0.05 to 0.1 µm wide. The sheets spread through the whole cell.',sv:.08,sk:'tube width',
+ parts:[['Rough ER','Flat stacked sacs with ribosomes on the outside.'],['Ribosomes','Build proteins and push them into the ER as they are made.'],['Lumen','The space inside the sacs, where proteins fold.'],['Smooth ER','Branching tubes without ribosomes. They make lipids for membranes.'],['Transport vesicles','Bubbles that bud off and carry cargo to the Golgi.']],
+ ft:'Make, fold, ship',fx:'Proteins enter the lumen and fold. Vesicles then bud off, headed for the Golgi.'},
+ribosome:{n:'Ribosomes',tag:'Protein builders',job:'Reads mRNA to build proteins',
+ d:'Complexes of RNA and protein. They read mRNA and join amino acids into proteins. Free ones float, others sit on the rough ER.',
+ f:'A single cell can have millions of them.',b:'Poppy seeds, peppercorns or tiny beads on the ER.',
+ s:'About 25 nm.',sv:.025,sk:'diameter',
+ parts:[['Large subunit','Joins amino acids together. The new chain leaves through a tunnel in it.'],['Small subunit','Grips the mRNA and checks each match.'],['mRNA','The message, read three letters (one codon) at a time.'],['tRNA','Adaptors that carry amino acids to the matching codon.'],['Growing protein','A chain of amino acids that will fold into its final shape.']],
+ ft:'Translation',fx:'Each codon on the mRNA matches one tRNA, which brings one amino acid to the growing chain.'},
+golgi:{n:'Golgi apparatus',tag:'Sorting and shipping',job:'Sorts and ships proteins in vesicles',
+ d:'A stack of flattened sacs. Proteins arrive from the ER, get modified and sorted, then leave in vesicles. Plant Golgi also build the sugars of the cell wall.',
+ f:'A plant cell can have hundreds of separate Golgi stacks drifting through the cytoplasm.',b:'A stack of flat teal pancakes, wafers or folded paper.',
+ s:'A stack is about 1 µm wide.',sv:1,sk:'width',
+ parts:[['Cisternae','Flat, curved sacs. Different enzymes work in each layer.'],['Cis face','The receiving side, facing the ER.'],['Trans face','The shipping side, where cargo is sorted into vesicles.'],['Vesicles','Bubbles that carry cargo in and out.']],
+ ft:'Sort and ship',fx:'Cargo moves from the cis side to the trans side, gets sugars and labels, then leaves in vesicles for the wall, membrane or vacuole.'},
+peroxisome:{n:'Peroxisome',tag:'Detox and recycling',job:'Breaks down hydrogen peroxide',
+ d:'A small sac with a single membrane, full of enzymes. It breaks down toxic hydrogen peroxide. In leaves it teams up with chloroplasts and mitochondria during photorespiration.',
+ f:'In germinating seeds a type called the glyoxysome turns stored fat into sugar.',b:'A small brown bead or button with a square block inside.',
+ s:'About 0.2 to 1.5 µm.',sv:.5,sk:'diameter',
+ parts:[['Single membrane','Just one membrane, unlike chloroplasts and mitochondria.'],['Crystalline core','Some enzymes pack so tightly that they form a crystal.'],['Enzymes','Catalase destroys hydrogen peroxide. Oxidases make it.']],
+ ft:'Detox',fx:'Catalase turns toxic hydrogen peroxide into water and oxygen.  2H₂O₂ → 2H₂O + O₂'}
+};
+const ORDER=['wall','membrane','cytoplasm','nucleus','chloroplast','vacuole','mito','er','ribosome','golgi','peroxisome'];
+const COLORKEY=id=>id==='mito'?'mito':id;
+const CAM={wall:[70,78,340],membrane:[450,625,420],cytoplasm:[300,590,400],nucleus:[752,190,320],chloroplast:[260,100,340],vacuole:[400,340,760],mito:[660,98,300],er:[722,262,340],ribosome:[700,250,260],golgi:[745,470,300],peroxisome:[96,328,220]};
+const SIZES=[
+ {id:'membrane'},{id:'ribosome'},{id:'er'},{id:'wall'},{id:'peroxisome'},{id:'golgi'},{id:'mito'},{id:'chloroplast'},{id:'nucleus'},{id:'vacuole'},
+ {t:'Flu virus',v:.1,ctx:1,k:'diameter'},{t:'Bacterium',v:2,ctx:1,k:'length'},{t:'Human hair',v:70,ctx:1,k:'width'},{t:'Whole plant cell',v:50,ctx:1,k:'typical size'}
+];
+const CMP=[
+ ['Outer layer','Cell wall and membrane','Membrane only'],
+ ['Shape','Fixed and boxy','Flexible, often round'],
+ ['Gets energy from','Sunlight, plus respiration','Food, through respiration'],
+ ['Vacuole','One huge central vacuole','Small ones, if any'],
+ ['Chloroplasts','Yes, dozens per leaf cell','None'],
+ ['Lysosomes and centrioles','Rare or absent in flowering plants','Present'],
+ ['Grows by','Taking in water and stretching','Mostly making more cells']
+];
+/* ---------- app ---------- */
+const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const scn={};const scene=id=>scn[id]||(scn[id]=SC[id]());
+const TH={};
+const thumb=id=>`<img class="th" data-t="${id}" alt="" decoding="async"${TH[id]?` src="${TH[id]}"`:''}>`;
+const hydrate=()=>$$('img[data-t]').forEach(i=>{if(TH[i.dataset.t]&&i.getAttribute('src')!==TH[i.dataset.t])i.src=TH[i.dataset.t]});
+function raster(id){return new Promise(res=>{const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="480" height="360"><defs>${$('#gdefs').innerHTML}</defs>${scene(id).svg}</svg>`,u=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})),img=new Image();
+ const done=()=>{hydrate();res()};
+ img.onload=async()=>{let keep=false;try{if(img.decode)await img.decode().catch(()=>{});const c=document.createElement('canvas');c.width=480;c.height=360;c.getContext('2d').drawImage(img,0,0,480,360);const b=await new Promise(r=>c.toBlob(r,'image/webp',.86));c.width=c.height=0;if(b)TH[id]=URL.createObjectURL(b);else{TH[id]=u;keep=true}}catch(e){TH[id]=u;keep=true}if(!keep)URL.revokeObjectURL(u);done()};
+ img.onerror=()=>{URL.revokeObjectURL(u);res()};img.src=u})}
+const N=ORDER.length;
+
+buildDefs();cellDefs();
+
+/* ===== main stage ===== */
+const cell=$('#cell'),stage=$('#stage'),panel=$('#panel'),statusEl=$('#status'),tip=$('#tip');
+const MITO=[[610,98],[700,586],[800,580],[814,398],[690,372]];
+let fx='<g id="fxg"><g id="day">';
+for(let i=0;i<5;i++)fx+=`<line class="ph" x1="${120+i*110}" y1="0" x2="${130+i*110}" y2="20" style="animation-delay:${(i*.37).toFixed(2)}s"/>`;
+[[140,72],[380,72],[170,560]].forEach((p,i)=>fx+=`<circle class="o2" cx="${p[0]}" cy="${p[1]}" r="4.5" style="animation-delay:${(i*.6).toFixed(1)}s"/>`);
+fx+='</g><g id="halos">';
+MITO.forEach((p,i)=>fx+=`<circle class="halo" cx="${p[0]}" cy="${p[1]}" r="58" fill="url(#g-halo)" style="animation-delay:${i*.4}s"/>`);
+fx+='</g><g id="sparks">';
+MITO.forEach((p,i)=>{for(let k=0;k<1;k++)fx+=`<circle class="sp" cx="${p[0]-22+k*22}" cy="${p[1]-14}" r="3.6" style="animation-delay:${(i*.3+k*.7).toFixed(1)}s"/>`});
+fx+='</g></g>';
+cell.innerHTML=`<rect width="900" height="680" fill="url(#g-field)"/>${plantCell(true)}<rect id="veil" width="900" height="680"/><rect width="900" height="680" fill="url(#g-vign)" pointer-events="none"/>`;
+/* animated extras (light, bubbles, ATP, vesicles, ripples) sit in a second svg on their own layer */
+const liveSvg=document.createElementNS(NS,'svg');liveSvg.id='liveSvg';liveSvg.setAttribute('viewBox','0 0 900 680');liveSvg.setAttribute('aria-hidden','false');liveSvg.setAttribute('focusable','false');
+liveSvg.innerHTML=fx+'<g id="live"></g>';cell.after(liveSvg);
+const ORGL=$$('.org',cell);
+
+/* camera */
+const AR=680/900;let cam={x:0,y:0,w:900,h:680},camRaf=0,moved=false;
+let camTick=0,taOn='';
+function applyCam(){camTick=0;const c=cam,vb=`${f1(c.x)} ${f1(c.y)} ${f1(c.w)} ${f1(c.h)}`;cell.setAttribute('viewBox',vb);liveSvg.setAttribute('viewBox',vb);const ta=c.w<880?'none':'pan-y';if(ta!==taOn){taOn=ta;stage.style.touchAction=ta}}
+function setCam(c,now){cam=c;if(now){if(camTick){cancelAnimationFrame(camTick)}applyCam()}else if(!camTick)camTick=requestAnimationFrame(applyCam)}
+function stopFly(){cancelAnimationFrame(camRaf);camRaf=0;cell.classList.remove('moving','flying')}
+const camFor=(cx,cy,w)=>{w=clamp(w,180,900);const h=w*AR;return{x:clamp(cx-w/2,0,900-w),y:clamp(cy-h/2,0,680-h),w,h}};
+function fly(t,ms=650){stopFly();if(reduced){setCam(t,true);return}cell.classList.add('moving');cell.classList.add('flying');const a={...cam},t0=performance.now();const step=now=>{let k=Math.min(1,(now-t0)/ms);k=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;setCam({x:a.x+(t.x-a.x)*k,y:a.y+(t.y-a.y)*k,w:a.w+(t.w-a.w)*k,h:a.h+(t.h-a.h)*k},true);if(k<1)camRaf=requestAnimationFrame(step);else{camRaf=0;cell.classList.remove('flying','moving')}};camRaf=requestAnimationFrame(step)}
+const zoomBy=f=>fly(camFor(cam.x+cam.w/2,cam.y+cam.h/2,cam.w*f),350);
+$('#zIn').onclick=()=>zoomBy(.65);$('#zOut').onclick=()=>zoomBy(1.5);$('#zRe').onclick=()=>deselect();
+let drag=null,tipRaf=0,tipEv=null,tipId='';
+function tipUpdate(){tipRaf=0;const e=tipEv;if(!e)return;const g=e.t.closest?e.t.closest('.org'):null;if(g){const r=stage.getBoundingClientRect(),id=g.dataset.id;if(id!==tipId){tipId=id;tip.textContent=O[id].n;tip.style.background=PAL[id][2]}tip.style.left=(e.x-r.left)+'px';tip.style.top=(e.y-r.top)+'px';tip.classList.add('on')}else{tipId='';tip.classList.remove('on')}}
+cell.addEventListener('pointerdown',e=>{if(cam.w>=880)return;drag={x:e.clientX,y:e.clientY,id:e.pointerId,on:false};moved=false});
+cell.addEventListener('pointermove',e=>{
+ if(drag&&drag.id===e.pointerId){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!drag.on&&Math.hypot(dx,dy)>6){drag.on=true;moved=true;try{cell.setPointerCapture(e.pointerId)}catch(_){}cell.classList.add('drag');stopFly()}
+  if(drag.on){const k=cam.w/cell.clientWidth;setCam({...cam,x:clamp(cam.x-dx*k,0,900-cam.w),y:clamp(cam.y-dy*k,0,680-cam.h)});drag.x=e.clientX;drag.y=e.clientY}}
+ if(e.pointerType==='mouse'&&!(drag&&drag.on)){tipEv={t:e.target,x:e.clientX,y:e.clientY};if(!tipRaf)tipRaf=requestAnimationFrame(tipUpdate)}});
+const endDrag=()=>{drag=null;cell.classList.remove('drag');setTimeout(()=>moved=false,0)};
+cell.addEventListener('pointerup',endDrag);cell.addEventListener('pointercancel',endDrag);cell.addEventListener('pointerleave',()=>{tipEv=null;tipId='';tip.classList.remove('on')});
+cell.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();const r=cell.getBoundingClientRect(),px=cam.x+(e.clientX-r.left)/r.width*cam.w,py=cam.y+(e.clientY-r.top)/r.height*cam.h,f=e.deltaY>0?1.12:.89,w=clamp(cam.w*f,180,900),h=w*AR;stopFly();setCam({x:clamp(px-(px-cam.x)*w/cam.w,0,900-w),y:clamp(py-(py-cam.y)*h/cam.h,0,680-h),w,h})},{passive:false});
+cell.addEventListener('click',e=>{if(moved)return;const g=e.target.closest('.org');if(g)select(g.dataset.id)});
+cell.addEventListener('keydown',e=>{const g=e.target.closest&&e.target.closest('.org');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();select(g.dataset.id)}});
+
+/* state: day/night, watered/thirsty */
+let night=false,dry=false,cur=null;const found=new Set();try{const a=JSON.parse(lsGet('pcFound')||'[]');if(Array.isArray(a))a.forEach(id=>ORDER.includes(id)&&found.add(id))}catch(e){}
+const stateMsg=()=>dry?(night?'Dark and dry. The plant is resting and thirsty.':'Thirsty. The vacuole shrinks, the membrane pulls away from the wall and the plant wilts.'):(night?'Night. No light for photosynthesis, but mitochondria keep burning sugar.':'Day. Chloroplasts catch light, make sugar and release oxygen.');
+function setStatus(){statusEl.innerHTML=cur?`<span><b>${O[cur].n}</b> · ${O[cur].tag}. Tap Dive inside to see how it is built.</span>`:`<span>${stateMsg()} <b>Tap a part to zoom in.</b></span>`}
+function setToggles(){cell.classList.toggle('night',night);cell.classList.toggle('dry',dry);liveSvg.classList.toggle('night',night);liveSvg.classList.toggle('dry',dry);$('#bDay').setAttribute('aria-pressed',!night);$('#bNight').setAttribute('aria-pressed',night);$('#bWet').setAttribute('aria-pressed',!dry);$('#bDry').setAttribute('aria-pressed',dry);setStatus()}
+$('#bDay').onclick=()=>{night=false;setToggles()};$('#bNight').onclick=()=>{night=true;setToggles()};
+$('#bWet').onclick=()=>{dry=false;setToggles()};$('#bDry').onclick=()=>{dry=true;setToggles();if(cur!=='vacuole'&&!cur)fly(camFor(450,340,900))};
+
+/* tray */
+const tray=$('#tray');
+tray.innerHTML=ORDER.map(id=>`<button class="tc un" data-id="${id}" aria-pressed="false" style="--oc:${PAL[id][1]}"><i></i><span>${O[id].n}</span></button>`).join('');
+const TCB=$$('.tc',tray);
+tray.addEventListener('click',e=>{const b=e.target.closest('.tc');if(b)select(b.dataset.id)});
+
+/* panel */
+function ring(n){const c=2*Math.PI*22;return`<svg class="ring" viewBox="0 0 54 54"><circle cx="27" cy="27" r="22" fill="none" stroke="var(--line)" stroke-width="6"/><circle cx="27" cy="27" r="22" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${f1(c*n/N)} ${f1(c)}" transform="rotate(-90 27 27)"/></svg>`}
+function intro(){panel.style.removeProperty('--oc');panel.style.removeProperty('--od');panel.innerHTML=`<div class="intro"><h3>Pick a part</h3><p>This is a mature leaf cell. The giant vacuole squeezes the nucleus and chloroplasts out toward the edge, just like in a real leaf.</p><p style="margin-top:10px">Tap anything in the picture, or choose from the list. The microscope flies in, and <b>Dive inside</b> opens a detailed view with labels and animations. Flip Night or Thirsty to see how the cell reacts. Catch the glowing <b>ATP sparks</b> drifting around, and tap the little vesicles to learn what they carry.</p><div class="cta" style="margin:14px 0 0"><button class="btn pri" id="tour" style="background:var(--accent);border-color:var(--accent);color:var(--accent-ink)">▶ Take the guided tour</button></div><div class="prog">${ring(found.size)}<div><b>${found.size} / ${N}</b><br><span style="color:var(--ink2);font-size:14px">parts collected</span></div></div></div>`}
+function showPanel(id){const o=O[id],p=PAL[id];panel.style.setProperty('--oc',p[1]);panel.style.setProperty('--od',p[2]);
+ panel.innerHTML=`<div class="pn-top"><div class="art"></div><h3>${o.n}</h3><span class="pill">${o.tag}</span></div><div class="pn-body"><p>${o.d}</p><div class="kv"><b>Size</b>${o.s}</div><div class="kv"><b>Fun fact</b>${o.f}</div><div class="kv"><b>Build it</b>${o.b}</div><div class="cta"><button class="btn pri" id="dive"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>Dive inside</button><button class="btn" id="nxt">Next</button><button class="btn sm" id="cp" aria-label="Copy a link to this part" title="Copy link">Share</button></div></div>`;
+ hydrate();setTimeout(()=>{const a=$('.art',panel);if(a&&cur===id)a.innerHTML=thumb(id)},700);$('#dive').onclick=()=>openLab(id);$('#nxt').onclick=()=>select(ORDER[(ORDER.indexOf(id)+1)%N]);$('#cp').onclick=()=>{const u=location.href.split('#')[0]+'#'+id;(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast('Link copied'),()=>toast(u))}}
+function ensurePanel(){if(innerWidth>860)return;const s=stage.getBoundingClientRect(),d=panel.getBoundingClientRect().top-(s.bottom+10);if(Math.abs(d)>40)scrollBy({top:d,behavior:reduced?'auto':'smooth'})}
+function discover(id){if(found.has(id))return;found.add(id);try{localStorage.setItem('pcFound',JSON.stringify([...found]))}catch(e){}refresh();if(found.size===N){boom();statusEl.innerHTML='<span><b>Cell Explorer!</b> You found all 11 parts.</span>'}}
+function refresh(){$('#bCnt').textContent=found.size+' / '+N+' found';TCB.forEach(b=>b.classList.toggle('un',!found.has(b.dataset.id)));$$('.card').forEach(c=>{const f=found.has(c.dataset.id);c.classList.toggle('locked',!f);$('.tx span',c).textContent=f?O[c.dataset.id].tag:'Not found yet'});
+ $('#albumP').textContent=found.size===N?'Complete. You are a Cell Explorer!':`${found.size} of ${N} collected. Select a part in the cell to add it. Locked cards show a silhouette. Tap one for a hint.`;if(!cur)intro()}
+function select(id,o={}){if(!o.tour)stopTour();blip(480+ORDER.indexOf(id)*38,.1);
+ cur=id;cell.classList.add('focus');ORGL.forEach(g=>g.classList.toggle('on',g.dataset.id===id));
+ TCB.forEach(b=>{const on=b.dataset.id===id;b.setAttribute('aria-pressed',on);if(on&&!o.quiet)b.scrollIntoView({block:'nearest',inline:'center',behavior:reduced?'auto':'smooth'})});
+ showPanel(id);discover(id);if(cur===id&&found.size<N)setStatus();
+ if(!o.quiet){const c=CAM[id];fly(camFor(c[0],c[1],c[2]));if(!o.tour)ensurePanel();try{history.replaceState(null,'','#'+id)}catch(e){}}}
+function deselect(){stopTour();try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}cur=null;cell.classList.remove('focus');ORGL.forEach(g=>g.classList.remove('on'));TCB.forEach(b=>b.setAttribute('aria-pressed',false));intro();setStatus();fly(camFor(450,340,900))}
+setToggles();refresh();intro();
+
+/* ===== dive-inside overlay ===== */
+const lab=$('#lab'),lb=$('#lb'),lsvg=$('#lsvg'),lcap=$('#lcap');let lid=null,opener=null;
+function overview(){const o=O[lid];lcap.innerHTML=`<h4>${o.n}</h4><p>${o.d}</p><small>Size: ${o.s}</small>`;lsvg.classList.remove('sel');$$('.pinb').forEach(b=>b.classList.remove('on'));$$('#lparts button').forEach(b=>b.setAttribute('aria-pressed',false))}
+function pick(i){const o=O[lid];lsvg.classList.add('sel');$$('[data-p]',lsvg).forEach(e=>e.classList.toggle('pon',+e.dataset.p===i));$$('.pinb').forEach((b,k)=>b.classList.toggle('on',k===i));$$('#lparts button').forEach((b,k)=>b.setAttribute('aria-pressed',k===i));$('#pins').classList.add('seen');lcap.innerHTML=`<h4>${i+1}. ${o.parts[i][0]}</h4><p>${o.parts[i][1]}</p>`}
+let numsOn=true;try{numsOn=localStorage.getItem('pcNums')!=='0'}catch(e){}
+function applyNums(){$('#pins').classList.toggle('hide',!numsOn);const b=$('#lnum');b.setAttribute('aria-pressed',numsOn);$('span',b).textContent=numsOn?'Numbers on':'Numbers off';$('.lh').textContent=numsOn?'Tap the numbered pins':'Tap any part of the drawing'}
+$('#lnum').onclick=()=>{numsOn=!numsOn;try{localStorage.setItem('pcNums',numsOn?'1':'0')}catch(e){}applyNums()};
+function openLab(id,keep){lid=id;const o=O[id],p=PAL[id],S=scene(id);if(!keep)opener=document.activeElement;
+ lb.style.setProperty('--oc',p[1]);lb.style.setProperty('--od',p[2]);$('#lt').textContent=o.n;$('#ltag').textContent=o.tag;
+ lsvg.setAttribute('class','');lsvg.innerHTML=S.svg+'<g id="flowl" pointer-events="none"></g>';
+ $('#pins').className='pins';$('#pins').innerHTML=S.pins.map((q,i)=>`<button class="pinb" data-i="${i}" style="left:${f1(q[0]/8)}%;top:${f1(q[1]/6)}%" aria-label="${o.parts[i][0]}">${i+1}</button>`).join('');
+ $('#lparts').innerHTML=o.parts.map((q,i)=>`<li><button data-i="${i}" aria-pressed="false"><span class="n">${i+1}</span>${q[0]}</button></li>`).join('');
+ applyNums();overview();if(lab.hidden){lab.hidden=false;document.body.style.overflow='hidden';lb.style.animation='none';void lb.offsetWidth;lb.style.animation=''}
+ lab.scrollTop=0;$('#lx').focus({preventScroll:true});discover(id);if(cur!==id)select(id,{quiet:true})}
+function closeLab(){lab.hidden=true;document.body.style.overflow='';if(cur){const c=CAM[cur];fly(camFor(c[0],c[1],c[2]),500)}if(opener&&opener.focus)opener.focus({preventScroll:true})}
+$('#pins').addEventListener('click',e=>{const b=e.target.closest('.pinb');if(b)pick(+b.dataset.i)});
+$('#lparts').addEventListener('click',e=>{const b=e.target.closest('button');if(b)pick(+b.dataset.i)});
+lsvg.addEventListener('click',e=>{const t=e.target.closest('[data-p]');if(t)pick(+t.dataset.p);else overview()});
+$('#lx').onclick=closeLab;lab.addEventListener('click',e=>{if(e.target===lab)closeLab()});
+$('#lPrev').onclick=()=>openLab(ORDER[(ORDER.indexOf(lid)+N-1)%N],true);$('#lNext').onclick=()=>openLab(ORDER[(ORDER.indexOf(lid)+1)%N],true);
+document.addEventListener('keydown',e=>{if(lab.hidden)return;if(e.key==='Escape')closeLab();if(e.key==='ArrowRight')$('#lNext').click();if(e.key==='ArrowLeft')$('#lPrev').click()});
+$('#lrun').onclick=()=>{const S=scene(lid),o=O[lid],g=$('#flowl');g.innerHTML='';if(reduced){lcap.innerHTML=`<h4>${o.ft}</h4><p>${o.fx}</p>`;return}lsvg.classList.remove('sel');$$('.pinb').forEach(b=>b.classList.remove('on'));const t0=lsvg.getCurrentTime();let end=0;
+ S.flows.forEach(f=>{for(let k=0;k<f.n;k++){const b=t0+(f.delay||0)+k*.8;g.insertAdjacentHTML('beforeend',`<g opacity="0"><circle r="11" fill="${f.c}" stroke="#fff" stroke-width="2.5"/>${k===0?`<text class="tokt" x="18" y="7">${f.l}</text>`:''}<animateMotion path="${f.d}" dur="${f.dur}s" begin="${f1(b)}s" fill="freeze"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.12;.85;1" dur="${f.dur}s" begin="${f1(b)}s" fill="freeze"/></g>`);end=Math.max(end,(f.delay||0)+k*.8+f.dur)}});
+ lcap.innerHTML=`<h4>${o.ft}</h4><p>${o.fx}</p><small>Watch the labeled dots move through the structure.</small>`;clearTimeout(run_t);run_t=setTimeout(()=>{g.innerHTML=''},end*1000+400)};
+let run_t=0;
+
+/* ===== album ===== */
+const buildAlbum=()=>{$('#albumG').innerHTML=ORDER.map(id=>`<button class="card locked" data-id="${id}" style="--oc:${PAL[id][1]};--od:${PAL[id][2]}"><span class="sw"></span><div class="im">${thumb(id)}</div><div class="tx"><b>${O[id].n}</b><span>Not found yet</span></div></button>`).join('');refresh();hydrate()};
+$('#albumG').addEventListener('click',e=>{const c=e.target.closest('.card');if(!c)return;const id=c.dataset.id;showTab('explore');
+ if(found.has(id)){setTimeout(()=>select(id),60)}else{c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');setTimeout(()=>{statusEl.innerHTML='<span>Hint: the glowing part is not collected yet. <b>Tap it.</b></span>';const g=$(`.org[data-id="${id}"]`,cell);g.classList.add('hint');setTimeout(()=>g.classList.remove('hint'),3200)},60)}});
+refresh();hydrate();
+
+/* ===== scale chart ===== */
+(function(){
+ const MIN=Math.log10(.003),MAX=Math.log10(100),pct=v=>(Math.log10(v)-MIN)/(MAX-MIN)*100,fm=v=>v<1?Math.round(v*1000)+' nm':v+' µm';
+ const rows=SIZES.map(s=>s.id?{id:s.id,v:O[s.id].sv,n:O[s.id].n,k:O[s.id].sk}:{id:null,v:s.v,n:s.t,k:s.k,ctx:1}).sort((a,b)=>a.v-b.v);
+ const tp=pct(.01),tk=100/(MAX-MIN);
+ const tick=[[.01,'10 nm'],[.1,'100 nm'],[1,'1 µm'],[10,'10 µm'],[100,'100 µm']];
+ $('#scaleBox').innerHTML=rows.map((r,ix)=>{const c=r.id?PAL[r.id][1]:null,inner=`<span class="nm"><i style="${c?`background:${c}`:'background:var(--ink2);opacity:.5'}"></i><span>${r.n}<small>${r.k}</small></span></span><span class="trk" style="--tp:${tp}%;--tk:${tk}%;${c?`--oc:${c}`:''}"><b style="width:${f1(pct(r.v))}%;--i:${ix}"></b></span><span class="v">${fm(r.v)}</span>`;
+  return r.id?`<button class="srow" data-id="${r.id}" style="--oc:${c}">${inner}</button>`:`<div class="srow ctx">${inner}</div>`}).join('')
+  +`<div class="axis"><span></span><div>${tick.map(t=>`<span style="left:${f1(pct(t[0]))}%">${t[1]}</span>`).join('')}</div><span></span></div><p class="note">Log scale: each gridline is 10 times bigger than the one before. Rows measure different things (thickness, length or diameter). Hatched rows are for comparison.</p>`;
+ $('#scaleBox').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(!b)return;showTab('explore');setTimeout(()=>select(b.dataset.id),60)});
+})();
+
+/* ===== compare ===== */
+let cmpDone=false;function initCompare(){
+ if(cmpDone)return;cmpDone=true;
+ const field='<rect width="900" height="680" fill="url(#g-field)"/>';
+ $('#cmpP').innerHTML=field+plantCell(false)+'<rect width="900" height="680" fill="url(#g-vign)"/>';
+ $('#cmpA').innerHTML=field+animalCell()+'<rect width="900" height="680" fill="url(#g-vign)"/>';
+ $('#tbl').innerHTML='<div class="r"><span>Feature</span><span>Plant cell</span><span>Animal cell</span></div>'+CMP.map(r=>`<div class="r"><b>${r[0]}</b><span>${r[1]}</span><span>${r[2]}</span></div>`).join('');
+ const w=$('#wipe'),inp=$('#wr'),co=$$('.callout',w),tp=$('.top',w),ln=$('.ln',w),kn=$('.kn',w);let lx=-1,wr=0;
+ const upd=()=>{wr=0;const x=+inp.value;if(x===lx)return;lx=x;const p=x+'%';tp.style.clipPath=`inset(0 0 0 ${p})`;ln.style.left=p;kn.style.left=p;co.forEach(c=>{const l=parseFloat(c.style.left)+4,s=c.dataset.s==='p',v=(s?l<x:l>x)?'1':'0';if(c._v!==v){c._v=v;c.style.opacity=v}})};
+ inp.addEventListener('input',()=>{if(!wr)wr=requestAnimationFrame(upd)});upd();
+}
+
+/* ===== quiz ===== */
+const qb=$('#quizBox');let Q=null;
+qb.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b&&has(O,b.dataset.go)){showTab('explore');setTimeout(()=>select(b.dataset.go),60)}});
+function newQuiz(){const ids=shuffle(ORDER),img=ids.slice(0,5).map(id=>({t:'img',id})),job=ids.slice(5,10).map(id=>({t:'job',id}));Q={list:shuffle(img.concat(job)),i:0,score:0,streak:0,res:[],miss:[]};drawQ()}
+function drawQ(){
+ if(Q.i>=Q.list.length){const s=Q.score,best=saveBest(s),rank=s>=9?'Master botanist':s>=7?'Sharp observer':s>=4?'Growing seedling':'Fresh sprout';
+  qb.innerHTML=`<div class="q-art"><div class="big">${rank}</div></div><div class="q-body res"><div class="q-meta"><span>Finished</span><span>Best ${best} / ${Q.list.length}</span></div><div class="score">${s}<span style="font-size:.4em;color:var(--ink2)"> / ${Q.list.length}</span></div><p style="margin:0;color:var(--ink2)">${s>=9?'Excellent. You know this cell inside out.':s>=7?'Strong result. A few parts are still worth a second look.':'Good start. Dive inside a few parts and try again.'}</p>${Q.miss.length?`<div class="miss"><span>Review</span>${Q.miss.map(id=>`<button class="btn" data-go="${id}">${O[id].n}</button>`).join('')}</div>`:''}<button class="btn qn" id="qAgain">Play again</button></div>`;
+  $('#qAgain').onclick=newQuiz;if(s>=8)boom();return}
+ const q=Q.list[Q.i],o=O[q.id],opts=shuffle([q.id].concat(shuffle(ORDER.filter(x=>x!==q.id)).slice(0,3)));
+ const art=q.t==='img'?`<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" aria-label="Unlabeled drawing of a cell part">${scene(q.id).svg.replace(/<text[\s\S]*?<\/text>/g,'')}</svg><span class="qtag">Identify</span>`:`<div class="big"><small>What does it do?</small>${o.job}</div>`;
+ const bar=Q.list.map((_,i)=>`<span class="${Q.res[i]||(i===Q.i?'now':'')}"></span>`).join('');
+ qb.innerHTML=`<div class="q-art" id="qart" style="--od:${PAL[q.id][2]};--oc:${PAL[q.id][1]}">${art}</div><div class="q-body"><div class="q-meta"><span>Question ${Q.i+1} of ${Q.list.length}</span><span>${Q.streak>1?'Streak '+Q.streak+' · ':''}Score ${Q.score}</span></div><div class="qbar" aria-hidden="true">${bar}</div><h3>${q.t==='img'?'Which part of the cell is this?':'Which part does this?'}</h3><div class="opts" id="opts">${opts.map((id,k)=>`<button class="opt" data-id="${id}" style="--oc:${PAL[id][1]}"><span class="lk">${'ABCD'[k]}</span><span class="on">${O[id].n}</span><i></i></button>`).join('')}</div><div class="fb" id="fb" aria-live="polite"></div></div>`;
+ $('#opts').onclick=e=>{const b=e.target.closest('.opt');if(!b||b.disabled)return;const ok=b.dataset.id===q.id;if(ok){Q.score++;Q.streak++;blip(784,.16)}else{Q.streak=0;if(!Q.miss.includes(q.id))Q.miss.push(q.id);blip(180,.22,"triangle")}Q.res[Q.i]=ok?'ok':'bad';
+  $$('.opt').forEach(x=>{x.disabled=true;if(x.dataset.id===q.id)x.classList.add('ok');else if(x===b)x.classList.add('bad')});$('#opts').classList.add('answered');
+  $('#qart').insertAdjacentHTML('beforeend',`<span class="qcap" style="background:${PAL[q.id][2]}">${o.n}</span>`);
+  $$('.qbar span')[Q.i].className=ok?'ok':'bad';
+  $('#fb').className='fb '+(ok?'ok':'bad');
+  $('#fb').innerHTML=`<b>${ok?'Correct!':'Not quite. It is the '+o.n.toLowerCase()+'.'}</b> ${o.f}<div style="margin-top:12px"><button class="btn qn" id="qNext">${Q.i+1<Q.list.length?'Next question':'See result'}</button></div>`;
+  $('#qNext').focus({preventScroll:true});$('#qNext').onclick=()=>{Q.i++;drawQ()}}}
+let quizDone=false;
+const idle=window.requestIdleCallback?(f=>requestIdleCallback(f,{timeout:3000})):(f=>setTimeout(f,80));
+setTimeout(()=>{(function warm(i){if(i>=ORDER.length)return;idle(()=>{if(document.hidden||cell.classList.contains('moving')||!lab.hidden){setTimeout(()=>warm(i),800);return}raster(ORDER[i]).then(()=>setTimeout(()=>warm(i+1),innerWidth<520?600:150))})})(0);},(navigator.hardwareConcurrency||8)<=4||innerWidth<520?3500:1200);
+
+/* ===== confetti ===== */
+let boomRaf=0;
+function boom(){if(reduced||boomRaf)return;const cv=$('#fx'),d=Math.min(devicePixelRatio||1,1.5),w=innerWidth,h=innerHeight;cv.style.display='block';cv.width=Math.round(w*d);cv.height=Math.round(h*d);const cx=cv.getContext('2d');
+ const cols=Object.values(PAL).map(p=>p[1]),P=Array.from({length:LOW?90:150},()=>({x:w/2+(Math.random()-.5)*200,y:h*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*13-3,r:Math.random()*6,s:5+Math.random()*7,c:cols[Math.random()*cols.length|0],vr:(Math.random()-.5)*.4}));let t=0,last=performance.now();
+ const f=now=>{const k=Math.min(3,(now-last)/16.67);last=now;cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);const g=Math.pow(.99,k);P.forEach(p=>{p.vy+=.35*k;p.x+=p.vx*k;p.y+=p.vy*k;p.vx*=g;p.r+=p.vr*k;const c=Math.cos(p.r)*d,n=Math.sin(p.r)*d;cx.setTransform(c,n,-n,c,p.x*d,p.y*d);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2)});t+=k;
+  if(t<190)boomRaf=requestAnimationFrame(f);else{boomRaf=0;cv.width=cv.height=0;cv.style.display='none'}};
+ boomRaf=requestAnimationFrame(f)}
+
+/* ===== tabs ===== */
+const TABS=['explore','album','scale','compare','sim','quiz','about'];
+function showTab(t){
+ TABS.forEach(n=>{const on=n===t;$('#'+n).hidden=!on;const b=$('#tab-'+n);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1});
+ if(t==='album'&&!$('#albumG').children.length)buildAlbum();
+ if(t==='compare')initCompare();
+ if(t==='sim')initSim();
+ if(t==='quiz'&&!quizDone){quizDone=true;newQuiz()}
+ const r=$('#tabs').getBoundingClientRect();if(r.top<0)scrollTo({top:scrollY+r.top-8,behavior:'auto'})}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)showTab(b.dataset.t)});
+$('#tabs').addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const i=TABS.indexOf(document.activeElement.dataset.t);if(i<0)return;const n=TABS[(i+(e.key==='ArrowRight'?1:TABS.length-1))%TABS.length];showTab(n);$('#tab-'+n).focus()});
+
+/* ===== v2 additions ===== */
+function saveBest(v){let b=lsInt('pcBest',10);if(v>b){b=v;lsSet('pcBest',b)}return Math.max(b,v)}
+let tourT=0;
+function stopTour(){clearTimeout(tourT);tourT=0}
+function startTour(){stopTour();let i=0;const step=()=>{if(i>=N){deselect();return}select(ORDER[i++],{tour:1});tourT=setTimeout(step,5600)};step()}
+panel.addEventListener('click',e=>{if(e.target.closest('#tour'))startTour()});
+try{new IntersectionObserver(([en])=>{cell.classList.toggle('paused',!en.isIntersecting);liveSvg.classList.toggle('paused',!en.isIntersecting)}).observe(stage)}catch(e){}
+new MutationObserver(()=>{document.body.classList.toggle('labopen',!lab.hidden);if(!lab.hidden)stopTour();ambS.hold(!lab.hidden)}).observe(lab,{attributes:true,attributeFilter:['hidden']});
+cell.addEventListener('click',e=>{if(moved||e.target.closest('.org,.orb,.ves'))return;if(cur)deselect()});
+(function(){const P=new Map();let p0=null;
+ cell.addEventListener('pointerdown',e=>{P.set(e.pointerId,[e.clientX,e.clientY]);if(P.size===2){drag=null;cell.classList.remove('drag');const[a,b]=[...P.values()];p0={d:Math.hypot(a[0]-b[0],a[1]-b[1])||1,w:cam.w};moved=true}});
+ cell.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;P.set(e.pointerId,[e.clientX,e.clientY]);if(P.size!==2||!p0)return;const[a,b]=[...P.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1])||1,w=clamp(p0.w*p0.d/d,180,900),h=w*AR,r=cell.getBoundingClientRect(),px=cam.x+((a[0]+b[0])/2-r.left)/r.width*cam.w,py=cam.y+((a[1]+b[1])/2-r.top)/r.height*cam.h;stopFly();setCam({x:clamp(px-(px-cam.x)*w/cam.w,0,900-w),y:clamp(py-(py-cam.y)*h/cam.h,0,680-h),w,h})});
+ const up=e=>{P.delete(e.pointerId);if(P.size<2)p0=null;if(!P.size)setTimeout(()=>moved=false,0)};
+ cell.addEventListener('pointerup',up);cell.addEventListener('pointercancel',up)})();
+(function(){const la=$('.la');let sw=null,swd=false;
+ la.addEventListener('pointerdown',e=>{sw=[e.clientX,e.clientY];swd=false});
+ la.addEventListener('pointerup',e=>{if(!sw)return;const dx=e.clientX-sw[0],dy=e.clientY-sw[1];sw=null;if(Math.abs(dx)>70&&Math.abs(dy)<45){swd=true;(dx<0?$('#lNext'):$('#lPrev')).click()}});
+ la.addEventListener('click',e=>{if(swd){e.stopPropagation();swd=false}},true);
+ document.addEventListener('keydown',e=>{if(lab.hidden||e.key!=='Tab')return;const f=$$('button:not([disabled])',lb).filter(b=>b.getClientRects().length);if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}})})();
+document.addEventListener('keydown',e=>{if($('#quiz').hidden||!lab.hidden||e.metaKey||e.ctrlKey||e.altKey)return;const k='abcd'.indexOf(e.key.toLowerCase()),n=['1','2','3','4'].indexOf(e.key),i=k>=0?k:n;if(i>=0){const b=$$('.opt')[i];if(b&&!b.disabled)b.click()}});
+(function(){const root=document.documentElement;{const t=lsGet('pcTheme');if(t==='light'||t==='dark')root.dataset.theme=t}
+ $('#theme').onclick=()=>{const c=root.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'),nx=c==='dark'?'light':'dark';root.dataset.theme=nx;lsSet('pcTheme',nx)}})();
+$('#reset').onclick=()=>{atp=0;clearTimeout(atpT);try{localStorage.removeItem('pcAtp')}catch(e){}atpUI();found.clear();try{localStorage.removeItem('pcFound')}catch(e){}deselect();refresh()};
+{let h='';try{h=decodeURIComponent(location.hash.slice(1))}catch(e){}if(ORDER.includes(h))setTimeout(()=>select(h),350)}
+addEventListener('pagehide',()=>{clearTimeout(atpT);lsSet('pcAtp',atp)});
+addEventListener('hashchange',()=>{let h='';try{h=decodeURIComponent(location.hash.slice(1))}catch(e){}if(ORDER.includes(h)&&h!==cur&&lab.hidden){showTab('explore');select(h)}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lab.hidden&&cur&&!$('#explore').hidden&&!e.metaKey&&!e.ctrlKey)deselect()});
+
+/* ===== v3: alive + clickable ===== */
+let AC=null,snd=lsGet('pcSnd')==='1';
+function blip(f=660,d=.12,t='sine',v=.05){if(!snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime;o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(n+d)}catch(e){}}
+const sndB=$('#snd');sndB.setAttribute('aria-pressed',snd);
+sndB.onclick=()=>{snd=!snd;sndB.setAttribute('aria-pressed',snd);lsSet('pcSnd',snd?'1':'0');blip(660,.12)};
+let toastT=0;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),3600)}
+let atp=lsInt('pcAtp',99999),atpT=0;
+function atpUI(){$('#bAtp').textContent='⚡ '+atp+' ATP'}atpUI();
+const live=liveSvg.querySelector('#live');
+const svgPt=(x,y)=>{const p=cell.createSVGPoint();p.x=x;p.y=y;return p.matrixTransform(cell.getScreenCTM().inverse())};
+function ripple(e){const q=svgPt(e.clientX,e.clientY),c=document.createElementNS(NS,'circle');c.setAttribute('class','rip');c.setAttribute('cx',q.x);c.setAttribute('cy',q.y);c.setAttribute('r',5);live.appendChild(c);setTimeout(()=>c.remove(),800)}
+cell.addEventListener('click',e=>{if(!moved&&!reduced)ripple(e)});
+function burst(x,y,col){if(reduced)return;for(let i=0;i<9;i++){const a=i/9*6.283,d=26+Math.random()*16,c=document.createElementNS(NS,'circle');c.setAttribute('class','bst');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',3.5);c.setAttribute('fill',col);c.style.setProperty('--bx',Math.cos(a)*d+'px');c.style.setProperty('--by',Math.sin(a)*d+'px');live.appendChild(c);setTimeout(()=>c.remove(),750)}}
+/* ATP sparks */
+const ANCH=[[610,98],[700,586],[800,580],[814,398],[690,372],[140,100],[260,100],[380,100],[500,100],[96,250],[96,400],[170,590],[295,590],[420,590],[545,590],[752,330],[745,470]];
+function spawnOrb(){if(live.querySelectorAll('.orb').length>=6)return;const a=ANCH[Math.random()*ANCH.length|0],x=a[0]+(Math.random()-.5)*50,y=a[1]+(Math.random()-.5)*50,g=document.createElementNS(NS,'g');g.setAttribute('class','orb');g.setAttribute('transform',`translate(${f1(x)} ${f1(y)})`);g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label','Collect ATP spark');
+ g.innerHTML=`<g class="orbi" style="--dx:${f1((Math.random()-.5)*60)}px;--dy:${f1((Math.random()-.5)*50)}px;--t:${f1(4+Math.random()*4)}s"><circle r="20" fill="transparent"/><g class="orbc"><circle class="orbg" r="19" fill="url(#g-orbglow)"/><circle r="10" fill="#FFE14D" stroke="#fff" stroke-width="2.4"/><path d="M2 -7L-4 1H0L-2 8L4 -1H0Z" fill="#B45309"/></g></g>`;
+ const grab=ev=>{ev.stopPropagation();if(g.dataset.x)return;g.dataset.x=1;const m=g.getBoundingClientRect(),q=svgPt(m.left+m.width/2,m.top+m.height/2);burst(q.x,q.y,'#FFE14D');g.remove();atp++;clearTimeout(atpT);atpT=setTimeout(()=>lsSet('pcAtp',atp),600);atpUI();blip(880+Math.min(atp,20)*14,.1,'triangle');
+  if(atp===5)toast('5 ATP! Mitochondria make most of this energy.');else if(atp===15)toast('15 ATP. The cell is buzzing with energy.');else if(atp===30){toast('30 ATP. Chief Energy Officer!');boom()}
+  setTimeout(spawnOrb,1400+Math.random()*1600)};
+ g.addEventListener('click',grab);g.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();grab(ev)}});live.appendChild(g)}
+for(let i=0;i<6;i++)setTimeout(spawnOrb,600+i*500);
+/* travelling vesicles */
+const VES=[
+ ['M745 498C772 540 820 562 852 600','#FFB36B','Vesicle from the Golgi, carrying cell wall sugars out to be added to the wall.'],
+ ['M744 396C738 420 740 440 745 452','#FFD0EA','Vesicle from the ER, carrying freshly folded protein to the Golgi for sorting.'],
+ ['M676 190C640 240 620 270 596 320','#5EEAD4','Messenger RNA, a copy of a gene, heading from the nucleus to ribosomes.'],
+ ['M650 475C560 540 500 520 420 540','#7FC8FF','Vesicle heading for the vacuole with cargo to store.']
+];
+VES.forEach((v,i)=>{const g=document.createElementNS(NS,'g');g.setAttribute('class','ves');g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label','Vesicle: tap to learn what it carries');
+ g.innerHTML=`<circle r="18" fill="transparent"/><circle r="8" fill="${v[1]}" stroke="#fff" stroke-width="2.4"/><circle cx="-2.5" cy="-2.5" r="2.4" fill="#fff" opacity=".8"/><animateMotion path="${v[0]}" dur="${6+i*1.3}s" begin="${i*1.1}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.9;1" dur="${6+i*1.3}s" begin="${i*1.1}s" repeatCount="indefinite"/>`;
+ const go=ev=>{ev.stopPropagation();toast(v[2]);blip(420+i*60,.12,'square',.03)};g.addEventListener('click',go);g.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();go(ev)}});live.appendChild(g)});
+/* idle nudge: pulse a part the visitor has not found yet */
+setInterval(()=>{if($('#explore').hidden||cur||!lab.hidden||document.hidden||found.size>=N||reduced)return;const left=ORDER.filter(id=>!found.has(id)),id=left[Math.random()*left.length|0],g=ORGL.find(o=>o.dataset.id===id);if(!g)return;g.classList.add('hint');setTimeout(()=>g.classList.remove('hint'),3200)},9000);
+/* ===== simulate tab ===== */
+let simDone=false;
+function initSim(){if(simDone)return;simDone=true;
+ const v=$('#simsvg'),ST=[
+  {k:'L',n:8,col:'#FFD43B',lab:'Light',x0:i=>90+i*86,y0:()=>-20,x1:i=>200+i*80,y1:()=>190},
+  {k:'W',n:6,col:'#5BC0FF',lab:'H₂O',x0:()=>-20,y0:i=>230+i*14,x1:()=>225,y1:i=>270+i*8},
+  {k:'C',n:6,col:'#C3C9D6',lab:'CO₂',x0:i=>140+i*50,y0:()=>550,x1:i=>300+i*26,y1:()=>395},
+  {k:'O',n:8,col:'#8FF3FF',lab:'O₂',x0:i=>470+i*10,y0:()=>200,x1:i=>600+i*26,y1:()=>-20},
+  {k:'S',n:6,col:'#FF8FB8',lab:'Sugar',x0:()=>520,y0:i=>320+i*6,x1:()=>830,y1:i=>330+i*14}
+ ];
+ let h=`<rect width="800" height="520" fill="url(#g-field)"/><g id="sun" transform="translate(60 56)"><g id="rays" stroke="#FFD43B" stroke-width="5" stroke-linecap="round">${[...Array(12)].map((_,i)=>`<line x1="44" y1="0" x2="62" y2="0" transform="rotate(${i*30})"/>`).join('')}</g><circle r="34" fill="#FFD43B" stroke="#fff" stroke-width="3"/></g><g id="simch" transform="translate(400 300) scale(3.4)" tabindex="0" role="button" aria-label="Chloroplast. Tap for a fact">${sp.chl(0,0,0)}</g>`;
+ ST.forEach(s=>{for(let i=0;i<s.n;i++)h+=`<g class="fl" data-k="${s.k}" data-i="${i}" style="--x0:${s.x0(i)}px;--y0:${s.y0(i)}px;--x1:${s.x1(i)}px;--y1:${s.y1(i)}px;animation-delay:-${(i/s.n*4).toFixed(2)}s"><circle r="9" fill="${s.col}" stroke="#fff" stroke-width="2"/>${i===0?`<text class="tokt" x="14" y="7">${s.lab}</text>`:''}</g>`});
+ v.innerHTML=h;
+ const NM={L:'Light',C:'CO₂',W:'Water'},FACTS=['Chloroplasts turn to face the light and can slide around inside a cell to avoid too much of it.','Nearly all the oxygen you breathe came from photosynthesis, on land and in the sea.','Leaves look green because chlorophyll absorbs red and blue light and reflects green.','A single leaf can hold half a million chloroplasts per square millimeter.'];let fi=0;
+ const $i=id=>$(id);let lastMsg='';
+ const FL=$$('.fl',v).map(e=>({e,k:e.dataset.k,i:+e.dataset.i,n:ST.find(s=>s.k===e.dataset.k).n,s:true,d:''}));
+ try{new IntersectionObserver(([en])=>v.classList.toggle('paused',!en.isIntersecting)).observe(v)}catch(e){}
+ function upd(){const L=+$i('#sL').value,C=+$i('#sC').value,W=+$i('#sW').value,lv={L,C,W},m=Math.min(L,C,W),out=m/100;
+  ['L','C','W'].forEach(k=>$i('#o'+k).textContent=lv[k]);
+  lv.O=m;lv.S=m;
+  FL.forEach(o=>{const show=o.i<Math.ceil(o.n*lv[o.k]/100-.0001),d=(4.6/(.45+lv[o.k]/100*.9)).toFixed(2)+'s';if(o.s!==show){o.s=show;o.e.style.display=show?'':'none'}if(o.d!==d){o.d=d;o.e.style.setProperty('--d',d)}});
+  $('#rays').style.opacity=f1(.2+.8*L/100);$('#sun').style.opacity=f1(.35+.65*L/100);
+  $('#mS').style.width=m+'%';$('#mO').style.width=m+'%';
+  const lim=['L','C','W'].filter(k=>lv[k]===m).map(k=>NM[k]);
+  const msg=m>=90?'<b>Full speed.</b> Everything is plentiful, so the chloroplast works as fast as its own enzymes allow.':m===0?`<b>Nothing is made.</b> ${lim.join(' and ')} is at zero, so photosynthesis stops.`:`<b>${lim.join(' and ')} ${lim.length>1?'are':'is'} the limiting factor.</b> Adding more of the others will not help. Turn up ${lim.join(' or ')} instead.`;
+  if(msg!==lastMsg){lastMsg=msg;$('#simmsg').innerHTML=msg}
+  $$('.pre button[data-l]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l==L&&b.dataset.c==C&&b.dataset.w==W))}
+ const PR=[['Perfect day',100,100,100],['Dusk',12,70,80],['Drought',90,60,8],['Stuffy room',80,10,80],['Dark cellar',0,70,80]];
+ $('#pre').innerHTML=PR.map(p=>`<button data-l="${p[1]}" data-c="${p[2]}" data-w="${p[3]}" aria-pressed="false">${p[0]}</button>`).join('')+'<button id="dayB" aria-pressed="false">▶ Play a day</button>';
+ let dayRaf=0;const dayB=$('#dayB');
+ const stopDay=()=>{if(dayRaf){cancelAnimationFrame(dayRaf);dayRaf=0}dayB.textContent='▶ Play a day';dayB.setAttribute('aria-pressed','false')};
+ const playDay=()=>{if(dayRaf){stopDay();return}dayB.textContent='■ Stop';dayB.setAttribute('aria-pressed','true');const t0=performance.now(),T=14000;
+  const step=now=>{if($('#sim').hidden||document.hidden){stopDay();return}const k=Math.min(1,(now-t0)/T),sun=Math.sin(k*Math.PI);$i('#sL').value=Math.round(Math.pow(sun,.8)*100);$i('#sC').value=Math.round(78-8*Math.cos(k*Math.PI*2));$i('#sW').value=Math.round(100-62*k);upd();if(k<1)dayRaf=requestAnimationFrame(step);else stopDay()};
+  dayRaf=requestAnimationFrame(step)};
+ ['#sL','#sC','#sW'].forEach(i=>$i(i).addEventListener('input',stopDay));
+ $('#pre').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='dayB'){playDay();return}stopDay();$i('#sL').value=b.dataset.l;$i('#sC').value=b.dataset.c;$i('#sW').value=b.dataset.w;upd();blip(500,.1)};
+ ['#sL','#sC','#sW'].forEach(i=>$i(i).addEventListener('input',upd));
+ const ch=$('#simch'),tapc=()=>{ch.classList.remove('pulse');void ch.getBoundingClientRect();ch.classList.add('pulse');toast(FACTS[fi++%FACTS.length]);blip(600,.1)};
+ ch.addEventListener('click',tapc);ch.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tapc()}});
+ upd()}
+
+/* ===== v4: living backgrounds, per-part motion, tune-ups ===== */
+const LOW=(navigator.hardwareConcurrency||8)<=4||innerWidth<520;
+const FX={mode:['auto','lite','full'].includes(lsGet('pcFx'))?lsGet('pcFx'):'auto',lvl:'full'};
+const MOOD={
+ _:{c:['#C9F28A','#FFF6A8'],sh:'dot',vy:-9,vx:5,s:[1.4,3.2],d:.7},
+ night:{c:['#FFF3A6','#B9FFB5'],sh:'dot',vy:-5,vx:7,s:[1.8,3.8],d:.5},
+ wall:{c:['#E7F59A','#B7D04C'],sh:'line',vy:-6,vx:10,s:[8,18],d:.6},
+ membrane:{c:['#FFE08A','#FFC93C'],sh:'dot',vy:0,vx:30,s:[2,4]},
+ cytoplasm:{c:['#BFE37A','#EAF6C6'],sh:'dot',vy:5,vx:26,s:[1.5,4]},
+ nucleus:{c:['#C4AEFF','#8CF5E3'],sh:'text',vy:-14,vx:5,s:[10,16],d:.6},
+ chloroplast:{c:['#FFF08A','#FFD43B'],sh:'dot',vy:34,vx:8,s:[1.5,3.5],d:1.1},
+ vacuole:{c:['#BEEBFF','#7CCBF2'],sh:'ring',vy:-26,vx:3,s:[3,10],d:.7},
+ mito:{c:['#FFB265','#FF7A2B'],sh:'dot',vy:-30,vx:6,s:[1.5,4]},
+ er:{c:['#FFB3DC','#E04FA9'],sh:'dot',vy:0,vx:-28,s:[2,5]},
+ ribosome:{c:['#FF9FB0','#FFE3E8'],sh:'dot',vy:0,vx:50,s:[1.5,3]},
+ golgi:{c:['#7DF2E0','#C9FBF1'],sh:'hex',vy:-6,vx:18,s:[5,10],d:.6},
+ peroxisome:{c:['#F4D3A5','#FF8A70'],sh:'ring',vy:-34,vx:2,s:[2,6]}
+};
+/* one tiny canvas particle engine, paused when offscreen, hidden or reduced motion */
+function Amb(host,cv){
+ const x=cv.getContext('2d');let W=0,H=0,P=[],m=MOOD._,live=0,fill=1,raf=0,vis=false,t0=0,held=false;
+ const R=(a,b)=>a+Math.random()*(b-a);
+ const mk=init=>{const o={s:R(m.s[0],m.s[1]),m,c:m.c[Math.random()*m.c.length|0],x:R(0,W),y:R(0,H),vx:m.vx*R(.6,1.3),vy:m.vy*R(.6,1.3),a:R(.3,.8),p:R(0,6.28),age:init?0:.7,ch:'ATGC'[Math.random()*4|0]};
+  if(!init){if(m.vy<0)o.y=H+12;else if(m.vy>0)o.y=-12;else o.x=m.vx>0?-12:W+12}return o};
+ const draw=p=>{const k=p.m.sh;x.globalAlpha=Math.max(0,p.a*Math.min(1,p.age/.7));x.fillStyle=x.strokeStyle=p.c;
+  if(k==='ring'){x.lineWidth=1.5;x.beginPath();x.arc(p.x,p.y,p.s,0,6.283);x.stroke()}
+  else if(k==='text'){x.font='700 '+p.s+'px "DM Mono",monospace';x.fillText(p.ch,p.x,p.y)}
+  else if(k==='hex'){x.lineWidth=1.6;x.beginPath();for(let j=0;j<6;j++){const a=j*1.047+p.p;x[j?'lineTo':'moveTo'](p.x+p.s*Math.cos(a),p.y+p.s*Math.sin(a))}x.closePath();x.stroke()}
+  else if(k==='line'){x.lineWidth=2.4;x.lineCap='round';x.beginPath();x.moveTo(p.x,p.y);x.lineTo(p.x+p.s*Math.cos(p.p),p.y+p.s*Math.sin(p.p));x.stroke()}
+  else{x.beginPath();x.arc(p.x,p.y,p.s,0,6.283);x.fill()}};
+ const frame=now=>{raf=requestAnimationFrame(frame);if(FX.lvl==='lite'&&now-t0<30)return;const dt=Math.min(.05,(now-t0)/1e3);t0=now;if(!W)return;
+  x.clearRect(0,0,W,H);x.globalCompositeOperation='lighter';
+  const want=Math.round(clamp(W*H/(LOW||FX.lvl==='lite'?20000:12000),12,56)*(m.d||1)*(FX.lvl==='lite'?.6:1));
+  while(live<want){P.push(mk(fill));live++}fill=0;
+  for(let i=P.length;i--;){const p=P[i];p.age+=dt;p.p+=dt*.6;p.x+=(p.vx+Math.sin(p.p*3)*8)*dt;p.y+=(p.vy+Math.cos(p.p*2.3)*6)*dt;if(p.die)p.a-=dt*1.6;
+   if(p.a<=0||p.x<-30||p.x>W+30||p.y<-30||p.y>H+30){if(!p.die)live--;P.splice(i,1);continue}draw(p)}};
+ const go=()=>{if(!raf&&vis&&!held&&!document.hidden&&W&&!reduced){t0=performance.now();raf=requestAnimationFrame(frame)}},halt=()=>{cancelAnimationFrame(raf);raf=0};
+ new IntersectionObserver(([e])=>{vis=e.isIntersecting;vis?go():halt()}).observe(host);
+ new ResizeObserver(()=>{const d=Math.min(devicePixelRatio||1,1.5);W=host.clientWidth;H=host.clientHeight;cv.width=W*d;cv.height=H*d;x.setTransform(d,0,0,d,0,0);go()}).observe(host);
+ document.addEventListener('visibilitychange',()=>document.hidden?halt():go());
+ return{set(t){m=t;P.forEach(p=>{if(!p.die){p.die=1;live--}});fill=1},hold(b){held=b;b?halt():go()}}
+}
+function layers(host,back){const t=document.createElement('div'),c=document.createElement('canvas');t.className='tint'+(back?' back':'');c.className='amb'+(back?' back':'');c.setAttribute('aria-hidden','true');back?host.prepend(t,c):cell.after(t,c);return[t,c]}
+const [tintS,cvS]=layers(stage,false),ambS=Amb(stage,cvS);
+const [tintL,cvL]=layers($('.la'),true),ambL=Amb($('.la'),cvL);
+/* the stage mood follows the selected part (and the night switch) */
+function theme4(id){const col=id?PAL[id][1]:'transparent';
+ tintS.dataset.k=id||'';tintS.style.setProperty('--tc',col);tintS.classList.toggle('on',!!id);
+ stage.style.setProperty('--tc',col);stage.classList.toggle('lit',!!id);
+ document.documentElement.style.setProperty('--tint',id?col:'transparent');
+ ambS.set(id?MOOD[id]:night?MOOD.night:MOOD._)}
+function labTheme(id){tintL.dataset.k=id;tintL.style.setProperty('--tc',PAL[id][1]);tintL.classList.add('on');ambL.set(MOOD[id]);$$('.pinb').forEach((b,i)=>b.style.setProperty('--k',i))}
+function flourish(id){if(reduced)return;const g=$(`.org[data-id="${id}"]`,cell);if(!g)return;try{const b=g.getBBox();burst(b.x+b.width/2,b.y+b.height/2,PAL[id][1])}catch(e){}if(navigator.vibrate)navigator.vibrate(10)}
+const _sel=select,_des=deselect,_ol=openLab;
+select=function(id,o){o=o||{};_sel(id,o);theme4(id);if(!o.quiet)flourish(id)};
+deselect=function(){_des();theme4(null)};
+openLab=function(id,keep){_ol(id,keep);labTheme(id)};
+['#bDay','#bNight'].forEach(s=>$(s).addEventListener('click',()=>theme4(cur)));
+theme4(cur);
+/* SMIL (vesicles, flows) keeps running offscreen unless told otherwise */
+const smil=p=>{try{p?liveSvg.pauseAnimations():liveSvg.unpauseAnimations()}catch(e){}};
+try{new IntersectionObserver(([e])=>smil(!e.isIntersecting)).observe(stage)}catch(e){}
+document.addEventListener('visibilitychange',()=>smil(document.hidden));
+
+/* ===== v5: shared drift clock, adaptive quality, small extras ===== */
+/* Organelles used to drift via 15 separate CSS animations, repainting the whole cell every frame.
+   One shared ~7 fps clock gives the same slow float (it moves well under a pixel per step) for a fraction of the paint work. */
+const DR=$$('.dr',cell).map(g=>{const st=g.style,n=p=>parseFloat(st.getPropertyValue(p))||0;return{g,dx:n('--dx'),dy:n('--dy'),t:n('--t')||11,d:n('--d')}});
+function driftTick(){if(reduced||document.hidden||!lab.hidden||cell.classList.contains('paused')||cell.classList.contains('moving'))return;const s=performance.now()/1000;
+ DR.forEach(o=>{const u=(((s-o.d)/o.t)%2+2)%2,f=u<1?u:2-u,e=f*f*(3-2*f),x=f1(o.dx*e),y=f1(o.dy*e);if(o.x!==x||o.y!==y){o.x=x;o.y=y;o.g.style.transform=`translate(${x}px,${y}px)`}})}
+setInterval(driftTick,140);driftTick();
+/* effects level: full by default, drops to lite on its own when frames stay slow */
+const fxb=$('#fxb');let govOn=false;
+function setLvl(l){FX.lvl=l;document.documentElement.dataset.fx=l;ambS.set(cur?MOOD[cur]:night?MOOD.night:MOOD._)}
+function fxLabel(){const m=FX.mode;fxb.dataset.m=m==='auto'?FX.lvl:m;fxb.setAttribute('aria-label',m==='auto'?`Visual effects: automatic, currently ${FX.lvl}. Tap to change`:`Visual effects: ${m}. Tap to change`);fxb.title=fxb.getAttribute('aria-label')}
+function govStart(){if(govOn||FX.mode!=='auto'||FX.lvl!=='full')return;govOn=true;const buf=[];let last=0,bad=0;
+ const f=now=>{if(FX.mode!=='auto'||FX.lvl!=='full'){govOn=false;return}
+  if(last&&!document.hidden&&!$('#explore').hidden&&lab.hidden&&!cell.classList.contains('paused')){const d=now-last;if(d<250)buf.push(d)}
+  last=document.hidden?0:now;
+  if(buf.length>=30){buf.sort((a,b)=>a-b);const use=buf.slice(0,27),avg=use.reduce((a,b)=>a+b,0)/use.length;buf.length=0;bad=avg>26?bad+1:0;
+   if(bad>=2){govOn=false;setLvl('lite');fxLabel();toast('Trimmed some glow effects to keep things smooth. Tap ✦ to change.');return}}
+  requestAnimationFrame(f)};requestAnimationFrame(f)}
+function applyMode(){const m=FX.mode;if(m==='lite')setLvl('lite');else{setLvl('full');if(m==='auto')govStart()}fxLabel()}
+fxb.onclick=()=>{FX.mode=FX.mode==='auto'?'lite':FX.mode==='lite'?'full':'auto';lsSet('pcFx',FX.mode);applyMode();toast(FX.mode==='auto'?'Effects: automatic':FX.mode==='lite'?'Effects: light':'Effects: full')};
+applyMode();
+/* paint-only gradient animations pause when scrolled out of view */
+try{const io=(el,cls)=>el&&new IntersectionObserver(([en])=>document.body.classList.toggle(cls,!en.isIntersecting)).observe(el);io($('.hero'),'hero-off');io(panel,'panel-off')}catch(e){}
+
+/* ===== v7: search, prev/next, read aloud, share ===== */
+(function(){
+ const step=d=>{const i=cur?ORDER.indexOf(cur):(d>0?-1:0);select(ORDER[(i+d+N)%N])};
+ let speaking=false;
+ const stopSpeak=()=>{try{speechSynthesis.cancel()}catch(e){}speaking=false;const b=$('#pRead');if(b)b.setAttribute('aria-pressed','false')};
+ const filter=q=>{q=q.trim().toLowerCase();TCB.forEach(b=>{const o=O[b.dataset.id],hay=(o.n+' '+o.tag+' '+(o.job||'')+' '+(o.d||'')).toLowerCase();b.classList.toggle('nomatch',!!q&&!hay.includes(q))})};
+ let qv='';
+ function addTools(){
+  if(panel.querySelector('.ptools'))return;
+  const d=document.createElement('div');d.className='ptools';
+  d.innerHTML='<button class="btn" id="pPrev" aria-label="Previous part">‹ Prev</button><button class="btn" id="pNext" aria-label="Next part">Next ›</button>'+
+   (window.speechSynthesis?'<button class="btn" id="pRead" aria-pressed="false">🔊 Read aloud</button>':'')+
+   '<button class="btn" id="pShare">🔗 Share</button><input type="search" id="pSearch" placeholder="Search parts…" aria-label="Search parts" autocomplete="off">';
+  panel.appendChild(d);
+  const inp=d.querySelector('#pSearch');inp.value=qv;
+  inp.addEventListener('input',()=>{qv=inp.value;filter(qv)});
+  d.querySelector('#pPrev').onclick=()=>step(-1);d.querySelector('#pNext').onclick=()=>step(1);
+  const rd=d.querySelector('#pRead');
+  if(rd)rd.onclick=()=>{if(speaking){stopSpeak();return}const o=cur&&O[cur];const t=o?`${o.n}. ${o.tag}. ${o.d} ${o.f||''}`:'Pick a part of the plant cell to hear about it.';
+   const u=new SpeechSynthesisUtterance(t);u.rate=.95;u.onend=u.onerror=()=>{speaking=false;rd.setAttribute('aria-pressed','false')};speaking=true;rd.setAttribute('aria-pressed','true');speechSynthesis.speak(u)};
+  d.querySelector('#pShare').onclick=async()=>{const url=location.href.split('#')[0]+(cur?'#'+cur:'');const o=cur&&O[cur];
+   try{if(navigator.share){await navigator.share({title:'Inside a Plant Cell',text:o?'Check out the '+o.n+' in a plant cell':'Explore a plant cell',url});return}}catch(e){if(e&&e.name==='AbortError')return}
+   try{await navigator.clipboard.writeText(url);toast('Link copied')}catch(e){toast(url)}};
+ }
+ new MutationObserver(()=>{stopSpeak();addTools()}).observe(panel,{childList:true});
+ addTools();
+ document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;const t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;if($('#explore').hidden||!lab.hidden)return;
+  if(e.key==='ArrowRight'){e.preventDefault();step(1)}else if(e.key==='ArrowLeft'){e.preventDefault();step(-1)}});
+})();
+</script>
+
+</body>
+</html>
