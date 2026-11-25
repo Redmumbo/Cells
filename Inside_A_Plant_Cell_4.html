@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#06202A">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="An interactive atlas of the plant cell: fly into 11 structures, dive inside, watch them work, compare with an animal cell and take the quiz.">
+<meta name="description" content="An interactive atlas of the plant cell: fly into 11 structures, dive inside, watch them work, compare with an animal cell play three games and take the quiz.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <title>Inside a Plant Cell</title>
@@ -456,6 +456,85 @@ html[data-fx="lite"] #lsvg{animation:none}
 .ptools input{flex:1 1 150px;min-height:44px;border:1px solid var(--line);border-radius:99px;padding:8px 16px;background:var(--surface);color:var(--ink);font:500 14px var(--body);min-width:0}
 .tc.nomatch{display:none}
 .ptools .btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+/* games */
+.gpick{display:grid;gap:14px;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:760px){.gpick{grid-template-columns:1fr}}
+.gcard{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:22px;box-shadow:var(--sh);padding:20px;display:grid;gap:8px;align-content:start;min-height:190px;transition:transform .15s,border-color .15s}
+.gcard:hover{transform:translateY(-3px);border-color:var(--accent)}
+.gcard .gi{font-size:40px;line-height:1}
+.gcard h3{font-size:24px;font-weight:700}
+.gcard p{margin:0;color:var(--ink2);font-size:15px}
+.gcard .gbest{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:auto;padding-top:6px}
+.gtop{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:14px}
+.gtop h3{font-size:clamp(20px,3vw,26px);font-weight:700;outline:none}
+.gstat{margin-left:auto;font:500 13px var(--mono);letter-spacing:.04em;color:var(--ink2)}
+.mgrid{display:grid;gap:10px;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:640px){.mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.mc{min-height:112px;border-radius:16px;border:2px solid var(--line);background:linear-gradient(135deg,#15803D,#0F5C2B);color:#fff;font:800 30px var(--display);display:grid;place-items:center;align-content:center;gap:4px;padding:8px;text-align:center;line-height:1.25;touch-action:manipulation}
+.mc:hover:not(.up):not(.done){filter:brightness(1.15)}
+.mc.up,.mc.done{background:var(--surface);color:var(--ink);font:500 13.5px/1.3 var(--body);animation:mflip .25s}
+.mc.up{border-color:var(--c)}
+.mc.done{background:var(--c0);color:var(--c2);border-color:var(--c)}
+.mc .mk{font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.mc .mn{font:700 17px/1.15 var(--display)}
+.mc.shake{animation:mshake .4s}
+@keyframes mflip{from{transform:scaleX(.1)}}
+@keyframes mshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes pop2{from{transform:scale(.88);opacity:.4}}
+.gres{margin-top:16px;display:grid;gap:8px;justify-items:start;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--sh);padding:20px}
+.gres h3{font-size:28px}.gres p{margin:0;color:var(--ink2)}
+.smiss{margin:4px 0 0;padding-left:18px;color:var(--ink2);font-size:14.5px;display:grid;gap:4px}.smiss b{color:var(--ink)}
+.gsun{position:relative;border-radius:22px;overflow:hidden;background:#06202A;box-shadow:var(--sh)}
+.gsun canvas{display:block;width:100%;height:auto;aspect-ratio:640/420;touch-action:pan-y;cursor:ew-resize}
+.gov{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px;text-align:center;padding:20px;background:rgba(4,22,30,.82);color:#fff}
+.gov h3{font-size:34px}.gov p{margin:0;max-width:38ch;color:#D6EBE4}
+.gpad{display:flex;gap:10px;margin-top:10px}
+.gpad .btn{flex:1;font-size:20px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.ghint{color:var(--ink2);font-size:14px;margin:10px 0 0}
+.sbox{background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:var(--sh);padding:22px;display:grid;gap:16px;justify-items:center}
+.sbar{width:100%;height:10px;border-radius:5px;background:var(--surface2);overflow:hidden}
+.sbar i{display:block;height:100%;width:100%;background:var(--accent);transition:width .1s linear}
+.scard{width:min(100%,440px);min-height:150px;border-radius:22px;display:grid;place-items:center;text-align:center;padding:18px;background:var(--surface2);border:3px solid var(--line);color:var(--ink);font:800 clamp(28px,6vw,42px)/1.1 var(--display);text-wrap:balance}
+.scard.in{animation:pop2 .18s}
+.sbtns{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:560px}
+.sbtns .btn{min-height:56px;font:700 15px var(--display);border-radius:16px;padding:8px;touch-action:manipulation}
+.sfb{min-height:44px;text-align:center;color:var(--ink2);max-width:52ch;font-size:15px}
+.sfb b{color:var(--ink)}.sfb.ok{color:#16803D}.sfb.bad{color:#B42318}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .sfb.ok{color:#4FD08A}:root:not([data-theme="light"]) .sfb.bad{color:#FF8A80}}
+:root[data-theme="dark"] .sfb.ok{color:#4FD08A}:root[data-theme="dark"] .sfb.bad{color:#FF8A80}
+@media(prefers-reduced-motion:reduce){.mc,.scard,.mc.shake{animation:none!important}.gcard{transition:none}}
+.lvs{display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:640px){.lvs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lv{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:18px;padding:14px;display:grid;gap:2px;min-height:96px;touch-action:manipulation}
+.lv:hover:not(:disabled){border-color:var(--accent)}
+.lv:disabled{opacity:.45;cursor:not-allowed}
+.lv b{font:800 28px var(--display)}.lv span{font-size:13px;color:var(--ink2)}.lv i{font-style:normal;color:#E8A317;letter-spacing:2px}
+.mgrid{grid-template-columns:repeat(var(--cols,4),minmax(0,1fr))}
+@media(max-width:640px){.mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.mc{min-height:92px}}
+.gbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.stars{font-size:30px;color:#E8A317;letter-spacing:4px}
+.sbar i{transition:none}
+.mc.pic,.mc.pic.up,.mc.pic.done{background:radial-gradient(circle at 50% 45%,#12404A,#06202A 85%);color:#fff;position:relative;overflow:hidden;padding:0}
+.mc.pic svg{position:absolute;inset:0;width:100%;height:100%;padding:4px}
+.mc.pic .mk{position:absolute;left:8px;top:6px;z-index:1;color:#fff;opacity:.85}
+.mc.pic.done{border-color:var(--c)}
+.nohint .mc.up:not(.done){border-color:var(--line)}
+.mc .mn{overflow-wrap:anywhere;hyphens:auto}@media(max-width:640px){.mc .mn{font-size:15px}}
+.dpad{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin-top:10px}.dpad .btn{min-height:54px;font-size:20px;padding:0;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+/* leaderboard */
+.glb{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--sh);padding:18px 20px}
+.glb:empty{display:none}
+.glb h4{font:700 20px var(--display);margin:0 0 4px}
+.glb .gl-goal{margin:0 0 12px;color:var(--ink2);font-size:14px}
+.glb ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.glb li{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 10px;border-radius:12px;background:var(--surface2)}
+.glb li.top{border:1px solid var(--accent)}
+.glb li.me{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.glb .rk{font:500 13px var(--mono);opacity:.8}
+.glb .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.glb .nm small{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-left:8px;opacity:.75}
+.glb .sc{font:500 14px var(--mono);font-variant-numeric:tabular-nums}
+.glb .gl-note{margin:10px 0 0;font-size:12px;color:var(--ink2)}
 </style>
 </head>
 <body>
@@ -469,7 +548,7 @@ html[data-fx="lite"] #lsvg{animation:none}
  <h1>Inside a <em>Plant</em> Cell</h1>
  <p class="lede">A leaf cell under the microscope. Tap any part to fly in close, then dive inside to see how it is built and watch it work.</p>
  </header>
-<div class="tabs" id="tabs" role="tablist" aria-label="Sections"><button role="tab" id="tab-explore" data-t="explore" aria-selected="true" aria-controls="explore">Explore</button><button role="tab" id="tab-album" data-t="album" aria-selected="false" aria-controls="album" tabindex="-1">Collection</button><button role="tab" id="tab-scale" data-t="scale" aria-selected="false" aria-controls="scale" tabindex="-1">Scale</button><button role="tab" id="tab-compare" data-t="compare" aria-selected="false" aria-controls="compare" tabindex="-1">Compare</button><button role="tab" id="tab-sim" data-t="sim" aria-selected="false" aria-controls="sim" tabindex="-1">Simulate</button><button role="tab" id="tab-quiz" data-t="quiz" aria-selected="false" aria-controls="quiz" tabindex="-1">Quiz</button><button role="tab" id="tab-about" data-t="about" aria-selected="false" aria-controls="about" tabindex="-1">Credits</button></div>
+<div class="tabs" id="tabs" role="tablist" aria-label="Sections"><button role="tab" id="tab-explore" data-t="explore" aria-selected="true" aria-controls="explore">Explore</button><button role="tab" id="tab-album" data-t="album" aria-selected="false" aria-controls="album" tabindex="-1">Collection</button><button role="tab" id="tab-scale" data-t="scale" aria-selected="false" aria-controls="scale" tabindex="-1">Scale</button><button role="tab" id="tab-compare" data-t="compare" aria-selected="false" aria-controls="compare" tabindex="-1">Compare</button><button role="tab" id="tab-sim" data-t="sim" aria-selected="false" aria-controls="sim" tabindex="-1">Simulate</button><button role="tab" id="tab-games" data-t="games" aria-selected="false" aria-controls="games" tabindex="-1">Games</button><button role="tab" id="tab-quiz" data-t="quiz" aria-selected="false" aria-controls="quiz" tabindex="-1">Quiz</button><button role="tab" id="tab-about" data-t="about" aria-selected="false" aria-controls="about" tabindex="-1">Credits</button></div>
 
 <section id="explore" role="tabpanel" aria-labelledby="tab-explore">
  <div class="grid">
@@ -531,6 +610,22 @@ html[data-fx="lite"] #lsvg{animation:none}
    <p class="simmsg" id="simmsg" aria-live="polite"></p>
    <span class="eqn">6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂</span>
   </div>
+ </div>
+</section>
+
+<section id="games" role="tabpanel" aria-labelledby="tab-games" hidden>
+ <div class="sh"><h2 id="h-games">Game room</h2><p>Five games, and most of them keep getting harder. Good scores earn ATP ⚡ for your total, and every game has a leaderboard to climb.</p></div>
+ <div class="gpick" id="gpick">
+  <button class="gcard" data-g="match"><span class="gi">🃏</span><h3>Part Match-Up</h3><p>Pair parts with their jobs and riddles. Six levels, from a gentle warm-up to 20 cards and a countdown.</p><span class="gbest" id="gb-match"></span></button>
+  <button class="gcard" data-g="sun"><span class="gi">☀️</span><h3>Sun Catcher</h3><p>Steer a chloroplast and make sugar. Every wave is faster, with clouds, weed killer, magnets and combos.</p><span class="gbest" id="gb-sun"></span></button>
+  <button class="gcard" data-g="sort"><span class="gi">⚡</span><h3>Rapid Fire Sort</h3><p>Plant, animal or both? Survive as the clock per card shrinks and the questions get trickier.</p><span class="gbest" id="gb-sort"></span></button>
+  <button class="gcard" data-g="run"><span class="gi">🏃</span><h3>Mito Dash</h3><p>A dino-style runner. Jump viruses, duck toxins and grab ⚡ ATP as your mitochondrion speeds up.</p><span class="gbest" id="gb-run"></span></button>
+  <button class="gcard" data-g="snake"><span class="gi">🧬</span><h3>Protein Chain</h3><p>Snake with a twist. Grow an amino acid chain through levels with solid walls and toxins.</p><span class="gbest" id="gb-snake"></span></button>
+ </div>
+ <div class="gplay" id="gplay" hidden>
+  <div class="gtop"><button class="btn" id="gback">← All games</button><h3 id="gtitle"></h3><span class="gstat" id="gstat"></span></div>
+  <div id="gbody"></div>
+  <div class="glb" id="glb" role="region" aria-label="Leaderboard"></div>
  </div>
 </section>
 
@@ -1230,14 +1325,14 @@ function pick(i){const o=O[lid];lsvg.classList.add('sel');$$('[data-p]',lsvg).fo
 let numsOn=true;try{numsOn=localStorage.getItem('pcNums')!=='0'}catch(e){}
 function applyNums(){$('#pins').classList.toggle('hide',!numsOn);const b=$('#lnum');b.setAttribute('aria-pressed',numsOn);$('span',b).textContent=numsOn?'Numbers on':'Numbers off';$('.lh').textContent=numsOn?'Tap the numbered pins':'Tap any part of the drawing'}
 $('#lnum').onclick=()=>{numsOn=!numsOn;try{localStorage.setItem('pcNums',numsOn?'1':'0')}catch(e){}applyNums()};
-function openLab(id,keep){lid=id;const o=O[id],p=PAL[id],S=scene(id);if(!keep)opener=document.activeElement;
+function openLab(id,keep){clearTimeout(run_t);lid=id;const o=O[id],p=PAL[id],S=scene(id);if(!keep)opener=document.activeElement;
  lb.style.setProperty('--oc',p[1]);lb.style.setProperty('--od',p[2]);$('#lt').textContent=o.n;$('#ltag').textContent=o.tag;
  lsvg.setAttribute('class','');lsvg.innerHTML=S.svg+'<g id="flowl" pointer-events="none"></g>';
  $('#pins').className='pins';$('#pins').innerHTML=S.pins.map((q,i)=>`<button class="pinb" data-i="${i}" style="left:${f1(q[0]/8)}%;top:${f1(q[1]/6)}%" aria-label="${o.parts[i][0]}">${i+1}</button>`).join('');
  $('#lparts').innerHTML=o.parts.map((q,i)=>`<li><button data-i="${i}" aria-pressed="false"><span class="n">${i+1}</span>${q[0]}</button></li>`).join('');
  applyNums();overview();if(lab.hidden){lab.hidden=false;document.body.style.overflow='hidden';lb.style.animation='none';void lb.offsetWidth;lb.style.animation=''}
  lab.scrollTop=0;$('#lx').focus({preventScroll:true});discover(id);if(cur!==id)select(id,{quiet:true})}
-function closeLab(){lab.hidden=true;document.body.style.overflow='';if(cur){const c=CAM[cur];fly(camFor(c[0],c[1],c[2]),500)}if(opener&&opener.focus)opener.focus({preventScroll:true})}
+function closeLab(){clearTimeout(run_t);lab.hidden=true;document.body.style.overflow='';lsvg.textContent='';if(cur){const c=CAM[cur];fly(camFor(c[0],c[1],c[2]),500)}if(opener&&opener.focus)opener.focus({preventScroll:true})}
 $('#pins').addEventListener('click',e=>{const b=e.target.closest('.pinb');if(b)pick(+b.dataset.i)});
 $('#lparts').addEventListener('click',e=>{const b=e.target.closest('button');if(b)pick(+b.dataset.i)});
 lsvg.addEventListener('click',e=>{const t=e.target.closest('[data-p]');if(t)pick(+t.dataset.p);else overview()});
@@ -1311,12 +1406,13 @@ function boom(){if(reduced||boomRaf)return;const cv=$('#fx'),d=Math.min(devicePi
  boomRaf=requestAnimationFrame(f)}
 
 /* ===== tabs ===== */
-const TABS=['explore','album','scale','compare','sim','quiz','about'];
+const TABS=['explore','album','scale','compare','sim','games','quiz','about'];
 function showTab(t){
  TABS.forEach(n=>{const on=n===t;$('#'+n).hidden=!on;const b=$('#tab-'+n);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1});
  if(t==='album'&&!$('#albumG').children.length)buildAlbum();
  if(t==='compare')initCompare();
  if(t==='sim')initSim();
+ if(t!=='games'&&window.gamesLeave)gamesLeave();
  if(t==='quiz'&&!quizDone){quizDone=true;newQuiz()}
  const r=$('#tabs').getBoundingClientRect();if(r.top<0)scrollTo({top:scrollY+r.top-8,behavior:'auto'})}
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)showTab(b.dataset.t)});
@@ -1362,7 +1458,8 @@ const live=liveSvg.querySelector('#live');
 const svgPt=(x,y)=>{const p=cell.createSVGPoint();p.x=x;p.y=y;return p.matrixTransform(cell.getScreenCTM().inverse())};
 function ripple(e){const q=svgPt(e.clientX,e.clientY),c=document.createElementNS(NS,'circle');c.setAttribute('class','rip');c.setAttribute('cx',q.x);c.setAttribute('cy',q.y);c.setAttribute('r',5);live.appendChild(c);setTimeout(()=>c.remove(),800)}
 cell.addEventListener('click',e=>{if(!moved&&!reduced)ripple(e)});
-function burst(x,y,col){if(reduced)return;for(let i=0;i<9;i++){const a=i/9*6.283,d=26+Math.random()*16,c=document.createElementNS(NS,'circle');c.setAttribute('class','bst');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',3.5);c.setAttribute('fill',col);c.style.setProperty('--bx',Math.cos(a)*d+'px');c.style.setProperty('--by',Math.sin(a)*d+'px');live.appendChild(c);setTimeout(()=>c.remove(),750)}}
+let bstN=0;
+function burst(x,y,col){if(reduced||bstN>54)return;const fr=document.createDocumentFragment(),cs=[];for(let i=0;i<9;i++){const a=i/9*6.283,d=26+Math.random()*16,c=document.createElementNS(NS,'circle');c.setAttribute('class','bst');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',3.5);c.setAttribute('fill',col);c.style.setProperty('--bx',Math.cos(a)*d+'px');c.style.setProperty('--by',Math.sin(a)*d+'px');fr.appendChild(c);cs.push(c)}bstN+=9;live.appendChild(fr);setTimeout(()=>{cs.forEach(c=>c.remove());bstN-=9},750)}
 /* ATP sparks */
 const ANCH=[[610,98],[700,586],[800,580],[814,398],[690,372],[140,100],[260,100],[380,100],[500,100],[96,250],[96,400],[170,590],[295,590],[420,590],[545,590],[752,330],[745,470]];
 function spawnOrb(){if(live.querySelectorAll('.orb').length>=6)return;const a=ANCH[Math.random()*ANCH.length|0],x=a[0]+(Math.random()-.5)*50,y=a[1]+(Math.random()-.5)*50,g=document.createElementNS(NS,'g');g.setAttribute('class','orb');g.setAttribute('transform',`translate(${f1(x)} ${f1(y)})`);g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label','Collect ATP spark');
@@ -1398,19 +1495,19 @@ function initSim(){if(simDone)return;simDone=true;
  ST.forEach(s=>{for(let i=0;i<s.n;i++)h+=`<g class="fl" data-k="${s.k}" data-i="${i}" style="--x0:${s.x0(i)}px;--y0:${s.y0(i)}px;--x1:${s.x1(i)}px;--y1:${s.y1(i)}px;animation-delay:-${(i/s.n*4).toFixed(2)}s"><circle r="9" fill="${s.col}" stroke="#fff" stroke-width="2"/>${i===0?`<text class="tokt" x="14" y="7">${s.lab}</text>`:''}</g>`});
  v.innerHTML=h;
  const NM={L:'Light',C:'CO₂',W:'Water'},FACTS=['Chloroplasts turn to face the light and can slide around inside a cell to avoid too much of it.','Nearly all the oxygen you breathe came from photosynthesis, on land and in the sea.','Leaves look green because chlorophyll absorbs red and blue light and reflects green.','A single leaf can hold half a million chloroplasts per square millimeter.'];let fi=0;
- const $i=id=>$(id);let lastMsg='';
+ const $c={},$i=id=>$c[id]||($c[id]=$(id));let lastMsg='',PB=null;
  const FL=$$('.fl',v).map(e=>({e,k:e.dataset.k,i:+e.dataset.i,n:ST.find(s=>s.k===e.dataset.k).n,s:true,d:''}));
  try{new IntersectionObserver(([en])=>v.classList.toggle('paused',!en.isIntersecting)).observe(v)}catch(e){}
  function upd(){const L=+$i('#sL').value,C=+$i('#sC').value,W=+$i('#sW').value,lv={L,C,W},m=Math.min(L,C,W),out=m/100;
   ['L','C','W'].forEach(k=>$i('#o'+k).textContent=lv[k]);
   lv.O=m;lv.S=m;
   FL.forEach(o=>{const show=o.i<Math.ceil(o.n*lv[o.k]/100-.0001),d=(4.6/(.45+lv[o.k]/100*.9)).toFixed(2)+'s';if(o.s!==show){o.s=show;o.e.style.display=show?'':'none'}if(o.d!==d){o.d=d;o.e.style.setProperty('--d',d)}});
-  $('#rays').style.opacity=f1(.2+.8*L/100);$('#sun').style.opacity=f1(.35+.65*L/100);
-  $('#mS').style.width=m+'%';$('#mO').style.width=m+'%';
+  $i('#rays').style.opacity=f1(.2+.8*L/100);$i('#sun').style.opacity=f1(.35+.65*L/100);
+  $i('#mS').style.width=m+'%';$i('#mO').style.width=m+'%';
   const lim=['L','C','W'].filter(k=>lv[k]===m).map(k=>NM[k]);
   const msg=m>=90?'<b>Full speed.</b> Everything is plentiful, so the chloroplast works as fast as its own enzymes allow.':m===0?`<b>Nothing is made.</b> ${lim.join(' and ')} is at zero, so photosynthesis stops.`:`<b>${lim.join(' and ')} ${lim.length>1?'are':'is'} the limiting factor.</b> Adding more of the others will not help. Turn up ${lim.join(' or ')} instead.`;
-  if(msg!==lastMsg){lastMsg=msg;$('#simmsg').innerHTML=msg}
-  $$('.pre button[data-l]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l==L&&b.dataset.c==C&&b.dataset.w==W))}
+  if(msg!==lastMsg){lastMsg=msg;$i('#simmsg').innerHTML=msg}
+  (PB||(PB=$$('.pre button[data-l]'))).forEach(b=>b.setAttribute('aria-pressed',b.dataset.l==L&&b.dataset.c==C&&b.dataset.w==W))}
  const PR=[['Perfect day',100,100,100],['Dusk',12,70,80],['Drought',90,60,8],['Stuffy room',80,10,80],['Dark cellar',0,70,80]];
  $('#pre').innerHTML=PR.map(p=>`<button data-l="${p[1]}" data-c="${p[2]}" data-w="${p[3]}" aria-pressed="false">${p[0]}</button>`).join('')+'<button id="dayB" aria-pressed="false">▶ Play a day</button>';
  let dayRaf=0;const dayB=$('#dayB');
@@ -1455,7 +1552,7 @@ function Amb(host,cv){
   else if(k==='hex'){x.lineWidth=1.6;x.beginPath();for(let j=0;j<6;j++){const a=j*1.047+p.p;x[j?'lineTo':'moveTo'](p.x+p.s*Math.cos(a),p.y+p.s*Math.sin(a))}x.closePath();x.stroke()}
   else if(k==='line'){x.lineWidth=2.4;x.lineCap='round';x.beginPath();x.moveTo(p.x,p.y);x.lineTo(p.x+p.s*Math.cos(p.p),p.y+p.s*Math.sin(p.p));x.stroke()}
   else{x.beginPath();x.arc(p.x,p.y,p.s,0,6.283);x.fill()}};
- const frame=now=>{raf=requestAnimationFrame(frame);if(FX.lvl==='lite'&&now-t0<30)return;const dt=Math.min(.05,(now-t0)/1e3);t0=now;if(!W)return;
+ const frame=now=>{raf=requestAnimationFrame(frame);if((FX.lvl==='lite'||LOW)&&now-t0<30)return;const dt=Math.min(.05,(now-t0)/1e3);t0=now;if(!W)return;
   x.clearRect(0,0,W,H);x.globalCompositeOperation='lighter';
   const want=Math.round(clamp(W*H/(LOW||FX.lvl==='lite'?20000:12000),12,56)*(m.d||1)*(FX.lvl==='lite'?.6:1));
   while(live<want){P.push(mk(fill));live++}fill=0;
@@ -1502,6 +1599,7 @@ function setLvl(l){FX.lvl=l;document.documentElement.dataset.fx=l;ambS.set(cur?M
 function fxLabel(){const m=FX.mode;fxb.dataset.m=m==='auto'?FX.lvl:m;fxb.setAttribute('aria-label',m==='auto'?`Visual effects: automatic, currently ${FX.lvl}. Tap to change`:`Visual effects: ${m}. Tap to change`);fxb.title=fxb.getAttribute('aria-label')}
 function govStart(){if(govOn||FX.mode!=='auto'||FX.lvl!=='full')return;govOn=true;const buf=[];let last=0,bad=0;
  const f=now=>{if(FX.mode!=='auto'||FX.lvl!=='full'){govOn=false;return}
+  if(document.hidden||$('#explore').hidden||!lab.hidden||cell.classList.contains('paused')){last=0;setTimeout(()=>requestAnimationFrame(f),500);return}
   if(last&&!document.hidden&&!$('#explore').hidden&&lab.hidden&&!cell.classList.contains('paused')){const d=now-last;if(d<250)buf.push(d)}
   last=document.hidden?0:now;
   if(buf.length>=30){buf.sort((a,b)=>a-b);const use=buf.slice(0,27),avg=use.reduce((a,b)=>a+b,0)/use.length;buf.length=0;bad=avg>26?bad+1:0;
@@ -1541,6 +1639,341 @@ try{const io=(el,cls)=>el&&new IntersectionObserver(([en])=>document.body.classL
  addTools();
  document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;const t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;if($('#explore').hidden||!lab.hidden)return;
   if(e.key==='ArrowRight'){e.preventDefault();step(1)}else if(e.key==='ArrowLeft'){e.preventDefault();step(-1)}});
+})();
+
+/* ===== games ===== */
+(function(){
+const K={stars:'pcGstars',sun:'pcGsun2',sunw:'pcGsunw',sort:'pcGso2',sortl:'pcGsol',run:'pcGrun',snake:'pcGsnake',match:'pcGmatch',qbest:'pcBest'};
+const TITLE={match:'Part Match-Up',sun:'Sun Catcher',sort:'Rapid Fire Sort',run:'Mito Dash',snake:'Protein Chain'};
+const pick=$('#gpick'),play=$('#gplay'),body=$('#gbody'),stat=$('#gstat');
+let stop=null;
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const award=n=>{if(n<=0)return;atp+=n;atpUI();lsSet('pcAtp',atp);toast('+'+n+' ATP ⚡')};
+const num=k=>lsInt(K[k],99999);
+const mx=(k,v)=>{if(v>num(k)){lsSet(K[k],v);lbNow();return true}return false};
+/* pre-rendered static backdrop, so game loops do not rebuild gradients every frame */
+const bgCanvas=(w,h,fn)=>{const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'));return c};
+const gst=()=>{const a=(lsGet(K.stars)||'').split(',').map(n=>Math.min(3,+n||0));while(a.length<6)a.push(0);return a.slice(0,6)};
+const ART=new Map(),art=k=>{if(!ART.has(k))ART.set(k,`<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${scene(k).svg.replace(/<text[\s\S]*?<\/text>/g,'')}</svg>`);return ART.get(k)};
+const unl=s=>{const i=s.findIndex(x=>!x);return i<0?5:i};
+/* ---- leaderboards: two fixed leaders, simulated group rivals that keep climbing, and You ---- */
+const GL=['match','sun','sort','run','snake'];
+const LBS={match:[40,320],sun:[120,900],sort:[25,140],run:[500,2600],snake:[60,420]};
+const lbNames=(()=>{const c=($('.crh h3')||{}).textContent,m=$$('.crm li b').map(b=>b.textContent.trim()).filter(Boolean);return{boss:(c||'Gabriel D. Vinuya').trim(),first:m[0]||'Princess Clarrise Gabriel',rest:m.slice(1)}})();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>Number(n).toLocaleString();
+const lbInit=()=>{let s=null;try{s=JSON.parse(lsGet('pcLb'))}catch(e){}
+ const n=lbNames.rest.length,good=a=>Array.isArray(a)&&a.length===n&&a.every(x=>Number.isFinite(x)&&x>=0);
+ if(!(s&&typeof s==='object'&&Number.isFinite(s.t)&&s.b&&s.s&&s.r&&GL.every(g=>good(s.b[g])&&good(s.s[g])&&good(s.r[g])))){
+  const r=rng(7+n*131);s={t:Date.now(),b:{},s:{},r:{},top:{}};
+  GL.forEach(g=>{const[lo,hi]=LBS[g];s.s[g]=Array.from({length:n},()=>Math.round(lo+r()*(hi-lo)));s.b[g]=s.s[g].slice();s.r[g]=Array.from({length:n},()=>.2+r()*.4)})}
+ s.top=s.top||{};GL.forEach(g=>{const t=s.top[g];if(!Array.isArray(t)||!Number.isFinite(t[0])||!Number.isFinite(t[1])||!(t[0]>t[1]))s.top[g]=[0,0]});
+ return s};
+const LB=lbInit(),lbR={};let curG=null,lbT=0,lbN=0;
+const lbPersist=()=>lsSet('pcLb',JSON.stringify(LB));
+/* rivals gain points steadily (20-60% of their starting score per hour, ceiling 6x). Time away only counts up to 20 minutes. */
+const lbAdv=()=>{const now=Date.now();let dt=(now-LB.t)/1000;LB.t=now;if(!(dt>0))return;dt=Math.min(dt,1200);
+ GL.forEach(g=>LB.b[g].forEach((v,i)=>{const s0=LB.s[g][i];LB.b[g][i]=Math.min(s0*6,v+s0*LB.r[g][i]*dt/3600)}))};
+/* the top two always sit above everyone else (You included) and never drop back, so they cannot be beaten */
+const lbRows=g=>{const meV=num(g),rows=lbNames.rest.map((n,i)=>({n,v:Math.floor(LB.b[g][i])}));
+ let M=meV;rows.forEach(r=>{if(r.v>M)M=r.v});
+ const t=LB.top[g];t[0]=Math.max(t[0],M+Math.ceil(M*.08)+20);t[1]=Math.max(t[1],M+Math.ceil(M*.04)+10);
+ rows.push({n:'You',v:meV,me:1});rows.sort((a,b)=>b.v-a.v||(a.me?1:0)-(b.me?1:0));
+ return[{n:lbNames.boss,v:t[0],tag:'Creator',ic:'👑 ',top:1},{n:lbNames.first,v:t[1],tag:'Group member #1',ic:'🥈 ',top:1},...rows]};
+const lbRank=g=>lbRows(g).findIndex(r=>r.me)+1;
+function lbDraw(){const g=curG,el=$('#glb');if(!g||!el)return;const rows=lbRows(g),mi=rows.findIndex(r=>r.me),me=rows[mi];let goal;
+ if(mi<=2)goal='You are #3, the highest anyone can climb. The top two are out of reach, so keep beating your own best.';
+ else{const t=rows[mi-1];goal=g==='match'?`Earn ${fmt(t.v+1-me.v)} more points to pass ${esc(t.n)} and reach #${mi}.`:`Score ${fmt(t.v+1)} or more to pass ${esc(t.n)} and reach #${mi}.`}
+ const h=`<h4>🏆 Leaderboard</h4><p class="gl-goal">${goal}</p><ol>${rows.map((r,i)=>`<li class="${r.me?'me':''}${r.top?' top':''}"><span class="rk">#${i+1}</span><span class="nm">${r.ic||''}${esc(r.n)}${r.tag?`<small>${r.tag}</small>`:''}</span><span class="sc">${fmt(r.v)}</span></li>`).join('')}</ol><p class="gl-note">${g==='match'?'Total points from cleared levels.':'Best score.'} Group scores are simulated and keep climbing.</p>`;
+ if(el._h!==h){el._h=h;el.innerHTML=h}}
+function lbNow(){if(!LB)return;lbAdv();const g=curG;if(!g)return;const r=lbRank(g);if(lbR[g]&&r<lbR[g])setTimeout(()=>{if(curG===g)toast(`Rank up! You are #${r} in ${TITLE[g]}`)},1700);lbR[g]=r;lbDraw()}
+const lbTick=()=>{if(document.hidden)return;lbAdv();lbDraw();if(++lbN%6===0)lbPersist()};
+const lbStart=g=>{curG=g;lbAdv();lbR[g]=lbRank(g);lbDraw();clearInterval(lbT);lbT=setInterval(lbTick,5000)};
+const lbStop=()=>{clearInterval(lbT);lbT=0;curG=null;const el=$('#glb');if(el){el._h='';el.innerHTML=''}lbPersist()};
+const lbAdd=n=>{lsSet(K.match,Math.min(99999,num('match')+n));lbNow()};
+addEventListener('pagehide',lbPersist);
+function labels(){const s=gst();
+ $('#gb-match').textContent=`Level ${unl(s)+1} of 6 · ${s.reduce((a,b)=>a+b,0)}/18 ★`;
+ $('#gb-sun').textContent=num('sun')?`Best ${num('sun')} pts · wave ${num('sunw')}`:'Not played yet';
+ $('#gb-sort').textContent=num('sort')?`Best ${num('sort')} pts · level ${num('sortl')}`:'Not played yet';
+ $('#gb-run').textContent=num('run')?`Best ${num('run')} pts`:'Not played yet';
+ $('#gb-snake').textContent=num('snake')?`Best ${num('snake')} pts`:'Not played yet';
+ GL.forEach(g=>{$('#gb-'+g).textContent+=` · Rank ${lbRank(g)}/${lbNames.rest.length+3}`})}
+function leave(){if(stop){stop();stop=null}lbStop();body.innerHTML='';stat.textContent='';play.hidden=true;pick.hidden=false;labels()}
+function launch(id){leave();pick.hidden=true;play.hidden=false;lbStart(id);const h=$('#gtitle');h.textContent=TITLE[id];stop=GAMES[id](body)||null;h.tabIndex=-1;h.focus({preventScroll:true})}
+window.gamesLeave=leave;
+pick.addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(b)launch(b.dataset.g)});
+$('#gback').onclick=leave;
+$('#reset').addEventListener('click',()=>{Object.values(K).forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});labels()});
+labels();
+
+const GAMES={
+/* ---- 1. part match-up: six levels ---- */
+match(root){
+ const LV=[[4,['i'],0],[6,['j'],0],[6,['i','j'],120],[8,['t'],110],[8,['i','j','t'],100],[10,['i','j','t'],100]];
+ let fl=[],lock=false,tm=0,to=0;
+ const stop1=()=>{clearInterval(tm);clearTimeout(to);tm=to=0};
+ function menu(){stop1();stat.textContent='';const s=gst(),u=unl(s);
+  root.innerHTML=`<div class="lvs">${LV.map((l,i)=>`<button class="lv" data-l="${i}"${i>u?' disabled':''}><b>${i+1}</b><span>${l[0]} pairs · ${l[1].map(m=>({i:'pictures',j:'jobs',t:'riddles'}[m])).join(' + ')}${l[2]?' · '+l[2]+'s':''}</span><i>${'★'.repeat(s[i])+'☆'.repeat(3-s[i])}</i></button>`).join('')}</div><p class="ghint">Match each part with its picture, its job or its riddle nickname. Higher levels add more cards, mixed card types, a countdown, a shorter peek and no color hints. Stars come from needing fewer moves. Clear a level to unlock the next.</p>`;
+  root.onclick=e=>{const b=e.target.closest('.lv');if(b&&!b.disabled)go(+b.dataset.l)}}
+ function go(i){stop1();root.onclick=null;const[np,modes,lim]=LV[i];
+  const deck=shuf(shuf(ORDER).slice(0,np).flatMap(k=>[{k,t:'n'},{k,t:'p',m:modes[Math.random()*modes.length|0]}]));
+  root.innerHTML=`<div class="mgrid${i>=3?' nohint':''}" id="mg" style="--cols:${np>=8?5:4}"></div><div id="mres" aria-live="polite"></div>`;
+  const g=$('#mg',root),down=n=>`Card ${n+1}, face down`;
+  g.innerHTML=deck.map((c,n)=>`<button class="mc" data-i="${n}" style="--c:${PAL[c.k][1]};--c0:${PAL[c.k][0]};--c2:${PAL[c.k][2]}" aria-label="${down(n)}">?</button>`).join('');
+  const cards=$$('.mc',g);let moves=0,pairs=0,sec=0,left=lim,started=false,done=false;fl=[];lock=false;
+  const upd=()=>{stat.textContent=`Lv ${i+1} · Moves ${moves} · ${pairs}/${np}`+(lim?` · ⏱ ${left}s`:'')};upd();
+  const face=(b,c)=>{const o=O[c.k],m=c.t==='n'?'n':c.m,txt=m==='n'?o.n:m==='t'?o.tag:o.job;b.classList.toggle('pic',m==='i');
+   b.innerHTML=m==='i'?`<span class="mk">Picture</span>${art(c.k)}`:`<span class="mk">${m==='n'?'Part':m==='t'?'Riddle':'Job'}</span>`+(m==='n'?`<b class="mn">${txt}</b>`:`<span>${txt}</span>`);
+   b.setAttribute('aria-label',m==='i'?'Drawing of a cell part':(m==='n'?'Part: ':m==='t'?'Nickname: ':'Job: ')+txt)};
+  const flip=b=>{b.classList.remove('up','shake','pic');b.textContent='?';b.setAttribute('aria-label',down(+b.dataset.i))};
+  const end=win=>{done=true;stop1();lock=true;
+   const stars=win?(moves<=np*1.5?3:moves<=np*2.2?2:1):0;
+   if(win){const s=gst();if(stars>s[i]){s[i]=stars;lsSet(K.stars,s.join(','))}award(stars*(i+2));lbAdd(stars*(i+2)*10);if(stars===3)boom()}
+   $('#mres',root).innerHTML=`<div class="gres"><h3>${win?['','Cleared!','Nicely done!','Perfect memory!'][stars]:'Time’s up!'}</h3>`+(win?`<div class="stars" aria-label="${stars} stars">${'★'.repeat(stars)+'☆'.repeat(3-stars)}</div><p>${moves} moves in ${sec} seconds</p>`:'<p>The countdown ran out. Try again, you know more now.</p>')+`<div class="gbtns">${win&&i<5?'<button class="btn qn" id="mnx">Next level</button>':''}<button class="btn" id="mrt">${win?'Play again':'Try again'}</button><button class="btn" id="mlv">All levels</button></div></div>`;
+   const f=$(win&&i<5?'#mnx':'#mrt',root);if(win&&i<5)f.onclick=()=>go(i+1);$('#mrt',root).onclick=()=>go(i);$('#mlv',root).onclick=menu;f.focus({preventScroll:true})};
+  g.onclick=e=>{const b=e.target.closest('.mc');if(!b||lock||done||b.classList.contains('up')||b.classList.contains('done'))return;
+   if(!started){started=true;if(lim)tm=setInterval(()=>{left--;upd();if(left<=0)end(false)},1000);else tm=setInterval(()=>{sec++},1000)}
+   const c=deck[b.dataset.i];b.classList.add('up');face(b,c);blip(520+fl.length*120,.08);fl.push([b,c]);
+   if(fl.length===2){moves++;const[[b1,c1],[b2,c2]]=fl;
+    if(c1.k===c2.k){[b1,b2].forEach(x=>{x.classList.remove('up');x.classList.add('done')});fl=[];pairs++;upd();blip(880,.15,'triangle');if(pairs===np){if(lim)sec=lim-left;end(true)}}
+    else{upd();lock=true;[b1,b2].forEach(x=>x.classList.add('shake'));to=setTimeout(()=>{[b1,b2].forEach(flip);fl=[];lock=false},Math.max(380,950-i*120))}}};
+  const pk=Math.max(0,2200-i*450);
+  if(pk){lock=true;cards.forEach((b,n)=>{face(b,deck[n]);b.classList.add('up')});stat.textContent=`Lv ${i+1} · memorize!`;to=setTimeout(()=>{cards.forEach(flip);lock=false;upd()},pk)}}
+ menu();
+ return stop1
+},
+/* ---- 2. sun catcher: endless waves ---- */
+sun(root){
+ const W=640,H=420,EM={x:'🧪',s:'☀️',w:'💧',k:'☁️',h:'❤️',m:'🧲'};
+ root.innerHTML=`<div class="gsun"><canvas id="sc" width="${W}" height="${H}" role="img" aria-label="Sun Catcher game. Move the chloroplast to catch sunlight, water and carbon dioxide."></canvas><div class="gov" id="sov"></div></div><div class="gpad"><button class="btn" id="sL" aria-label="Move left">◀</button><button class="btn" id="sR" aria-label="Move right">▶</button></div><p class="ghint">Drag, use ← → keys, or hold the arrow buttons. ☀️ + 💧 + CO₂ = 🍬 sugar. Chain sugars for combos. Dodge 🧪 weed killer and ☁️ clouds (they wipe your sunlight). Grab ❤️ for a life and 🧲 to pull ingredients in.</p>`;
+ const cv=$('#sc',root),cx=cv.getContext('2d'),ov=$('#sov',root);
+ const BG=bgCanvas(W,H,b=>{const g=b.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0F5B6B');g.addColorStop(1,'#06202A');b.fillStyle=g;b.fillRect(0,0,W,H);
+  const rg=b.createRadialGradient(560,0,10,560,0,280);rg.addColorStop(0,'rgba(255,225,120,.35)');rg.addColorStop(1,'rgba(255,225,120,0)');b.fillStyle=rg;b.fillRect(0,0,W,H)});
+ let x=W/2,tx=W/2,items=[],pops=[],ps=[],inv,lives,score,combo,ct,wave,got,t,sp,run=false,raf=0,last=0,L=0,R=0,hit=0,mag=0,ban=0;
+ const need=()=>wave+2;
+ const hud=()=>{stat.textContent='❤️'.repeat(lives)+'🖤'.repeat(Math.max(0,3-lives))+`  Wave ${wave} · ${score} pts`};
+ const burst=(px,py,c)=>{for(let i=0;i<9;i++){const a=Math.random()*6.3,v=60+Math.random()*120;ps.push({x:px,y:py,vx:Math.cos(a)*v,vy:Math.sin(a)*v-40,l:.6,c})}};
+ const show=(h,p,b)=>{ov.hidden=false;ov.innerHTML=`<h3>${h}</h3><p>${p}</p><button class="btn qn" id="sgo">${b}</button>`;const e=$('#sgo',ov);e.onclick=start;e.focus({preventScroll:true})};
+ function start(){x=tx=W/2;items=[];pops=[];ps=[];inv={s:0,w:0,c:0};lives=3;score=0;combo=0;ct=0;wave=1;got=0;t=0;sp=.6;hit=0;mag=0;ban=1.4;run=true;ov.hidden=true;hud();last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+ function over(){run=false;draw();const nb=score>0&&mx('sun',score);mx('sunw',wave);award(Math.min(Math.floor(score/40),20));if(nb)boom();
+  show('Game over',`You reached wave ${wave} with ${score} points${nb?' — new best! ':'. '}Real plants make sugar from exactly these ingredients.`,'Play again')}
+ function spawn(){const w=wave,r=Math.random(),pb=Math.min(.32,.08+w*.04);let k;
+  if(r<pb)k='x';else if(w>=3&&r<pb+.08)k='k';else if(w>=2&&r<pb+(w>=3?.08:0)+.04)k=lives<3&&Math.random()<.6?'h':'m';
+  else{const o=Object.keys(inv).sort((a,b)=>inv[a]-inv[b]);k=Math.random()<.5?o[0]:'swc'[Math.random()*3|0]}
+  items.push({k,x:30+Math.random()*(W-60),y:-30,v:(95+w*16+Math.min(t*1.2,60))*(.85+Math.random()*.3),ph:Math.random()*6})}
+ function loop(now){if(!run)return;raf=requestAnimationFrame(loop);
+  const dt=Math.min(.05,(now-last)/1000);last=now;t+=dt;hit=Math.max(0,hit-dt);mag=Math.max(0,mag-dt);ban=Math.max(0,ban-dt);
+  if(ct>0){ct-=dt;if(ct<=0)combo=0}
+  const v=(R?1:0)-(L?1:0);if(v)tx=Math.max(50,Math.min(W-50,tx+v*500*dt));
+  x+=(tx-x)*Math.min(1,dt*14);
+  sp-=dt;if(sp<=0){sp=Math.max(.3,1-wave*.07);spawn()}
+  for(const it of items){it.y+=it.v*dt;
+   if(mag>0&&'swc'.includes(it.k)&&it.y>60)it.x+=(x-it.x)*Math.min(1,dt*3);
+   if(!it.d&&it.y>H-92&&it.y<H-28&&Math.abs(it.x-x)<54){it.d=1;
+    if(it.k==='x'){lives--;hit=.35;combo=0;pops.push({x:it.x,y:H-90,t:'Ouch!',c:'#FF8A80',a:1});burst(it.x,H-60,'#B07CFF');blip(160,.25,'sawtooth',.06);hud();if(lives<=0){over();return}}
+    else if(it.k==='k'){inv.s=0;combo=0;pops.push({x:it.x,y:H-90,t:'Clouded!',c:'#CFE3EA',a:1});blip(220,.2,'sawtooth',.05)}
+    else if(it.k==='h'){lives=Math.min(3,lives+1);hud();pops.push({x:it.x,y:H-90,t:'+1 life',c:'#FF8FA3',a:1});burst(it.x,H-60,'#FF5A78');blip(700,.2,'triangle')}
+    else if(it.k==='m'){mag=7;pops.push({x:it.x,y:H-90,t:'Magnet!',c:'#9BD7FF',a:1});blip(520,.2,'triangle')}
+    else{if(inv[it.k]<3)inv[it.k]++;burst(it.x,H-60,it.k==='s'?'#FFD84D':it.k==='w'?'#58C4F5':'#DDE5E1');blip(it.k==='s'?760:it.k==='w'?560:420,.08);
+     if(inv.s&&inv.w&&inv.c){inv.s--;inv.w--;inv.c--;combo=ct>0?Math.min(5,combo+1):1;ct=5;const p=10*combo;score+=p;got++;
+      pops.push({x:it.x,y:H-100,t:`🍬 +${p}`+(combo>1?` x${combo}`:''),c:'#FFE14D',a:1});blip(990+combo*60,.18,'triangle');
+      if(got>=need()){score+=50*wave;wave++;got=0;ban=1.8;items=items.filter(i=>!(i.k==='x'||i.k==='k'));if((wave-1)%3===0)lives=Math.min(3,lives+1);blip(1200,.3,'triangle');boom()}
+      hud()}}}}
+  items=items.filter(i=>!i.d&&i.y<H+30);
+  pops.forEach(p=>{p.y-=40*dt;p.a-=dt*1.1});pops=pops.filter(p=>p.a>0);
+  ps.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=300*dt;p.l-=dt});ps=ps.filter(p=>p.l>0);
+  draw()}
+ function draw(){
+  cx.drawImage(BG,0,0);
+  cx.fillStyle='rgba(255,255,255,.12)';for(let i=0;i<26;i++)cx.fillRect((i*97+t*(6+i%4*4))%W,(i*53+t*5)%H,2,2);
+  cx.textAlign='center';cx.textBaseline='middle';
+  for(const it of items){const wob=Math.sin(t*3+it.ph)*3;
+   if(it.k==='c'){cx.fillStyle='#CBD5D1';cx.beginPath();cx.arc(it.x+wob,it.y,21,0,7);cx.fill();cx.fillStyle='#1F2D2A';cx.font='700 15px system-ui,sans-serif';cx.fillText('CO₂',it.x+wob,it.y+1)}
+   else{cx.fillStyle='#fff';cx.font='34px serif';cx.fillText(EM[it.k],it.x+wob,it.y)}}
+  for(const p of ps){cx.globalAlpha=Math.max(0,p.l*1.6);cx.fillStyle=p.c;cx.fillRect(p.x,p.y,4,4)}cx.globalAlpha=1;
+  cx.save();cx.translate(x+(hit>0?(Math.random()-.5)*6:0),H-52);
+  if(mag>0){cx.strokeStyle='rgba(155,215,255,.6)';cx.lineWidth=3;cx.beginPath();cx.ellipse(0,0,70,40,0,0,7);cx.stroke()}
+  cx.fillStyle=hit>0?'#E5484D':'#34B84F';cx.beginPath();cx.ellipse(0,0,56,28,0,0,7);cx.fill();cx.lineWidth=3;cx.strokeStyle='#0F6329';cx.stroke();
+  cx.fillStyle='#0F6329';for(const[a,b]of[[-30,-4],[-8,6],[14,-6],[34,4]])for(let i=0;i<3;i++)cx.fillRect(a-8,b-8+i*5,16,3.5);
+  cx.restore();
+  cx.font='700 16px system-ui,sans-serif';cx.textAlign='left';
+  [['s','☀️'],['w','💧'],['c','CO₂']].forEach(([k,e],i)=>{cx.fillStyle='rgba(255,255,255,.14)';cx.fillRect(12+i*104,12,98,30);cx.fillStyle='#fff';cx.fillText(e+' '+'●'.repeat(inv[k])+'○'.repeat(3-inv[k]),20+i*104,28)});
+  cx.fillStyle='rgba(255,255,255,.14)';cx.fillRect(W-172,12,160,10);cx.fillStyle='#8CCB2E';cx.fillRect(W-172,12,160*Math.min(1,got/need()),10);
+  cx.textAlign='right';cx.font='700 13px system-ui,sans-serif';cx.fillStyle='#fff';cx.fillText(`Wave ${wave}  ${got}/${need()}`+(combo>1?`  combo x${combo}`:''),W-12,36);
+  cx.textAlign='center';
+  for(const p of pops){cx.globalAlpha=Math.max(0,p.a);cx.fillStyle=p.c;cx.font='800 22px system-ui,sans-serif';cx.fillText(p.t,p.x,p.y)}
+  cx.globalAlpha=1;
+  if(ban>0&&run){cx.globalAlpha=Math.min(1,ban);cx.fillStyle='#fff';cx.font='800 44px system-ui,sans-serif';cx.fillText(`Wave ${wave}`,W/2,H/2-40);cx.font='600 18px system-ui,sans-serif';cx.fillText(`Make ${need()} sugars`+(wave>=3?' · watch for clouds':''),W/2,H/2);cx.globalAlpha=1}}
+ const mv=e=>{const r=cv.getBoundingClientRect();tx=Math.max(50,Math.min(W-50,(e.clientX-r.left)/r.width*W));if(!run)x=tx};
+ cv.addEventListener('pointermove',mv);cv.addEventListener('pointerdown',mv);
+ const isL=e=>e.key==='ArrowLeft'||e.key==='a',isR=e=>e.key==='ArrowRight'||e.key==='d';
+ const kd=e=>{if(e.target&&e.target.tagName==='INPUT'||e.ctrlKey||e.metaKey||e.altKey)return;if(isL(e)){L=1;if(run)e.preventDefault()}else if(isR(e)){R=1;if(run)e.preventDefault()}};
+ const ku=e=>{if(isL(e))L=0;else if(isR(e))R=0};
+ document.addEventListener('keydown',kd);document.addEventListener('keyup',ku);
+ const bl=()=>{L=R=0};addEventListener('blur',bl);
+ const hold=(id,left)=>{const b=$(id,root);b.addEventListener('pointerdown',e=>{e.preventDefault();left?L=1:R=1});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>{left?L=0:R=0}))};
+ hold('#sL',true);hold('#sR',false);
+ inv={s:0,w:0,c:0};lives=3;score=0;combo=0;wave=1;got=0;t=0;hud();draw();
+ show('Sun Catcher','Make sugar wave after wave. Each wave is faster and nastier. How far can you get?','Play');
+ return()=>{run=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',kd);document.removeEventListener('keyup',ku);removeEventListener('blur',bl)}
+},
+/* ---- 4. mito dash: dino-style runner ---- */
+run(root){
+ const W=640,H=420,GY=340,PX=90;
+ root.innerHTML=`<div class="gsun"><canvas id="rc" width="${W}" height="${H}" role="img" aria-label="Mito Dash runner game. Tap or press space to jump. Hold the duck button or down arrow to duck."></canvas><div class="gov" id="rov"></div></div><div class="gpad"><button class="btn" id="rJ">▲ Jump</button><button class="btn" id="rD">▼ Duck</button></div><p class="ghint">Tap the screen, press Space or ↑ to jump. Hold ↓ or the duck button to duck. Jump over 🦠 viruses, duck under 🧪 toxins and grab ⚡ ATP. You get faster the longer you survive.</p>`;
+ const cv=$('#rc',root),cx=cv.getContext('2d'),ov=$('#rov',root),BC=Object.values(PAL).map(p=>p[1]);
+ const BG=bgCanvas(W,H,b=>{const g=b.createLinearGradient(0,0,0,GY);g.addColorStop(0,'#0F5B6B');g.addColorStop(1,'#1F7A5A');b.fillStyle=g;b.fillRect(0,0,W,H)});
+ let py=0,vy=0,duck=false,obs=[],bolts=[],pops=[],t=0,sp=300,dist=0,atpc=0,gap=0,sx=0,run=false,raf=0,last=0,mile=0;
+ let hs='';const sc=()=>Math.floor(dist)+atpc*10,hud=()=>{const s=`⚡ ${atpc} · ${sc()} pts`;if(s!==hs){hs=s;stat.textContent=s}};
+ const show=(h,p,b)=>{ov.hidden=false;ov.innerHTML=`<h3>${h}</h3><p>${p}</p><button class="btn qn" id="rgo">${b}</button>`;const e=$('#rgo',ov);e.onclick=start;e.focus({preventScroll:true})};
+ const jump=()=>{if(run&&py<=0){vy=800;blip(500,.08)}};
+ function start(){py=vy=0;duck=false;obs=[];bolts=[];pops=[];t=0;sp=300;dist=0;atpc=0;gap=420;sx=0;mile=0;run=true;ov.hidden=true;hud();last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+ function over(){run=false;draw();const s=sc(),nb=s>0&&mx('run',s);award(Math.min(Math.floor(s/60),20));if(nb)boom();
+  show('Wiped out!',`You ran ${s} points and grabbed ${atpc} ATP${nb?' — new best! ':'. '}A real mitochondrion makes ATP all day long.`,'Run again')}
+ function spawn(){const r=Math.random(),x=W+40;let o;
+  if(t>10&&r<.28)o={x,w:36,h:34,y:GY-22-34,e:'🧪',f:1};
+  else if(t>20&&r<.55)o={x,w:78,h:40,y:GY-40,e:'🦠',n:2};
+  else o={x,w:34,h:40,y:GY-40,e:'🦠',n:1};
+  obs.push(o);if(Math.random()<.6){const hy=o.f?GY-30:GY-100;for(let i=0;i<3;i++)bolts.push({x:x+70+i*38,y:hy-(i===1?16:0)})}}
+ function loop(now){if(!run)return;raf=requestAnimationFrame(loop);
+  const dt=Math.min(.05,(now-last)/1000);last=now;t+=dt;sp=Math.min(720,300+t*7);dist+=sp*dt/12;sx+=sp*dt;
+  vy-=(duck&&py>0?5200:2300)*dt;py+=vy*dt;if(py<=0){py=0;vy=0}
+  gap-=sp*dt;if(gap<=0){spawn();gap=Math.max(300,sp*(.85+Math.random()*.7))}
+  const ph=duck&&py===0?20:38,pl=PX-18,pr=PX+18,pt=GY-py-ph,pb=GY-py;
+  for(const o of obs){o.x-=sp*dt;if(pr>o.x+6&&pl<o.x+o.w-6&&pb>o.y+6&&pt<o.y+o.h-4){blip(150,.3,'sawtooth',.07);over();return}}
+  for(const b of bolts){b.x-=sp*dt;if(!b.d&&Math.abs(b.x-PX)<30&&b.y>pt-14&&b.y<pb+14){b.d=1;atpc++;blip(900,.07,'triangle');pops.push({x:b.x,y:b.y,a:1})}}
+  obs=obs.filter(o=>o.x>-100);bolts=bolts.filter(b=>!b.d&&b.x>-40);pops.forEach(p=>{p.y-=50*dt;p.a-=dt*1.6});pops=pops.filter(p=>p.a>0);
+  if(Math.floor(sc()/100)>mile){mile++;blip(880,.12,'triangle')}
+  hud();draw()}
+ function draw(){
+  cx.drawImage(BG,0,0);
+  cx.globalAlpha=.16;for(let i=0;i<6;i++){cx.fillStyle=BC[i*2%BC.length];const bx=(((i*190-sx*.12)%(W+200))+(W+200))%(W+200)-100;cx.beginPath();cx.ellipse(bx,90+i%3*55,60,34,i,0,7);cx.fill()}cx.globalAlpha=1;
+  cx.fillStyle='#2F6B2C';cx.fillRect(0,GY,W,H-GY);cx.fillStyle='#4C9A3F';cx.fillRect(0,GY,W,5);cx.fillStyle='rgba(0,0,0,.25)';for(let i=0;i<14;i++)cx.fillRect(((i*60-sx)%W+W)%W,GY+22+(i%3)*18,26,3);
+  cx.textAlign='center';cx.textBaseline='middle';cx.fillStyle='#fff';cx.font='36px serif';
+  for(const o of obs)for(let i=0;i<(o.n||1);i++)cx.fillText(o.e,o.x+17+i*40,o.y+o.h/2+(o.f?Math.sin(t*6)*3:0));
+  for(const b of bolts){cx.font='28px serif';cx.fillText('⚡',b.x,b.y)}
+  const ph=duck&&py===0?20:38,cy=GY-py-ph/2-5;
+  cx.fillStyle='#A84000';cx.lineWidth=4;cx.strokeStyle='#A84000';cx.beginPath();const lg=py>0?0:Math.sin(t*20)*6;cx.moveTo(PX-8,cy+ph/2);cx.lineTo(PX-8+lg,GY-py);cx.moveTo(PX+8,cy+ph/2);cx.lineTo(PX+8-lg,GY-py);cx.stroke();
+  cx.fillStyle='#FB8C2A';cx.beginPath();cx.ellipse(PX,cy,28,ph/2+2,0,0,7);cx.fill();cx.stroke();
+  cx.strokeStyle='#A84000';cx.lineWidth=2;if(ph>30){cx.beginPath();for(const a of[-12,-2,8]){cx.moveTo(PX+a-3,cy-9);cx.lineTo(PX+a,cy);cx.lineTo(PX+a-3,cy+9)}cx.stroke()}
+  cx.fillStyle='#fff';cx.beginPath();cx.arc(PX+13,cy-ph/4,5,0,7);cx.fill();cx.fillStyle='#222';cx.beginPath();cx.arc(PX+15,cy-ph/4,2.4,0,7);cx.fill();
+  for(const p of pops){cx.globalAlpha=Math.max(0,p.a);cx.fillStyle='#FFE14D';cx.font='800 20px system-ui,sans-serif';cx.fillText('+10',p.x,p.y)}cx.globalAlpha=1}
+ cv.addEventListener('pointerdown',jump);
+ const isJ=e=>e.key==='ArrowUp'||e.key===' '||e.key==='w',isD=e=>e.key==='ArrowDown'||e.key==='s';
+ const kd=e=>{if(e.target&&e.target.tagName==='INPUT'||e.ctrlKey||e.metaKey||e.altKey)return;if(isJ(e)){if(run){e.preventDefault();jump()}}else if(isD(e)){duck=true;if(run)e.preventDefault()}};
+ const ku=e=>{if(isD(e))duck=false};
+ document.addEventListener('keydown',kd);document.addEventListener('keyup',ku);
+ const bl=()=>{duck=false};addEventListener('blur',bl);
+ $('#rJ',root).addEventListener('pointerdown',e=>{e.preventDefault();jump()});
+ const rd=$('#rD',root);rd.addEventListener('pointerdown',e=>{e.preventDefault();duck=true});['pointerup','pointerleave','pointercancel'].forEach(ev=>rd.addEventListener(ev,()=>{duck=false}));
+ draw();show('Mito Dash','Run your mitochondrion through the cytoplasm. Jump viruses, duck toxins, grab ATP.','Run');
+ return()=>{run=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',kd);document.removeEventListener('keyup',ku);removeEventListener('blur',bl)}
+},
+/* ---- 5. protein chain: snake with levels ---- */
+snake(root){
+ const C=30,CW=21,CH=14,W=C*CW,H=C*CH,AA='AGLKSVEDT',BC=Object.values(PAL).map(p=>p[1]);
+ root.innerHTML=`<div class="gsun"><canvas id="nc" width="${W}" height="${H}" style="aspect-ratio:${W}/${H};touch-action:none" role="img" aria-label="Protein Chain snake game. Use arrow keys or swipe to steer."></canvas><div class="gov" id="nov"></div></div><div class="dpad"><span></span><button class="btn" data-d="u" aria-label="Up">▲</button><span></span><button class="btn" data-d="l" aria-label="Left">◀</button><button class="btn" data-d="d" aria-label="Down">▼</button><button class="btn" data-d="r" aria-label="Right">▶</button></div><p class="ghint">Swipe, use arrow keys or WASD. Collect amino acids to grow your protein chain. Every 5 makes a new level: faster, with more 🧪 toxins, and from level 3 the walls turn solid. Grab the ⭐ to fold the chain shorter.</p>`;
+ const cv=$('#nc',root),cx=cv.getContext('2d'),ov=$('#nov',root);
+ const BG=bgCanvas(W,H,b=>{b.fillStyle='#06202A';b.fillRect(0,0,W,H);b.fillStyle='rgba(255,255,255,.035)';for(let x=0;x<CW;x++)for(let y=0;y<CH;y++)if((x+y)%2)b.fillRect(x*C,y*C,C,C)});
+ const D={u:{x:0,y:-1},d:{x:0,y:1},l:{x:-1,y:0},r:{x:1,y:0}};
+ let sn,dir,q,food,gold,haz,lv,ate,score,ms,run=false,raf=0,last=0,acc=0,t=0;
+ const hud=()=>{stat.textContent=`Lv ${lv} · chain ${sn.length} · ${score} pts`};
+ const show=(h,p,b)=>{ov.hidden=false;ov.innerHTML=`<h3>${h}</h3><p>${p}</p><button class="btn qn" id="ngo">${b}</button>`;const e=$('#ngo',ov);e.onclick=start;e.focus({preventScroll:true})};
+ const taken=(x,y)=>sn.some(s=>s.x===x&&s.y===y)||haz.some(s=>s.x===x&&s.y===y)||(food&&food.x===x&&food.y===y)||(gold&&gold.x===x&&gold.y===y);
+ const cell=(far)=>{for(let i=0;i<300;i++){const x=Math.random()*CW|0,y=Math.random()*CH|0;if(!taken(x,y)&&(!far||Math.abs(x-sn[0].x)+Math.abs(y-sn[0].y)>5))return{x,y}}return{x:0,y:0}};
+ const newFood=()=>{food=cell();food.c=BC[Math.random()*BC.length|0];food.l=AA[Math.random()*AA.length|0]};
+ function start(){sn=[{x:8,y:7},{x:7,y:7},{x:6,y:7}];dir=D.r;q=[];haz=[];gold=null;lv=1;ate=0;score=0;ms=150;acc=0;t=0;newFood();run=true;ov.hidden=true;hud();last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+ function over(why){run=false;draw();const nb=score>0&&mx('snake',score);award(Math.min(Math.floor(score/40),20));if(nb)boom();blip(150,.3,'sawtooth',.07);
+  show('Chain broken',`${why} Your chain reached ${sn.length} amino acids and ${score} points${nb?' — new best! ':'. '}Real proteins can be thousands of amino acids long.`,'Play again')}
+ function turn(d){if(!run)return;const l=q.length?q[q.length-1]:dir;if(d.x===l.x&&d.y===l.y||d.x===-l.x&&d.y===-l.y)return;if(q.length<2)q.push(d)}
+ function step(){dir=q.shift()||dir;let x=sn[0].x+dir.x,y=sn[0].y+dir.y;
+  if(lv>=3){if(x<0||y<0||x>=CW||y>=CH)return over('You hit the wall.')}else{x=(x+CW)%CW;y=(y+CH)%CH}
+  if(sn.slice(0,-1).some(s=>s.x===x&&s.y===y))return over('You tangled the chain.');
+  if(haz.some(s=>s.x===x&&s.y===y))return over('You touched a toxin.');
+  sn.unshift({x,y});
+  if(food&&x===food.x&&y===food.y){ate++;score+=10*lv;blip(500+ate%5*90,.09);newFood();
+   if(ate%5===0){lv++;ms=Math.max(70,150-(lv-1)*11);for(let i=0;i<(lv>4?2:1);i++)if(haz.length<10)haz.push(cell(true));blip(1000,.25,'triangle');toast(`Level ${lv}`+(lv===3?': walls are solid now!':''))}}
+  else sn.pop();
+  if(gold&&x===gold.x&&y===gold.y){score+=50;sn.length=Math.max(3,sn.length-2);gold=null;blip(1200,.2,'triangle')}
+  if(gold){gold.l-=ms/1000;if(gold.l<=0)gold=null}else if(ate>=3&&Math.random()<.025){gold=cell();gold.l=7}
+  hud()}
+ function loop(now){if(!run)return;raf=requestAnimationFrame(loop);const dt=Math.min(.1,(now-last)/1000);last=now;t+=dt;acc+=dt*1000;while(acc>=ms&&run){acc-=ms;step()}if(run)draw()}
+ function draw(){
+  cx.drawImage(BG,0,0);
+  if(lv>=3){cx.strokeStyle='#E5484D';cx.lineWidth=4;cx.strokeRect(2,2,W-4,H-4)}
+  cx.textAlign='center';cx.textBaseline='middle';cx.fillStyle='#fff';cx.font='24px serif';
+  for(const h of haz)cx.fillText('🧪',h.x*C+C/2,h.y*C+C/2+1);
+  if(gold){cx.globalAlpha=gold.l<2?(Math.sin(t*20)>0?1:.3):1;cx.font='26px serif';cx.fillText('⭐',gold.x*C+C/2,gold.y*C+C/2+1);cx.globalAlpha=1}
+  if(food){cx.fillStyle=food.c;cx.beginPath();cx.arc(food.x*C+C/2,food.y*C+C/2,C/2-3+Math.sin(t*6)*1.5,0,7);cx.fill();cx.fillStyle='#fff';cx.font='700 14px system-ui,sans-serif';cx.fillText(food.l,food.x*C+C/2,food.y*C+C/2+1)}
+  for(let i=sn.length-1;i>=0;i--){const s=sn[i];cx.fillStyle=BC[(i+3)%BC.length];cx.beginPath();cx.arc(s.x*C+C/2,s.y*C+C/2,i?C/2-3:C/2-1,0,7);cx.fill();if(!i){cx.strokeStyle='#fff';cx.lineWidth=2;cx.stroke();cx.fillStyle='#fff';const px=-dir.y*5,py=dir.x*5;for(const k of[-1,1]){cx.beginPath();cx.arc(s.x*C+C/2+dir.x*4+px*k,s.y*C+C/2+dir.y*4+py*k,3,0,7);cx.fill()}}}}
+ cv.addEventListener('pointerdown',e=>{cv._p=[e.clientX,e.clientY]});
+ cv.addEventListener('pointerup',e=>{const p=cv._p;if(!p)return;const dx=e.clientX-p[0],dy=e.clientY-p[1];if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;turn(Math.abs(dx)>Math.abs(dy)?(dx>0?D.r:D.l):(dy>0?D.d:D.u))});
+ $('.dpad',root).addEventListener('pointerdown',e=>{const b=e.target.closest('[data-d]');if(b){e.preventDefault();turn(D[b.dataset.d])}});
+ const kd=e=>{if(e.target&&e.target.tagName==='INPUT'||e.ctrlKey||e.metaKey||e.altKey)return;const m={ArrowUp:'u',w:'u',ArrowDown:'d',s:'d',ArrowLeft:'l',a:'l',ArrowRight:'r',d:'r'}[e.key];if(m&&run){e.preventDefault();turn(D[m])}};
+ document.addEventListener('keydown',kd);
+ sn=[{x:8,y:7},{x:7,y:7},{x:6,y:7}];dir=D.r;q=[];haz=[];gold=null;lv=1;ate=0;score=0;ms=150;food={x:14,y:7,c:BC[0],l:'M'};hud();draw();
+ show('Protein Chain','Grow a protein chain, one amino acid at a time. Each level is faster and trickier.','Play');
+ return()=>{run=false;cancelAnimationFrame(raf);document.removeEventListener('keydown',kd)}
+},
+/* ---- 3. rapid fire sort: survival with shrinking clock ---- */
+sort(root){
+ const I=[
+ ['Cell wall','p','A rigid cellulose frame sits outside the membrane. Animal cells have no wall.','wall',1],
+ ['Chloroplast','p','Only plants and algae have chloroplasts, where photosynthesis happens.','chloroplast',1],
+ ['Central vacuole','p','Plant cells have one huge water tank. Animal cells only have small vacuoles.','vacuole',1],
+ ['Nucleus','b','Plants and animals both keep their DNA in a nucleus.','nucleus',1],
+ ['Mitochondrion','b','Plants have mitochondria too. They burn sugar for ATP day and night.','mito',1],
+ ['Cell membrane','b','Both cell types are wrapped in a selective membrane.','membrane',1],
+ ['Cytoplasm','b','Both cell types are filled with cytoplasm.','cytoplasm',1],
+ ['Ribosomes','b','Every living cell needs ribosomes to build proteins.','ribosome',1],
+ ['Golgi apparatus','b','Both sort and ship proteins in vesicles.','golgi',1],
+ ['Endoplasmic reticulum','b','Both cell types build proteins and lipids on an ER.','er',1],
+ ['Plasmodesmata','p','These channels run through plant cell walls and link neighboring cells.','',2],
+ ['Lysosome','a','Animal cells have classic lysosomes. Plants recycle waste in the vacuole instead.','',2],
+ ['Centrioles','a','Animal cells use centrioles to organize cell division. Most plants have none.','',2],
+ ['Peroxisome','b','Both plants and animals use peroxisomes to break down hydrogen peroxide.','peroxisome',2],
+ ['Amyloplast','p','A plastid that stores starch, found in plant cells like potato tubers.','',2],
+ ['Tonoplast','p','The membrane around the central vacuole of a plant cell.','',2],
+ ['Cilia','a','Animal cells can have cilia. Most plant cells have none.','',2],
+ ['Nucleolus','b','Both cell types build ribosome parts in the nucleolus.','',2],
+ ['Vesicles','b','Both cell types move cargo in small membrane bubbles.','',2],
+ ['Nuclear pores','b','Both cell types control traffic into the nucleus with pores.','',2],
+ ['Glycogen granules','a','Animals store spare sugar as glycogen. Plants use starch instead.','',3],
+ ['Starch grains','p','Plants store spare sugar as starch grains.','',3],
+ ['Chromoplast','p','A plastid full of orange and red pigments, like in carrots.','',3],
+ ['Cellulose fibers','p','The main building material of plant cell walls. Animal cells do not build it.','',3],
+ ['Cytoskeleton','b','Both cell types have a scaffold of microtubules and filaments.','',3],
+ ['Tight junctions','a','These seal gaps between animal cells. Plants use plasmodesmata instead.','',3],
+ ['Desmosomes','a','Spot welds that hold animal cells together. Plant walls do that job.','',3],
+ ['DNA','b','Both cell types store their genes in DNA.','',3]];
+ const NAME={p:'plant only',b:'in both',a:'animal only'};
+ root.innerHTML=`<div class="sbox"><div class="sbar"><i id="sbar"></i></div><div class="scard" id="scard">Ready?</div><button class="btn qn" id="sgo2">Start</button><div class="sbtns" id="sbtns" hidden><button class="btn" data-a="p">🌿 Plant only</button><button class="btn" data-a="b">🤝 Both</button><button class="btn" data-a="a">🐾 Animal only</button></div><div class="sfb" id="sfb">Is each part found in plant cells, animal cells, or both? You have 3 lives. The clock per card shrinks and trickier parts show up as you level up. Keys: ← plant, ↓ both, → animal.</div></div><div id="sres"></div>`;
+ const card=$('#scard',root),bar=$('#sbar',root),fb=$('#sfb',root),btns=$('#sbtns',root),go=$('#sgo2',root),res=$('#sres',root);
+ let run=false,cur=null,lives=3,score=0,streak=0,right=0,total=0,miss=new Map(),tm=0,ct=0,tl=5;
+ const lvl=()=>1+Math.floor(right/6),tier=()=>lvl()>=5?3:lvl()>=3?2:1,limit=()=>Math.max(1.8,5.5-(lvl()-1)*.5);
+ const hud=()=>{stat.textContent='❤️'.repeat(lives)+'🖤'.repeat(3-lives)+` · Lv ${lvl()} · ${score} pts`};
+ function next(){const pool=I.filter(i=>i[4]<=tier());let it;do{it=pool[Math.random()*pool.length|0]}while(it===cur&&pool.length>1);cur=it;ct=tl=limit();
+  const p=it[3]?PAL[it[3]]:null;card.textContent=it[0];card.style.background=p?p[0]:'';card.style.color=p?p[2]:'';card.style.borderColor=p?p[1]:'';
+  card.classList.remove('in');void card.offsetWidth;card.classList.add('in')}
+ function start(){res.innerHTML='';run=true;lives=3;score=streak=right=total=0;miss=new Map();go.hidden=true;btns.hidden=false;fb.className='sfb';fb.textContent='Go go go!';next();hud();
+  clearInterval(tm);tm=setInterval(()=>{ct-=.05;bar.style.width=Math.max(0,ct/tl*100)+'%';if(ct<=0)answer(null)},50)}
+ function answer(a){if(!run)return;total++;const before=lvl();
+  if(a===cur[1]){right++;streak++;score+=1+Math.min(3,Math.floor(streak/4));blip(600+Math.min(streak,10)*40,.07);fb.className='sfb ok';fb.textContent=streak>=4?`🔥 ${streak} in a row!`:'✓ Correct';
+   if(lvl()>before){toast(`Level ${lvl()}: faster`+(lvl()===3||lvl()===5?' and trickier!':'!'));blip(1000,.2,'triangle')}}
+  else{streak=0;lives--;miss.set(cur[0],cur);blip(180,.2,'sawtooth');fb.className='sfb bad';fb.innerHTML=`${a===null?'Too slow! ':''}<b>${cur[0]}</b> is ${NAME[cur[1]]}. ${cur[2]}`}
+  hud();if(lives<=0){end();return}next()}
+ function end(){clearInterval(tm);tm=0;run=false;btns.hidden=true;card.textContent='Game over';card.style.background=card.style.color=card.style.borderColor='';bar.style.width='0%';
+  const lv=lvl(),nb=score>0&&mx('sort',score);mx('sortl',lv);award(Math.min(Math.round(score/3),20));if(nb)boom();
+  fb.className='sfb';fb.textContent='';const ms=[...miss.values()];
+  res.innerHTML=`<div class="gres"><h3>${score} points · level ${lv}</h3><p>${right} of ${total} correct${nb?' · new best!':''}</p>`+(ms.length?`<p>Worth another look:</p><ul class="smiss">${ms.map(m=>`<li><b>${m[0]}</b> is ${NAME[m[1]]}. ${m[2]}</li>`).join('')}</ul>`:'')+`<button class="btn qn" id="sag">Play again</button></div>`;
+  const b=$('#sag',root);b.onclick=start;b.focus({preventScroll:true})}
+ go.onclick=start;
+ btns.onclick=e=>{const b=e.target.closest('[data-a]');if(b)answer(b.dataset.a)};
+ const kd=e=>{if(!run||e.altKey||e.ctrlKey||e.metaKey)return;const m={ArrowLeft:'p',ArrowDown:'b',ArrowRight:'a',1:'p',2:'b',3:'a'}[e.key];if(m){e.preventDefault();answer(m)}};
+ document.addEventListener('keydown',kd);
+ return()=>{clearInterval(tm);run=false;document.removeEventListener('keydown',kd)}
+}};
 })();
 </script>
 
